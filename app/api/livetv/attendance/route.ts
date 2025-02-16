@@ -1,0 +1,58 @@
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+import sequelize from "@/lib/sequelize"; // Ensure correct path
+import { Attendance, SignUp } from "@/lib/models"; // Adjust based on your project structure
+
+export const runtime = "nodejs"; // Ensure API route runs on Node.js, not Edge
+
+export async function POST(req: NextRequest) {
+  try {
+    // Ensure DB connection
+    await sequelize.authenticate();
+
+    // Extract token from cookies
+    const token = req.cookies.get("authToken")?.value;
+    if (!token) {
+      return NextResponse.json({ error: "Access denied. No token provided." }, { status: 403 });
+    }
+
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { email: string };
+    if (!decoded.email) {
+      return NextResponse.json({ error: "Invalid token." }, { status: 403 });
+    }
+
+    // Fetch user from database
+    const user = await SignUp.findOne({ where: { email: decoded.email } });
+    if (!user) {
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
+    }
+
+    // Extract request body
+    const { page } = await req.json();
+
+    // Check if the user has already registered
+    const existingAttendance = await Attendance.findOne({ where: { userId: user.id } });
+    if (existingAttendance) {
+      return NextResponse.json({ error: "Already Registered" }, { status: 400 });
+    }
+
+    // Store attendance
+    await Attendance.create({
+      userId: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      zone: user.zone,
+      page,
+      country: user.country,
+      email: user.email,
+      timestamp: new Date(),
+      ipAddress: req.ip, // Optional
+    });
+
+    return NextResponse.json({ message: "Attendance recorded successfully" }, { status: 200 });
+  } catch (error) {
+    console.error("Error recording attendance:", error);
+    return NextResponse.json({ message: "Failed to record attendance" }, { status: 500 });
+  }
+}
