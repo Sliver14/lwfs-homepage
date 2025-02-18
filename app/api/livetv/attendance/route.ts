@@ -32,23 +32,27 @@ export async function POST(req: NextRequest) {
     const { page } = await req.json();
 
     // Check if the user has already registered
-    const existingAttendance = await Attendance.findOne({ where: { userId: user.id } });
+    const existingAttendance = await Attendance.findOne({ where: { userId: user.getDataValue("id") } });
+
     if (existingAttendance) {
       return NextResponse.json({ error: "Already Registered" }, { status: 400 });
     }
 
     // Store attendance
     await Attendance.create({
-      userId: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      zone: user.zone,
+      userId: user.getDataValue("id"),
+      firstName: user.getDataValue("firstName"),
+      lastName: user.getDataValue("lastName"),
+      zone: user.getDataValue("zone"),
       page,
-      country: user.country,
-      email: user.email,
+      country: user.getDataValue("country"),
+      email: user.getDataValue("email"),
       timestamp: new Date(),
-      ipAddress: req.ip, // Optional
+      ipAddress: req.headers.get("x-forwarded-for") || "Unknown",
+
     });
+    
+    
 
     return NextResponse.json({ message: "Attendance recorded successfully" }, { status: 200 });
   } catch (error) {

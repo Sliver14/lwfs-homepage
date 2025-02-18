@@ -1,8 +1,7 @@
 "use client";
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios, { AxiosError } from "axios";
 import { FaChevronLeft } from "react-icons/fa6";
 import { AiFillHome } from "react-icons/ai";
 
@@ -14,8 +13,8 @@ const Signin: React.FC = () => {
     const [success, setSuccess] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    // Function to handle sign-in
-const handleSubmit = async (e: React.FormEvent) => {
+  // Function to handle sign-in
+  const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setLoading(true);
   setError(null);
@@ -23,30 +22,47 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   try {
     const response = await axios.post("/api/auth/signin", { email });
-    const { token } = response.data;
+    // const { token } = response.data;
 
     // Success message
-    setSuccess(response.data.message);
+    // setSuccess(response.data.message);
 
     // ✅ Cookies are set from the **server**, so no need for js-cookie here
 
-  router.push("/"); // Redirect to dashboard or home page
-
     setSuccess(response.data.message);
-  } catch (error: any) {
+    router.push("/"); // Redirect to dashboard or home page
+    router.refresh();
+
+  } catch (error: unknown) {
     console.error("Sign-in error:", error);
 
-    const errorMessage = error.response?.data?.error ?? "Sign-in failed";
+    // const errorMessage = error.response?.data?.error ?? "Sign-in failed";
 
-    if (errorMessage.includes("user not verified")) {
-      setError("User not verified. Redirecting to verification...");
-      setTimeout(() => router.push("/signup/verify"), 2000); // Give user time to see the message
+  //   if (errorMessage.includes("user not verified")) {
+  //     setError("User not verified. Redirecting to verification...");
+  //     setTimeout(() => router.push("/signup/verify"), 2000); // Give user time to see the message
+  //   } else {
+  //     setError(errorMessage);
+  //   }
+  // } finally {
+  //   setLoading(false);
+  // }
+
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data?.error ?? "Sign-in failed";
+
+      if (errorMessage.includes("User not verified")) {
+          setError("User not verified. Redirecting to verification...");
+          setTimeout(() => router.push("/signup/verify"), 2000);
+      } else {
+          setError(errorMessage);
+      }
     } else {
-      setError(errorMessage);
+        setError("An unknown error occurred.");
     }
-  } finally {
+    } finally {
     setLoading(false);
-  }
+    }
   };
 
   return (
@@ -70,6 +86,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <span onClick={()=>{router.push("/signup")}}>New here? <a className="text-blue-500 hover:underline cursor-pointer" >Create Account</a></span>
         </div>
     </div> 
+    
     </div>
   )
 }

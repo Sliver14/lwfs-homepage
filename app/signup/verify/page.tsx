@@ -10,8 +10,8 @@ const Verify = () => {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [email, setEmail] = useState("");
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);  
   const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
@@ -26,9 +26,12 @@ const Verify = () => {
   }, []);
 
   // Signup verification
-const signupVerification = async (e) => {
+const signupVerification = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setLoading(true);
+  setError(null);
+  setSuccess(null);
+
   try{
     const response = await axios.post("/api/auth/signup/verify", { email, code });
 
@@ -44,17 +47,25 @@ const signupVerification = async (e) => {
     // window.location.reload();
         
   } catch (error){
-    setError(error.response?.data?.error || "Verification failed");
+    if (axios.isAxiosError(error)) {
+      setError(error.response?.data?.error || "Verification failed");
+    } else {
+      setError("An unknown error occurred.");
+    }
   } finally {
     setLoading(false);
   }
 }
   const resendCode = async () =>{
     try{
-      const response = await axios.post("api/auth/resendcode", {email});
+      const response = await axios.post("/api/auth/resendcode", {email});
       setSuccess(response.data.message || "Resend Succeessful")
     }catch(error){
-      setError(error.response?.data?.error || "Resend-failed")
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.error || "Resend failed");
+      } else {
+        setError("An unknown error occurred.");
+      }
     }
   }
   return (
@@ -68,19 +79,26 @@ const signupVerification = async (e) => {
           <h2 className='text-3xl font-bold ' >Check your inbox</h2>
         
         <h2>Enter the verification code sent to {email}</h2>
-        <input
-          className='border border-lwfs3 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black text-md w-[300px]'
-          type="text"
-          onChange={(e) => setCode(e.target.value)}
-        />
-        <button className={`flex  bg-lw_dark_blue text-white py-2 px-5 flex-grow rounded-sm justify-center w-[300px] transition transform ease-out duration-200 hover:scale-95 hover:shadow-sm ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-black text-white"}`} disabled={loading} onClick={signupVerification}>{loading ? "Loading..." : "Continue"}</button>
+        <form onSubmit={signupVerification}>
+          <input
+            className='border border-blue-950 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black text-md w-[300px]'
+            type="text" 
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+          />
+          <button className={`flex  bg-lw_dark_blue text-white py-2 px-5 flex-grow rounded-sm justify-center w-[300px] transition transform ease-out duration-200 hover:scale-95 hover:shadow-sm ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-black text-white"}`} disabled={loading} type='submit'>
+            {loading ? "Loading..." : "Continue"}
+          </button>
+        </form>
+        
+
         {error && <p style={{ color: "red" }}>{error}</p>}
         {success && <p style={{ color: "green" }}>{success}</p>}
         <button className='underline' onClick={resendCode}>Resend-code</button>
 
         <div className='flex gap-5 text-lg'>
-          <buttton className='cursor-pointer' onClick={() => router.push("/signin")}>Signin</buttton>
-          <buttton className='cursor-pointer' onClick={() => router.push("/signup")}>Signup</buttton>
+          <button className='cursor-pointer' onClick={() => router.push("/signin")}>Signin</button>
+          <button className='cursor-pointer' onClick={() => router.push("/signup")}>Signup</button>
         </div>
         </div>
       </div>

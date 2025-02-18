@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from 'react'
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -10,11 +10,23 @@ import { useRouter } from 'next/navigation';
 import { FaChevronLeft } from "react-icons/fa6";
 import { AiFillHome } from "react-icons/ai";
 
+// Define the type for the form values
+interface SignupFormValues {
+  firstName: string;
+  lastName: string;
+  countryCode: string;
+  phoneNumber: string;
+  zone: string;
+  country: string;
+  church: string;
+  email: string;
+}
+
 const Signup = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null)
     const [loading, setLoading] = useState(false); // Loading state
     const initialValues = {
         // title: "",
@@ -30,28 +42,17 @@ const Signup = () => {
       };
     
       const validationSchema = Yup.object().shape({
-        // title: Yup.string()
-        // .required('Title is required') // Make the title mandatory
-        // .oneOf(['Pastor', 'Deacon', 'Deaconess', 'Brother', 'Sister'], 'Invalid title selection'), // Restrict to valid options
-    
-        firstName: Yup.string().required(""),
-    
-        lastName: Yup.string().required(""),
-    
-        countryCode: Yup.string().required(""),
-    
-        phoneNumber: Yup.string().max(15, "Phone number must not exceed 15 digits")
+        firstName: Yup.string().required("First Name is required"),
+        lastName: Yup.string().required("Last Name is required"),
+        countryCode: Yup.string().required("Country Code is required"),
+        phoneNumber: Yup.string()
+          .max(15, "Phone number must not exceed 15 digits")
           .matches(/^\d+$/, "Phone number must contain only numbers")
           .required("Phone number is required"),
-    
-        zone: Yup.string().required(""),
-          
-        church: Yup.string().required(""),
-    
+        zone: Yup.string().required("Zone is required"),
+        church: Yup.string().required("Church is required"),
         email: Yup.string().email("Invalid email address").required("Email is required"),
-    
-        country: Yup.string().required(""),
-        
+        country: Yup.string().required("Country is required"),
       });
 
       useEffect(()=>{
@@ -60,23 +61,33 @@ const Signup = () => {
       },[email])
 
       //handle signup
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: SignupFormValues) => {
         setLoading(true);
+        setError(null);
+        setSuccess(null);
         try {
             const response = await axios.post("/api/auth/signup", data);
             router.push("/signup/verify");
             setSuccess(response.data.message);
             
         } catch(error){
-            console.error("Error Signing up", error);
-            if (error.response?.data?.error.includes('User not verified')){
-            const response2 = await axios.post("api/auth/resendcode", {email});
-            router.push("signup/verify");
-            }
-            setError(error.response?.data?.error || "Error verifiying code");
-        }finally{
-            setLoading(false);
-        }
+            // console.error("Error Signing up", error);
+
+             if (error instanceof AxiosError) {
+                   const errorMessage = error.response?.data?.error ?? "Sign-up failed";
+             
+                   if (errorMessage.includes("User not verified")) {
+                       setError("User not verified. Redirecting to verification...");
+                       setTimeout(() => router.push("/signup/verify"), 2000);
+                   } else {
+                       setError(errorMessage);
+                   }
+                 } else {
+                     setError("An unknown error occurred.");
+                 }
+                 } finally {
+                 setLoading(false);
+                 }
     }
 
   return (

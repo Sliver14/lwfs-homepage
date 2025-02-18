@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     }
   
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as jwt.Jwtpayload;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
       const email = decoded.email;
   
       const user = await SignUp.findOne({where:{email}});
@@ -23,15 +23,17 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         valid: true, 
         user:{ 
-            id: user.id, 
-            firstName: user.firstName, 
-            lastName: user.lastName, 
-            email: user.email, 
-            zone: user.zone, 
+          id: user.getDataValue("id"),
+          firstName: user.getDataValue("firstName"),
+          lastName: user.getDataValue("lastName"),
+          email: user.getDataValue("email"),
+          zone: user.getDataValue("zone"),
+          
         },
      }, {status: 200});
 
     } catch (error) {
+      console.error("Error during code verification:", error); // Logs the error
         return NextResponse.json({ valid: false, error: "Invalid or expired token" }, {status: 403});
     }
   };

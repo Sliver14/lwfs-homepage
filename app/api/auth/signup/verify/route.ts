@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import SignUp from "@/lib/models/SignUp"; // Adjust import path
 import sequelize from "@/lib/sequelize";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
 
 // verify code & signup
 export async function POST(req: NextRequest) {
@@ -19,7 +18,8 @@ export async function POST(req: NextRequest) {
       }
   
       // compare provided code
-      const isMatch = bcrypt.compareSync(code, record.verificationCode);
+      const isMatch = bcrypt.compareSync(code, record.getDataValue("verificationCode"));
+
   
       if (!isMatch){
         return NextResponse.json({error: 'invalid code'}, {status:400});

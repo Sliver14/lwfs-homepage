@@ -1,13 +1,11 @@
 export const runtime = "nodejs"; // Add this at the top
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import Comment from "@/lib/models/Comment";
 import SignUp from "@/lib/models/SignUp";
-import sequelize from "@/lib/sequelize";
-import jwt from "jsonwebtoken";
 
 // Fetch Live-tv comment
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const comments = await Comment.findAll({
             include: [
@@ -21,6 +19,7 @@ export async function GET(req: NextRequest) {
         });
         return NextResponse.json(comments, {status: 200});
     } catch (error) {
+        console.error("Error fetching comments:", error); // Logs the error
         return NextResponse.json({ message: 'Could not fetch comments' }, {status: 500});
     }
     };

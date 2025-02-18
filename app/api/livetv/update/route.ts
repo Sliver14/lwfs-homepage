@@ -26,7 +26,8 @@ export async function POST(req: NextRequest) {
 
     // Update the attendance record
     await attendance.update({
-      groupParticipation: groupParticipation || attendance.groupParticipation, // Keep old value if undefined
+      groupParticipation: groupParticipation || attendance.getDataValue("groupParticipation"),
+
     });
 
     return NextResponse.json(

@@ -3,48 +3,61 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link  from 'next/link';
-import Cookies from "js-cookie";
 import { GrMenu } from "react-icons/gr";
 import { IoMdClose } from "react-icons/io";
 import { FaAngleDown } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
+import { LiaPowerOffSolid } from "react-icons/lia";
 import axios from 'axios';
+import Image from 'next/image';
+
+// Define user type
+interface User {
+  firstName: string;
+  lastName: string;
+}
 
 function Navbar() {
     const pathname  = usePathname();
+
+    // Hide navbar on these routes
+    const hideNavbar = ["/signin", "/signup", "/signup/verify"].includes(pathname);
     const router = useRouter();
+
     const [isOpen, setIsOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownOpen2, setDropdown2Open] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
-    const [user, setUser] = useState("");
-    const [groupParticipation, setGroupParticipation] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState(false);
-    const name = "React";
-    const [letsLogin, setLetsLogin] = useState(false);
 
     const activeClass = "flex px-3 py-2 rounded-lg font-medium bg-opacity-90 transform duration-300 bg-red-500 text-white";
     const inactiveClass = "flex text-black px-3 py-2 rounded-lg hover:bg-gray-300 hover:bg-opacity-25 hover:text-black transform transform ease-out duration-300 hover:scale-95";
 
-    const navRef = useRef(null);
-    const nav2Ref = useRef(null);
-    const sidebarRef = useRef(null); // For sidebar menu
-    const proRef = useRef(null);
+    const navRef = useRef<HTMLDivElement | null>(null);
+    const nav2Ref = useRef<HTMLDivElement | null>(null);
+    const sidebarRef = useRef<HTMLDivElement | null>(null);
+    const proRef = useRef<HTMLDivElement | null>(null);
 
     // Function to handle clicks outside the nav
     useEffect(() => {
-        const handleClickOutside = (event) => {
-        if (navRef.current && !navRef.current.contains(event.target)) {
+        const handleClickOutside = (event: MouseEvent) => {
+          const target = event.target as Node;
+        if (navRef.current && !navRef.current.contains(target)) {
             setDropdownOpen(false);
         }
-        if (nav2Ref.current && !nav2Ref.current.contains(event.target)) { // Fix: Correct ref usage
+        if (nav2Ref.current && !nav2Ref.current.contains(target)) { // Fix: Correct ref usage
             setDropdown2Open(false);
         }
-        if (sidebarRef.current && !sidebarRef.current.contains(event.target) && !event.target.closest(".toggle-btn")) { 
-            setIsOpen(false); 
+        if (
+          sidebarRef.current && 
+          !sidebarRef.current.contains(target) && 
+          target instanceof Element && // Ensure target is an Element
+          !target.closest(".toggle-btn") // Now safe to use closest()
+        ) { 
+          setIsOpen(false); 
         }
-        if (proRef.current && !proRef.current.contains(event.target)) {
+        if (proRef.current && !proRef.current.contains(target)) {
             setProfile(false);
         }
         };
@@ -65,8 +78,12 @@ function Navbar() {
           setLoggedIn(true);
           
         } catch (error) {
-          console.error('Verification failed:', error.message);
-        } 
+          if (axios.isAxiosError(error)) {
+            console.error("Verification failed:", error.response?.data || error.message);
+          } else {
+            console.error("An unknown error occurred.");
+          }
+        }
       };
 
       fetchUserDetails();
@@ -76,7 +93,6 @@ function Navbar() {
         window.scrollTo(0, 0);
     }, [pathname]);
  
-
     const toggleSidebar = () => {
       setIsOpen(!isOpen);
       
@@ -94,25 +110,12 @@ function Navbar() {
       setProfile(!profile)
     }
 
-    const updateAttendance = async (e) => {
-      e.preventDefault();
-      try{
-        const response = await axios.post("/api/livetv/update", { groupParticipation }, {
-          withCredentials: true, // Include user token from cookies
-        });
-      } catch(error){
+    const logout = async () => {
+      await fetch("/api/logout", { method: "POST" });
+      router.push("/signin");
+    };
 
-      }
-    }
-
-    const logout = () => {
-        // Remove the authToken cookie
-      Cookies.remove("authToken");
-      router.refresh();
-    
-      // Optionally, reset any state related to authentication
-      // setIsModalOpen(true);
-      }
+    if (hideNavbar) return null; // Don't render navbar on these pages
     
   return (
     // Navbar
@@ -129,8 +132,8 @@ function Navbar() {
         <button className="cursor-pointer px-4 text-2xl align-middle lg:hidden" onClick={toggleSidebar}>
           <GrMenu/>
         </button>
-        <div className='flex h-10 self-center'>
-         <img onClick={() => {router.push("/")}} className='cursor-pointer' src="/images/LWFS_LOGO.png" alt="lwfs_logo"/>
+        <div className='flex h-auto w-44 self-center'>
+         <Image onClick={() => {router.push("/")}} className='cursor-pointer object-contain w-full h-full' width={250} height={150} src="/images/LWFS_LOGO.png" alt="lwfs_logo" />
         </div>
 
         {/* Navigation Links for Large Screens */}
@@ -181,21 +184,26 @@ function Navbar() {
                     </li>
                   </a>
                   
-                  <li
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
-                    onClick={() => {
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    LWFS Store
-                  </li>
+                  <a href="https://lwfoundationschool.org/store/" target='_blank'>
+                    <li
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
+                      onClick={() => {
+                        setDropdownOpen(false);
+                      }}
+                    >
+                      LWFS Store
+                    </li>
+                  </a>
+                  
 
-                  <li
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
-
-                  >
-                    Portal
-                  </li>
+                  <a href="https://lwfs-portal-elrt.vercel.app/" target='_blank'>
+                    <li
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
+                    >
+                      Portal
+                    </li>
+                  </a>
+                  
                 </ul>
               )}
             </div>
@@ -224,7 +232,7 @@ function Navbar() {
           
           {profile && <>
             <div className='absolute top-[60px] right-5 flex items-center shadow-md  text-red-600 bg-white p-5 z-20  transition translate duration-150'>
-              <div className='flex rounded-md text-lw_red items-center'>
+              <div className='flex rounded-md text-lw_red items-center gap-2'>
                 <AiOutlineLogout className='cursor-pointer' onClick={logout} />
                 <button className='cursor-pointer' onClick={logout} >Logout</button>
               </div>
@@ -241,41 +249,43 @@ function Navbar() {
     
     
     {/* Mobile Opened Sidebar */}
-    <div ref={sidebarRef} className={`fixed top-0 left-0 justify-center w-screen h-full bg-white overflow-hidden transition ease-in-out duration-300 z-20  ${isOpen ? "-translate-x-12" : "-translate-x-full"}`}>
+    <div ref={sidebarRef} className={`fixed top-0 left-0 justify-center w-screen h-full bg-white overflow-hidden transition transform ease-in-out duration-300 z-20  ${isOpen ? "-translate-x-12" : "-translate-x-full"}`}>
     <div className='flex flex-col w-screen ml-9'>
             
     {/* Mobile Toggle */}
-    <div className='flex flex-row w-full align-middle justify-between p-5 pr-10 items-center' >
-      <div className='flex gap-2 text-xs'>
-        <div className='flex flex-col bg-gray-900 text-xl font-bold rounded-full text-white self-center  w-12 h-12 items-center justify-center '>{user?.lastName ? user.lastName.charAt(0) : ''} {user?.firstName ? user?.firstName.charAt(0) : ''}</div> 
+    <div className='flex flex-row w-full align-middle items-center border-solid border-b-[0.1px]' >
+      {/* <div className='flex gap-2 text-xs'>
+        <div className='flex flex-col bg-gray-900 text-xl font-bold rounded-full text-white self-center  w-12 h-12 items-center justify-center '>
+          {user?.lastName ? user.lastName.charAt(0) : ''} {user?.firstName ? user?.firstName.charAt(0) : ''}
+        </div> 
         <h1 className='cursor-pointer text-sm flex items-center gap-1' onClick={profileToggle}>{user?.firstName} {user?.lastName}</h1> 
-      </div>   
-      <button onClick={toggleSidebar} className="ml-3 p-5" ><IoMdClose />
+      </div> */}
+      <button onClick={toggleSidebar} className="ml-3 p-5 text-lg" ><IoMdClose />
       </button>
     </div>
 
       <div className='flex flex-col h-screen' >
         <ul className='px-5 space-y-2 ' >
-          <li className=' p-2 cursor-pointer transition transform ease-out duration-200 hover:scale-95 hover:bg-gray-100 ' onClick={() => {toggleSidebar(); router.push("/")}}>
+          <li className=' p-2 cursor-pointer transition transform ease-out duration-200 ' onClick={() => {toggleSidebar(); router.push("/")}}>
             Home
           </li>
-          <li className='p-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95' onClick={() => {toggleSidebar(); router.push("/livetv")}}>
+          <li className='p-2 cursor-pointer transition transform ease-out duration-200' onClick={() => {toggleSidebar(); router.push("/livetv")}}>
           Live TV
           </li>
           
           {/* Mobile Dropdown for Platforms*/}
-          <div ref={nav2Ref} className="relative z-50">
+          <div ref={nav2Ref} className="relative z-50 w-full">
               <button
                 onClick={toggleDropdown2} 
-                className="flex items-center text-black px-3 py-2 cursor-pointer"
+                className="flex items-center text-black px-2 pr-10 py-2 cursor-pointer justify-between w-full"
               >
-                Platforms <FaAngleDown />
+               <h1>Platforms</h1> <FaAngleDown />
               </button>
               {dropdownOpen2 && (
-                <ul className="absolute left-0 bg-white shadow-lg mt-2 rounded-md w-48 py-2">
+                <ul className="absolute left-0 bg-white shadow-lg mt-2 rounded-md w-full py-2">
                   <a href='https://online.lwfoundationschool.org/' target='_blank'>
                     <li
-                      className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
+                      className="px-4 py-2 cursor-pointer transition transform ease-out"
                       onClick={() => {
                         setDropdown2Open(false);
                       }}
@@ -286,7 +296,7 @@ function Navbar() {
                   
                   <a href='https://lwfoundationschool.org/testimonybank/' target='_blank'>
                     <li
-                      className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
+                      className="px-4 py-2 cursor-pointer transition transform ease-out"
                       onClick={() => {
                         setDropdownOpen(false);
                       }}
@@ -297,7 +307,7 @@ function Navbar() {
                   
                   <a href='https://lwfoundationschool.org/store/' target='_blank'>
                     <li
-                      className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
+                      className="px-4 py-2 cursor-pointer transition transform ease-out"
                     >
                       LWFS Store
                     </li>
@@ -305,7 +315,7 @@ function Navbar() {
                   
                   <a href='https://lwfoundationschool.org/login' target='_blank'>
                     <li
-                      className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95"
+                      className="px-4 py-2 cursor-pointer transition transform ease-out"
                     >
                       Portal
                     </li>
@@ -315,15 +325,15 @@ function Navbar() {
               )}
             </div>
 
-          <li className='p-2 cursor-pointer hover:bg-gray-100 transition transform ease-out duration-200 hover:scale-95' onClick={() => {toggleSidebar(); router.push("/posts")}}>
+          <li className='p-2 cursor-pointer transition transform ease-out duration-200' onClick={() => {toggleSidebar(); router.push("/posts")}}>
           Posts
           </li>
 
-          <li className=' flex p-2 hover:bg-gray-100 text-center items-center justify-center text-xl'>
+          <div className=' flex p-2 text-center items-center border-solid border-t-[0.1px] border-b-[0.1px]'>
             {!loggedIn ? <h1 onClick={()=> router.push("/signin")} className='cursor-pointer' >Signin/Register</h1> : <div>
-            <button className='flex gap-2 cursor-pointer text-lw_red w-full px-10 py-2 items-center' onClick={logout}><AiOutlineLogout className='cursor-pointer' onClick={logout} />Logout</button>
+            <button className='flex gap-2 cursor-pointer text-red-500 text-xs w-full py-2 items-center' onClick={logout}><LiaPowerOffSolid className='cursor-pointer text-lg font-semibold' onClick={logout} />LOGOUT</button>
             </div>}
-          </li>
+          </div>
         </ul>
         
         

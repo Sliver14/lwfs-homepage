@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import SignUp from "@/lib/models/SignUp"; // Adjust import path
-import sequelize from "@/lib/sequelize";
+// import sequelize from "@/lib/sequelize";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
+
+interface RequestBody {
+  id: number;
+  email: string;
+  verified: boolean;
+  verificationCode?: string;
+}
 
 // resend-code
 export async function POST(req: NextRequest) {  
     try {
-        const { email } = await req.json();
+      const { email } = (await req.json()) as RequestBody;
+      
       // Find the record based on email and code
       const record = await SignUp.findOne({ where: { email } });
   
@@ -16,7 +24,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "User not found" }, {status: 400});
       }
   
-      if (record.verified === true){
+      if (record?.getDataValue('verified') === true){
         return NextResponse.json({message: "User already verified"}, {status: 200})
       }
   
@@ -24,7 +32,7 @@ export async function POST(req: NextRequest) {
       const generateVerificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit number
     
       // Hash the verification code before saving
-      const hashedCode = bcrypt.hashSync(generateVerificationCode, 10);
+      const hashedCode = await bcrypt.hash(generateVerificationCode, 10);
   
       // Send the code via email
       const transporter = nodemailer.createTransport({

@@ -1,11 +1,11 @@
 "use client";
 import React from 'react'
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import  ImageSlider from "./ImageSlider";
 import  LogoSlider from "./LogoSlider";
 // import Modal from "../component/Modal"
 import VideoSlider from "./VideoSlider";
+import Image from 'next/image';
 
 export default function Home() {
   const router = useRouter();
@@ -21,9 +21,9 @@ export default function Home() {
   ];
 
   const testimonySlides = [
-    {url: "../images/2@2x.jpg"},
-    {url: "../images/4@2x.jpg"},
-    {url: "../images/5@2x.jpg"},
+    {url: "/images/2@2x.jpg"},
+    {url: "/images/4@2x.jpg"},
+    {url: "/images/5@2x.jpg"},
   ]
 
   return (
@@ -35,7 +35,7 @@ export default function Home() {
       
       <div className='flex flex-col relative w-screen'>
         <div className='relative h-52 max-h-[600px] w-screen md:h-80 lg:h-96'>
-          <img className='absolute object-cover object-[50%_20%] h-full w-full' src='../images/bg-bg.jpeg'/>
+          <Image className='absolute object-cover object-[50%_20%] h-full w-full' fill alt='' src='/images/bg-bg.jpeg'/>
           <div className='absolute inset-0 bg-black opacity-65'></div>
         </div>
         
@@ -95,7 +95,7 @@ export default function Home() {
       {/* Post */}
       <div>
         <div className='relative group flex flex-col h-[350px] w-screen gap-5 justify-end items-center text-center'>
-            <img className='absolute w-full h-full object-cover' src='../images/loading-1q.jpg'/>
+            <Image className='absolute w-full h-full object-cover' alt="" width={500} height={300} src='/images/loading-1q.jpg'/>
             <div onClick={()=>router.push("/posts")} className=' cursor-pointerabsolute inset-0 flex flex-col w-full h-12 self-end justify-self-center text-xl bg-lw_yellow justify-center items-center text-black text-center opacity-0 transition-opacity transform duration-500 group-hover:opacity-90'>
               <h1 className="cursor-pointer" onClick={()=> router.push("/posts")}>View More Post</h1>
             </div>
@@ -115,7 +115,7 @@ export default function Home() {
       <div className='flex flex-col relative gap-5 w-screen overflow-x-scroll items-center justify-center md:flex md:flex-row'>
         {testimonySlides.map((testimony)=>(
           <div key={testimony.url} className='flex relative group h-auto w-full'>
-            <img src={testimony.url} className='w-full h-full object-cover'/>
+            <Image src={testimony.url} className='w-full h-full object-cover' alt='' fill/>
             <a href='https://lwfoundationschool.org/testimonybank/' target="_blank" className='flex flex-col absolute text-xl inset-0 bg-lw_yellow w-full text-black h-12 bottom-8 self-end justify-center items-center text-center opacity-0 group-hover:opacity-90 transform duration-500'>
               <p>Share Your Testimony</p>
             </a>
