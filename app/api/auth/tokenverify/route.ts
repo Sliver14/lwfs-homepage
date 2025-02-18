@@ -28,7 +28,6 @@ export async function GET(req: NextRequest) {
           lastName: user.getDataValue("lastName"),
           email: user.getDataValue("email"),
           zone: user.getDataValue("zone"),
-          
         },
      }, {status: 200});
 

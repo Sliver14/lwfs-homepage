@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import SignUp from "@/lib/models/SignUp"; // Adjust import path
-import sequelize from "@/lib/sequelize";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
+import syncDatabase from "@/lib/syncDatabase";
 
 export async function POST(req: NextRequest) {
     try {
-        await sequelize.authenticate(); // Ensure DB connection
-        await sequelize.sync(); // Sync tables
+        await syncDatabase(); // Sync the database on server start
         
         const { firstName, lastName, phoneNumber, zone, church, country, email } = await req.json() as {
             firstName: string;

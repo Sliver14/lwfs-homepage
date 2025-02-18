@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import SignUp from "@/lib/models/SignUp"; // Adjust import path
-import sequelize from "@/lib/sequelize";
 import bcrypt from "bcryptjs";
 
 // verify code & signup
 export async function POST(req: NextRequest) {
-    try {
-      await sequelize.sync(); // Ensure database is synced
+    try {      
       const { email, code } = await req.json();
 
       // Find the record based on email and code

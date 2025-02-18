@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import sequelize from "@/lib/sequelize"; // Ensure correct path
 import { Attendance, SignUp } from "@/lib/models"; // Adjust based on your project structure
+import syncDatabase from "@/lib/syncDatabase";
 
 export const runtime = "nodejs"; // Ensure API route runs on Node.js, not Edge
 
 export async function POST(req: NextRequest) {
   try {
-    // Ensure DB connection
-    await sequelize.authenticate();
+    await syncDatabase(); // Sync the database on server start
 
     // Extract token from cookies
     const token = req.cookies.get("authToken")?.value;

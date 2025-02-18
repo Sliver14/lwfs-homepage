@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import sequelize from "@/lib/sequelize";
 import SignUp from "@/lib/models/SignUp"; 
+import syncDatabase from "@/lib/syncDatabase";
 
 export async function POST(req: NextRequest) {
     try {
+      await syncDatabase(); // Sync the database on server start
+      
       const { email } = await req.json();
-  
-      // Basic validation
+      
+        // Basic validation
       if (!email) {
         return NextResponse.json({ error: 'Email is required.' }, {status: 400});
       }

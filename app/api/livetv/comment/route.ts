@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import Comment from "@/lib/models/Comment";
 import sequelize from "@/lib/sequelize";
 import jwt from "jsonwebtoken";
+import syncDatabase from "@/lib/syncDatabase";
+await syncDatabase(); // Sync the database on server start
 
 export async function POST(req: NextRequest) {
   try {
-    await sequelize.authenticate();
+    await syncDatabase();
 
     const token = req.cookies.get("authToken")?.value;
     if (!token) {
