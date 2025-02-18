@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import Comment from "@/lib/models/Comment";
-import sequelize from "@/lib/sequelize";
 import jwt from "jsonwebtoken";
 import syncDatabase from "@/lib/syncDatabase";
 await syncDatabase(); // Sync the database on server start

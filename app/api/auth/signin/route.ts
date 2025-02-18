@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import sequelize from "@/lib/sequelize";
 import SignUp from "@/lib/models/SignUp"; 
 import syncDatabase from "@/lib/syncDatabase";
 
