@@ -13,19 +13,16 @@ const LiveTv: React.FC = () => {
     user?: 
     { firstName: string }; createdAt: string }[]>([]);
   const [ loading, setLoading ] = useState<boolean>(false);
-  const [groupParticipation, setGroupParticipation] = useState<number | "">(() => {
-    const storedValue = localStorage.getItem("groupParticipation");
-    return storedValue ? Number(storedValue) || "" : "";
-  });
+  const [groupParticipation, setGroupParticipation] = useState<number | "">("");
   const [successMessage, setSuccessMessage] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement | null>(null);
   
   useEffect(() => {
-    // Store groupParticipation in localStorage whenever it changes
-    if (groupParticipation!== "") {
-      localStorage.setItem("groupParticipation", String(groupParticipation));
+    const storedValue = localStorage.getItem("groupParticipation");
+    if (storedValue) {
+      setGroupParticipation(Number(storedValue) || "");
     }
-  }, [groupParticipation]);
+  }, []);
 
   // Fetch Comment
   useEffect(() => {
@@ -99,7 +96,7 @@ const LiveTv: React.FC = () => {
 // update groupAttendance
 const updateAttendance = async (): Promise<void> => {
   if (groupParticipation === "") return; // Prevent sending empty data
-
+  localStorage.setItem("groupParticipation", String(groupParticipation));
   setLoading(true);
   try {
     await axios.post("/api/livetv/update", { groupParticipation }, { withCredentials: true });
