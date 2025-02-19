@@ -91,7 +91,7 @@ const LiveTv: React.FC = () => {
   
     recordAttendance();
   },
-   []);
+   [])
   
 // update groupAttendance
 const updateAttendance = async (): Promise<void> => {
