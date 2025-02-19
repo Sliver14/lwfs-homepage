@@ -121,7 +121,7 @@ const updateAttendance = async (): Promise<void> => {
         {/* LIVE TV */}
         <div className='flex flex-col md:w-[60%]'>
           <div className='w-screen h-auto md:w-full  '>
-            {/* <video 
+            <video 
               src="https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4" 
               // type="application/x-mpegURL"
               className="w-full h-full object-cover" 
@@ -129,8 +129,8 @@ const updateAttendance = async (): Promise<void> => {
               muted={false}
               controlsList="nodownload"
             >
-            </video> */}
-            <VideoPlayer src="https://vcpout-sf01-altnetro.internetmultimediaonline.org/vcp/07636ad7/playlist.m3u8" />
+            </video>
+            {/* <VideoPlayer src="https://vcpout-sf01-altnetro.internetmultimediaonline.org/vcp/07636ad7/playlist.m3u8" /> */}
           {/* <video ref={videoRef} controls width="100%" /> */}
           {/* <HlsPlayer className="w-full h-full object-contain" src="https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4" /> */}
           </div>
