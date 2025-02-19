@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios';
 import Image from 'next/image';
-import VideoPlayer from './VideoPlayer';
+// import VideoPlayer from './VideoPlayer';
 
 const LiveTv: React.FC = () => {
   const [content, setContent] = useState<string>('');
