@@ -76,13 +76,10 @@ function Navbar() {
           });
           setUser(response.data.user);
           setLoggedIn(true);
-          
         } catch (error) {
-          if (axios.isAxiosError(error)) {
-            console.error("Verification failed:", error.response?.data || error.message);
-          } else {
-            console.error("An unknown error occurred.");
-          }
+          console.error("Error verifying user:", error)
+          setUser(null);  // Ensure user is null if not logged in
+          setLoggedIn(false);
         }
       };
 
@@ -94,8 +91,7 @@ function Navbar() {
     }, [pathname]);
  
     const toggleSidebar = () => {
-      setIsOpen(!isOpen);
-      
+      setIsOpen(!isOpen); 
     }
 
     const toggleDropdown = () => {
@@ -110,9 +106,21 @@ function Navbar() {
       setProfile(!profile)
     }
 
+    // const logout = async () => {
+    //   await fetch("/api/logout", { method: "POST" });
+    //   setUser(null);   // ✅ Reset user state
+    //   setLoggedIn(false);  // ✅ Reset loggedIn state
+    //   router.push("/signin");
+    // };
     const logout = async () => {
-      await fetch("/api/logout", { method: "POST" });
-      router.push("/signin");
+      try {
+        await axios.post("/api/logout", {}, { withCredentials: true });
+        setUser(null);   // ✅ Reset user state
+        setLoggedIn(false);  // ✅ Reset loggedIn state
+        router.push("/signin");
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     };
 
     if (hideNavbar) return null; // Don't render navbar on these pages
@@ -208,9 +216,9 @@ function Navbar() {
               )}
             </div>
 
-            <Link href="/posts"
-              className={pathname === "/posts" ? activeClass : inactiveClass}
-              onClick={() => router.push("/posts")}
+            <Link href="/postpage"
+              className={pathname === "/postpage" ? activeClass : inactiveClass}
+              onClick={() => router.push("/postpage")}
             >
               Posts
             </Link>
@@ -325,7 +333,7 @@ function Navbar() {
               )}
             </div>
 
-          <li className='p-2 cursor-pointer transition transform ease-out duration-200' onClick={() => {toggleSidebar(); router.push("/posts")}}>
+          <li className='p-2 cursor-pointer transition transform ease-out duration-200' onClick={() => {toggleSidebar(); router.push("/postpage")}}>
           Posts
           </li>
 

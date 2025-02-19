@@ -2,8 +2,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios';
 import Image from 'next/image';
+import VideoPlayer from './VideoPlayer';
 
-const LiveTv = () => {
+const LiveTv: React.FC = () => {
   const [content, setContent] = useState<string>('');
   // const apiUrl = import.meta.env.VITE_API_URL;
   const [comments, setComments] = useState<{ 
@@ -12,11 +13,20 @@ const LiveTv = () => {
     user?: 
     { firstName: string }; createdAt: string }[]>([]);
   const [ loading, setLoading ] = useState<boolean>(false);
-  // const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
-  const [groupParticipation, setGroupParticipation] = useState<number | "">("");
+  const [groupParticipation, setGroupParticipation] = useState<number | "">(() => {
+    const storedValue = localStorage.getItem("groupParticipation");
+    return storedValue ? Number(storedValue) || "" : "";
+  });
   const [successMessage, setSuccessMessage] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement | null>(null);
   
+  useEffect(() => {
+    // Store groupParticipation in localStorage whenever it changes
+    if (groupParticipation!== "") {
+      localStorage.setItem("groupParticipation", String(groupParticipation));
+    }
+  }, [groupParticipation]);
+
   // Fetch Comment
   useEffect(() => {
     const fetchComments = async () => {
@@ -44,6 +54,7 @@ const LiveTv = () => {
   //Post comment
   const postComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true)
     if (!content.trim()) {
       alert('Comment cannot be empty');
       return;
@@ -58,6 +69,8 @@ const LiveTv = () => {
       setContent(''); // Clear input
     } catch (error) {
       console.error('Error posting comment:', error);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -84,25 +97,23 @@ const LiveTv = () => {
    []);
   
 // update groupAttendance
-const updateAttendance = async () => {
-  setLoading(true)
-  try{
-    await axios.post("/api/livetv/update", {groupParticipation}, {
-      withCredentials: true, // Ensure cookies are sent
-    });
+const updateAttendance = async (): Promise<void> => {
+  if (groupParticipation === "") return; // Prevent sending empty data
+
+  setLoading(true);
+  try {
+    await axios.post("/api/livetv/update", { groupParticipation }, { withCredentials: true });
     setSuccessMessage("Attendance successfully updated!");
-      
-      // Hide success message after 3 seconds
-      setTimeout(() => {
-        setSuccessMessage('');
-      }, 3000);
-  } catch(error){
+
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 3000);
+  } catch (error) {
     console.error("Error updating attendance:", error);
-    // setError({error: "error updating attendance"});
-  } finally{
+  } finally {
     setLoading(false);
   }
-}
+};
 
   return (
     
@@ -113,7 +124,7 @@ const updateAttendance = async () => {
         {/* LIVE TV */}
         <div className='flex flex-col md:w-[60%]'>
           <div className='w-screen h-auto md:w-full  '>
-            <video 
+            {/* <video 
               src="https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4" 
               // type="application/x-mpegURL"
               className="w-full h-full object-cover" 
@@ -121,7 +132,8 @@ const updateAttendance = async () => {
               muted={false}
               controlsList="nodownload"
             >
-            </video>
+            </video> */}
+            <VideoPlayer src="https://vcpout-sf01-altnetro.internetmultimediaonline.org/vcp/07636ad7/playlist.m3u8" />
           {/* <video ref={videoRef} controls width="100%" /> */}
           {/* <HlsPlayer className="w-full h-full object-contain" src="https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4" /> */}
           </div>
@@ -137,6 +149,7 @@ const updateAttendance = async () => {
               onChange={(e) => setGroupParticipation(e.target.value ? Number(e.target.value) : "")}
               type='number'
               min="1"
+              value={groupParticipation}
               placeholder='1'
             />
               <button onClick={updateAttendance} className={`bg-red-600 px-2 py-1 text-white rounded-md lg:py-3 lg:px-5`} >Update Attendance</button>
@@ -160,13 +173,13 @@ const updateAttendance = async () => {
               className='object-contain'
             />
           </div>
-          <div className='flex mt-2 w-full md:w-full'>
+          <div className='flex mt-2 w-full'>
             <button className='bg-blue-700 px-8 py-2 text-white md:px-5'>Live Chat</button>
             <button className='bg-yellow-400 px-8 py-2 md:px-5'>Programme Line-UP</button>
           </div>
           
-          <div className='flex flex-col bg-white p-3 border-[1.5px] border-solid border-lw_gray w-screen '>
-              {loading ? <h1>Comments Loading...... </h1> : 
+          <div className='flex flex-col bg-white p-3 border-[1.5px] border-solid border-gray-400 w-full'>
+              {loading ? <h1 className='flex w-full justify-center p-10'>Comments Loading...... </h1> : 
                <div ref={scrollRef} className='flex flex-col overflow-y-auto max-h-[250px] md:w-full md:max-h-[250px]'>
                {comments.slice() // Create a copy to avoid mutating the original array
                .reverse().map((comment) => (
@@ -188,8 +201,8 @@ const updateAttendance = async () => {
                 onChange={(event) => setContent(event.target.value)} className='p-2 grow rounded-md border-[1px] border-solid border-black min-h-20'placeholder='Type your comment here'
               />
 
-              <button className='flex text-center items-center justify-center bg-blue-950 w-full text-lg text-white self-center  py-2 rounded-md cursor-pointer'>
-                Submit
+              <button className={`flex text-center items-center justify-center w-full text-lg text-white self-center  py-2 rounded-md cursor-pointer ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-950 text-white"}`} disabled={loading}>
+                {loading ? "Commment..." : "Comment"}
               </button>
             </form>
           </div>

@@ -1,9 +1,10 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "LWFoundationschool", // Change this to your site title
+  title: "Lwfoundationschool", // Change this to your site title
   description: "Welcome to Loveworld Foundation School",
   icons: {
     icon: "/images/logo.png",
@@ -27,6 +28,7 @@ export default function RootLayout({
       {/* {!hideNavbar && <Navbar />} */}
       <Navbar />
         {children}
+      <Footer />
       </body>
     </html>
   );

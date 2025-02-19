@@ -10,18 +10,5 @@ Comment.belongsTo(SignUp, { foreignKey: "userId", as: "user" });
 SignUp.hasMany(Attendance, { foreignKey: "userId", as: "attendances" });
 Attendance.belongsTo(SignUp, { foreignKey: "userId", as: "user" });
 
-// // Sync database
-// const syncDatabase = async () => {
-//   try {
-//     await sequelize.sync({ alter: true }); // Adjust based on needs
-//     console.log("✅ Database synced successfully");
-//   } catch (error) {
-//     console.error("❌ Error syncing database:", error);
-//   }
-// };
-
-// // Call sync
-// syncDatabase();
-
 // Use named exports instead of default
 export { sequelize, SignUp, Comment, Attendance };

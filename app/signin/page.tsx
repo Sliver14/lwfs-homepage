@@ -79,7 +79,7 @@ const Signin: React.FC = () => {
         <div className='flex flex-col items-center' >
             <input onChange={(event) => setEmail(event.target.value)} className='border rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black text-lg w-[250px]' type="email" autoComplete="email" placeholder='Email'/>
             <button onClick={handleSubmit} 
-            className={`bg-lw_blue mt-5 w-[250px] transition transform ease-out duration-200 hover:scale-95 hover:shadow-sm rounded-md text-white p-2 mb-5 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 text-white"}`} 
+            className={`bg-lw_blue mt-5 w-[250px] transition transform ease-out duration-200 hover:scale-95 hover:shadow-sm rounded-md text-white p-2 mb-5 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-900 text-white"}`} 
             disabled={loading} >{loading ? "Signing In..." : "Sign In"}</button>
             {error && <p className='text-red-500'>{error}</p>}
             {success && <p className='text-green-500'>{success}</p>}
