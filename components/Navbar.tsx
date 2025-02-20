@@ -109,13 +109,13 @@ function Navbar() {
       setIsOpen(!isOpen); 
     }
 
-    const toggleDropdown = () => {
-      setDropdownOpen(!dropdownOpen);
-    };
+    // const toggleDropdown = () => {
+    //   setDropdownOpen(!dropdownOpen);
+    // };
 
-    const toggleDropdown2 = () => {
-      setDropdown2Open(!dropdownOpen2);
-    };
+    // const toggleDropdown2 = () => {
+    //   setDropdown2Open(!dropdownOpen2);
+    // };
 
     const profileToggle = () => {
       setProfile(!profile)

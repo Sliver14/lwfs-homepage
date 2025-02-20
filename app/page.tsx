@@ -2,7 +2,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation';
 import  ImageSlider from "./ImageSlider";
-import  LogoSlider from "./LogoSlider";
+// import  LogoSlider from "./LogoSlider";
 // import Modal from "../component/Modal"
 import VideoSlider from "./VideoSlider";
 import Image from 'next/image';
@@ -55,7 +55,7 @@ export default function Home() {
         </div>
         
       </div> */}
-      
+
       {/* Foundation School */}
       {/* <div className='flex flex-col  md:py-5 gap-5'> */}
         <div className='flex flex-col w-screen'>
