@@ -8,8 +8,14 @@ import { IoMdClose } from "react-icons/io";
 import { FaAngleDown } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import { LiaPowerOffSolid } from "react-icons/lia";
+import { IoHomeOutline } from "react-icons/io5";
+import { MdModelTraining } from "react-icons/md";
+import { MdLiveTv } from "react-icons/md";
+import { IoMdAppstore } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
 import axios from 'axios';
 import Image from 'next/image';
+
 
 // Define user type
 interface User {
@@ -30,6 +36,7 @@ function Navbar() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState(false);
+    const [active, setActive] = useState(0);
 
     const activeClass = "flex px-3 py-2 rounded-lg font-medium bg-opacity-90 transform duration-300 bg-red-500 text-white";
     const inactiveClass = "flex text-black px-3 py-2 rounded-lg hover:bg-gray-300 hover:bg-opacity-25 hover:text-black transform transform ease-out duration-300 hover:scale-95";
@@ -38,6 +45,14 @@ function Navbar() {
     const nav2Ref = useRef<HTMLDivElement | null>(null);
     const sidebarRef = useRef<HTMLDivElement | null>(null);
     const proRef = useRef<HTMLDivElement | null>(null);
+
+    const Navbar = [
+      {name: "Home", icon: <IoHomeOutline/>, dis: "translate-x-0"},
+      {name: "Training", icon: <MdModelTraining />, dis: "translate-x-16"},
+      {name: "Livetv", icon: <MdLiveTv />, dis: "translate-x-32"},
+      {name: "Store", icon: <IoMdAppstore />, dis: "translate-x-48"},
+      {name: "Profile", icon: <CgProfile />, dis: "translate-x-64"},
+    ]
 
     // Function to handle clicks outside the nav
     useEffect(() => {
@@ -84,7 +99,7 @@ function Navbar() {
       };
 
       fetchUserDetails();
-    },[]);
+    },[loggedIn]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -127,7 +142,7 @@ function Navbar() {
     
   return (
     // Navbar
-    <div className='relative flex flex-col '>
+    <div className='relative flex flex-col w-screen'>
       
       {/* Modal */}
      {/* {letsLogin && <Modal isOpen={letsLogin} onClick={() =>setLetsLogin(true) } />}  */}
@@ -161,7 +176,7 @@ function Navbar() {
             </Link>
 
             {/* Laptop Dropdown for Platforms */}
-            <div ref={navRef} className="relative transition transform duration-200 ease-out">
+            {/* <div ref={navRef} className="relative transition transform duration-200 ease-out">
               <button
                 onClick={toggleDropdown} 
                 className="flex items-center text-black px-3 py-2 cursor-pointer"
@@ -214,21 +229,16 @@ function Navbar() {
                   
                 </ul>
               )}
-            </div>
-
-            <Link href="/postpage"
-              className={pathname === "/postpage" ? activeClass : inactiveClass}
-              onClick={() => router.push("/postpage")}
+            </div> */}
+            
+            <Link href="/training"
+              className={pathname === "/training" ? activeClass : inactiveClass}
+              onClick={() => router.push("/training")}
             >
-              Posts
+              Training
             </Link>
 
-            <Link href="/contact"
-              className={pathname === "/contact" ? activeClass : inactiveClass}
-              onClick={() => router.push("/contact")}
-            >
-              Contact
-            </Link>
+            
             
         </div>
         <div ref={proRef} className='hidden lg:flex'>
@@ -282,7 +292,7 @@ function Navbar() {
           </li>
           
           {/* Mobile Dropdown for Platforms*/}
-          <div ref={nav2Ref} className="relative z-50 w-full">
+          {/* <div ref={nav2Ref} className="relative z-50 w-full">
               <button
                 onClick={toggleDropdown2} 
                 className="flex items-center text-black px-2 pr-10 py-2 cursor-pointer justify-between w-full"
@@ -331,16 +341,20 @@ function Navbar() {
                   
                 </ul>
               )}
-            </div>
+            </div> */}
+
+          <li className='p-2 cursor-pointer transition transform ease-out duration-200' onClick={() => {toggleSidebar(); router.push("/training")}}>
+          Training
+          </li>
 
           <li className='p-2 cursor-pointer transition transform ease-out duration-200' onClick={() => {toggleSidebar(); router.push("/postpage")}}>
           Posts
           </li>
 
           <div className=' flex p-2 text-center items-center border-solid border-t-[0.1px] border-b-[0.1px]'>
-            {!loggedIn ? <h1 onClick={()=> router.push("/signin")} className='cursor-pointer' >Signin/Register</h1> : <div>
+            {loggedIn ?  <div>
             <button className='flex gap-2 cursor-pointer text-red-500 text-xs w-full py-2 items-center' onClick={logout}><LiaPowerOffSolid className='cursor-pointer text-lg font-semibold' onClick={logout} />LOGOUT</button>
-            </div>}
+            </div> : <h1 onClick={()=> router.push("/signin")} className='cursor-pointer' >Signin/Register</h1>}
           </div>
         </ul>
         
@@ -353,6 +367,21 @@ function Navbar() {
       
         
     </div>
+
+      <div className='flex w-screen h-12 p-10 fixed shadow-lg bg-white bottom-0 justify-center z-50 items-center'>
+        <ul className='flex relative'>
+                {
+                  Navbar.map((menu, i)=>(
+                  <li key={i} className='w-16' >
+                    <a className='flex flex-col items-center' onClick={()=>setActive(i)}>
+                      <span className={`text-xl duration-500 ${active === i && "-mt-5"}` }>{menu.icon}</span>
+                      <span className={`text-sm  ${active === i? "translate-y-2 duration-700 opacity-100" : "opacity-0 translate-y-10"} `}>{menu.name}</span>
+                    </a>
+                  </li>
+                  ))
+                }
+        </ul>
+      </div>
   
 </div>
 

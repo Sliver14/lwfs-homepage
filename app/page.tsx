@@ -11,8 +11,8 @@ export default function Home() {
   const router = useRouter();
     const slides = [
       {url: "../images/hslhs.jpeg", link: "https://healingstreams.tv/LHS", title: "Healing Streams Live healing Services with Pastor Chris"},
-      // {url: "../images/jan-jan.jpg", link: "https://lwfoundationschool.org/homes/", title: "Jan-comm"},
-      // {url: "https://res.cloudinary.com/dfi8bpolg/image/upload/v1736329279/samples/smile.jpg", title: "logo"},
+      {url: "../images/jan-jan.jpg", link: "https://lwfoundationschool.org/homes/", title: "Jan-comm"},
+      {url: "https://res.cloudinary.com/dfi8bpolg/image/upload/v1736329279/samples/smile.jpg", title: "logo"},
     ];
 
   const videoSlides = [
@@ -32,8 +32,16 @@ export default function Home() {
        <div className='flex flex-col pt-12 pb-20 gap-5' >
 
       {/* <Modal/> */}
+      {/* Resource center video slider */}
+      <div className="w-screen ">
+        <div className="w-screen h-64 overflow-hidden md:h-[350px] md:w-1/2">
+          {/* Auto-scroll enabled with 5-second interval */}
+          <VideoSlider slides={videoSlides} autoScroll={true} interval={15000}/>
+        </div> 
+      </div>
       
-      <div className='flex flex-col relative w-screen'>
+      {/* Loveworld fs backdrop */}
+      {/* <div className='flex flex-col relative w-screen'>
         <div className='relative h-52 max-h-[600px] w-screen md:h-80 lg:h-96'>
           <Image className='absolute object-cover object-[50%_20%] h-full w-full' fill alt='' src='/images/bg-bg.jpeg'/>
           <div className='absolute inset-0 bg-black opacity-65'></div>
@@ -46,11 +54,12 @@ export default function Home() {
           </div>
         </div>
         
-      </div>
+      </div> */}
+      
       {/* Foundation School */}
       {/* <div className='flex flex-col  md:py-5 gap-5'> */}
         <div className='flex flex-col w-screen'>
-          <div className='flex flex-col gap-2 px-5 text-wrap md:px-10'>
+          {/* <div className='flex flex-col gap-2 px-5 text-wrap md:px-10'>
             <p className='font-bold text-xl text-lw_blue'>Welcome to Loveworld</p>
             <p className='font-semibold text-lg text-lw_yellow'>Foundation School</p>
             <p className='font-medium text-base text-lw_blue'>The Foundation School is a compulsory part of our Church Ministry, with clearly defined Aims and Objectives as summarized below.</p>
@@ -61,7 +70,7 @@ export default function Home() {
                 <p>5.  To introduce them to fellowship with fellow Christians and the Holy Spirit.</p>
               <p>6.  To set them on an irreversible path of continuous growth and service in the Local Assembly and beyond.</p> 
                 <p>7.  To fulfill the first requirement for eligibility and consideration for higher responsibilities in Ministry</p>
-          </div>
+          </div> */}
         </div>
 
         {/* Up coming programmes */}
@@ -104,34 +113,24 @@ export default function Home() {
       </div>
 
       {/* Platforms Logo Slider */}
-      <div className="relative flex flex-col justify-center items-center w-screen py-10">
+      {/* <div className="relative flex flex-col justify-center items-center w-screen py-10">
         <h1 className='text-2xl font-bold text-center w-screen text-lw_dark_blue uppercase'>Our Platforms</h1>
         <div className="w-screen shadow-lg py-10 ">
           <LogoSlider />
         </div>
-      </div>
+      </div> */}
 
       {/* Testimony slider*/}
       <div className='flex flex-col relative gap-5 w-screen overflow-x-scroll items-center justify-center md:flex md:flex-row'>
-        {testimonySlides.map((testimony)=>(
-          <div key={testimony.url} className='flex relative group h-auto w-full'>
-            <Image src={testimony.url} className='w-full h-full object-cover' alt='' fill/>
-            <a href='https://lwfoundationschool.org/testimonybank/' target="_blank" className='flex flex-col absolute text-xl inset-0 bg-lw_yellow w-full text-black h-12 bottom-8 self-end justify-center items-center text-center opacity-0 group-hover:opacity-90 transform duration-500'>
+        {testimonySlides.map((testimony, index)=>(
+          <div key={index} className='flex relative group h-[480px] w-full'>
+            <Image src={testimony?.url} className='w-full h-full object-cover' fill alt=''/>
+            <a href='https://lwfoundationschool.org/testimonybank/' target="_blank" className='flex flex-col absolute text-xl inset-0 bg-yellow-400 w-full text-black h-12 bottom-8 self-end justify-center items-center text-center opacity-0 group-hover:opacity-90 transform duration-500'>
               <p>Share Your Testimony</p>
             </a>
           </div>
         ))}
         </div>
-        
-
-      {/* Resource center video slider */}
-      <div className="w-screen ">
-        <div className="w-screen h-64 overflow-hidden md:h-[350px] md:w-1/2">
-          {/* Auto-scroll enabled with 5-second interval */}
-          <VideoSlider slides={videoSlides} autoScroll={true} interval={15000}/>
-        </div>
-        
-    </div>
 
 
       {/* Store */}

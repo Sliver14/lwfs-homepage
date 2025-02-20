@@ -14,5 +14,5 @@ export function middleware(req: NextRequest) {
 
 // // Apply middleware only to Live TV page
 export const config = {
-  matcher: "/livetv", // This will protect only the /livetv route
+  matcher: ["/", "/livetv", "/training", "/makepost", "/profile", ],
 };
