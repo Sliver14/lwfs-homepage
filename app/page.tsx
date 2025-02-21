@@ -76,7 +76,7 @@ export default function Home() {
         {/* Up coming programmes */}
         <div className="relative flex flex-col justify-center items-center w-screen md:px-10">
           <div className="w-screen h-[250px] shadow-lg md:h-[450px] lg:h-[650px]">
-            <ImageSlider slides={slides} autoScroll={true} interval={20000} />
+            <ImageSlider slides={slides} autoScroll={true} interval={20000}/>
           </div>
           <div className='hidden md:flex flex-col px-2 gap-5 py-8'>
             <h1 className='text-lw_red text-4xl font-extrabold self-center'>Upcoming Events</h1>

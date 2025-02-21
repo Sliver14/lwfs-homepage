@@ -1,6 +1,5 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -25,10 +24,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-black">
-      {/* {!hideNavbar && <Navbar />} */}
       <Navbar />
         {children}
-      <Footer />
       </body>
     </html>
   );
