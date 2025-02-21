@@ -197,11 +197,11 @@ function Navbar() {
     </div>
   
 
-      <div className='flex w-screen h-auto p-2 fixed shadow-2xl bg-white bottom-0 justify-center z-50 items-center rounded-t-xl md:none'>
+      <div className='flex w-screen h-auto px-2 py-1 fixed shadow-2xl bg-white bottom-0 justify-center z-50 items-center rounded-t-xl md:none'>
         <ul className='flex relative gap-2'>
                 {Navbar.map((menu, i)=>(
-                  <li key={i} className='w-16 cursor-pointer' >
-                    <a className='flex flex-col items-center text-center' onClick={()=> {
+                  <li key={i} className={`w-16 cursor-pointer py-2 duration-500 ${active === i ? " border border-white border-t-black" : "border-none"}`}>
+                    <a className='flex flex-col items-center text-center ' onClick={()=> {
                       setActive(i);
                       router.push(`${menu.route}`)
                       }}>
