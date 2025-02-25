@@ -12,7 +12,7 @@ export function middleware(req: NextRequest) {
   return NextResponse.next(); // Allow access if token exists
 }
 
-// // Apply middleware only to Live TV page
+// // Apply middleware to these pages
 export const config = {
-  matcher: ["/", "/livetv", "/training", "/makepost", "/profile", ],
+  matcher: ["/home", "/livetv", "/training", "/makepost", "/profile", ],
 };

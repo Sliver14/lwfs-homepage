@@ -34,7 +34,7 @@ const Signin: React.FC = () => {
     // ✅ Cookies are set from the **server**, so no need for js-cookie here
 
     setSuccess(response.data.message);
-    router.push("/"); // Redirect to dashboard or home page
+    router.push("/home"); // Redirect to dashboard or home page
     router.refresh();
 
   } catch (error: unknown) {
@@ -71,6 +71,7 @@ const Signin: React.FC = () => {
 
   return (
     <div className='flex relative flex-col items-center justify-center w-screen h-screen lg:grid lg:grid-cols-2 lg:gap-0 overflow-hidden'>
+
         <Image 
         src="/welcome/bg welcome app.png"
         alt="bg"
@@ -91,7 +92,7 @@ const Signin: React.FC = () => {
            />
 
            <Image
-            src="/welcome/logo-shadow.png"
+            src="/welcome/Logo-shadow.png"
             alt="Background"
             // layout="fill"
             width="200"

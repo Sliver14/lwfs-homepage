@@ -28,7 +28,7 @@ function Navbar() {
     const pathname  = usePathname();
 
     // Hide navbar on these routes
-    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/welcome"].includes(pathname);
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/"].includes(pathname);
     const router = useRouter();
 
     // const [isOpen, setIsOpen] = useState(false);
