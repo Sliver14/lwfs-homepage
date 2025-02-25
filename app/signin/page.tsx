@@ -95,10 +95,10 @@ const Signin: React.FC = () => {
             src="/welcome/Logo-shadow.png"
             alt=""
             // layout="fill"
-            width="90"
-            height="90"
+            width="200"
+            height="200"
             objectFit="contain"
-            className="hidden lg:flex w-[90px] h-auto"
+            className="hidden lg:flex w-[200px] h-auto"
           />
         </div>
 
