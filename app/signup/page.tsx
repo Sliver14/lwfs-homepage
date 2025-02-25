@@ -122,7 +122,7 @@ const Signup = () => {
         width="90"
         height="90"
         objectFit="contain"
-        className="flex absolute top-5 self-center justify-self-center lg:hidden"
+        className="flex absolute top-5 self-center justify-self-center z-20 lg:hidden"
       />
       {/* left */}
       <div className='hidden h-screen w-full lg:flex justify-center items-center'>
@@ -147,8 +147,9 @@ const Signup = () => {
       </div>
 
       {/* Right */}
-      <div className='hidden lg:flex lg:bg-white lg:overflow-y-scroll z-20'>
-        <div className='flex relative flex-col bg-white rounded-t-2xl mt-14 lg:mt-0 lg:rounded-none lg:bg-opacity-0 lg:h-full lg:w-full'>
+      {/* <div className=' lg:flex lg:bg-white lg:overflow-y-scroll z-10'> */}
+        <div className='flex relative flex-col bg-white rounded-t-2xl lg:overflow-y-scroll mt-14 lg:mt-0 lg:rounded-none lg:h-full lg:w-full'>
+
         <Image 
             src="/welcome/bg-transparent.jpg"
             alt=""
@@ -372,7 +373,7 @@ const Signup = () => {
                 </div>
           </div>
         </div>
-      </div>
+      {/* </div> */}
       
         
     </div>
