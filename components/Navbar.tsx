@@ -48,7 +48,7 @@ function Navbar() {
     const proRef = useRef<HTMLDivElement | null>(null);
 
     const Navbar = [
-      {name: "Home", route: "/", icon: <IoHomeOutline/>,icon2: <IoHomeOutline/> , dis: "translate-x-0"},
+      {name: "Home", route: "/home", icon: <IoHomeOutline/>,icon2: <IoHomeOutline/> , dis: "translate-x-0"},
       {name: "Training", route: "/training",icon: <MdModelTraining />,icon2: <MdModelTraining /> , dis: "translate-x-16"},
       {name: "Livetv", route: "/livetv", icon: <MdLiveTv />,icon2: <MdLiveTv /> , dis: "translate-x-32"},
       {name: "Store", route: "/store", icon: <IoMdAppstore />, icon2: <IoMdAppstore />, dis: "translate-x-48"},
@@ -143,14 +143,14 @@ function Navbar() {
           <GrMenu/>
         </button> */}
         <div className='flex h-auto w-44 self-center'>
-         <Image onClick={() => {router.push("/")}} className='cursor-pointer object-contain w-full h-full' width={250} height={150} src="/images/LWFS_LOGO.png" alt="lwfs_logo" />
+         <Image onClick={() => {router.push("/home")}} className='cursor-pointer object-contain w-full h-full' width={250} height={150} src="/images/LWFS_LOGO.png" alt="lwfs_logo" />
         </div>
 
         {/* Navigation Links for Large Screens */}
         <div className="hidden lg:flex items-center space-x-5 text-sm justify-center ">
-            <Link href="/"
-              className={pathname === "/" ? activeClass : inactiveClass}
-              onClick={() => router.push("/")}
+            <Link href="/home"
+              className={pathname === "/home" ? activeClass : inactiveClass}
+              onClick={() => router.push("/home")}
             >
               Home
             </Link>
