@@ -16,6 +16,7 @@ import { IoMdAppstore } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import axios from 'axios';
 import Image from 'next/image';
+import { CircleUser } from "lucide-react"
 
 
 // Define user type
@@ -135,16 +136,33 @@ function Navbar() {
      {/* {letsLogin && <Modal isOpen={letsLogin} onClick={() =>setLetsLogin(true) } />}  */}
 
       {/* Navbar */}
-    <div className='flex flex-col w-screen bg-white fixed top-0 z-20 shadow-md' >
-    
-      <div className='flex justify-between align-middle py-2 pl-2 pr-5 w-screen md:pr-10 md:pl-5 lg:px-10'>
-        {/* Toggle */}
-        {/* <button className="cursor-pointer px-4 text-2xl align-middle lg:hidden" onClick={toggleSidebar}>
-          <GrMenu/>
-        </button> */}
-        <div className='flex h-auto w-44 self-center'>
-         <Image onClick={() => {router.push("/home")}} className='cursor-pointer object-contain w-full h-full' width={250} height={150} src="/images/LWFS_LOGO.png" alt="lwfs_logo" />
+    <div className='flex flex-col w-screen bg-white fixed top-0 z-20 shadow-md ' >
+      <Image
+        src="/welcome/bg welcome app.png"
+        alt=""
+        // width="90"
+        // height="90"
+        layout="fill"
+        objectFit="cover"
+        className="flex self-center justify-self-center -z-20 lg:hidden"
+      />
+      <div className='grid grid-cols-3 items-center py-2 pl-2 pr-5 w-screen md:pr-10 md:pl-5 lg:px-10'>
+        <div></div>
+        <div className='text-3xl font-bold text-white text-center'>
+          LWFS
         </div>
+
+        <div className='flex w-full h-auto justify-end pr-10 relative  items-center '>
+          <div>
+           <CircleUser className='flex w-10 h-auto bg-zinc-800 rounded-full p-2 text-white'/>
+          </div>
+          
+        </div>
+        
+
+        {/* <div className='flex h-auto w-44 self-center'>
+         <Image onClick={() => {router.push("/home")}} className='cursor-pointer object-contain w-full h-full' width={250} height={150} src="/images/LWFS_LOGO.png" alt="lwfs_logo" />
+        </div> */}
 
         {/* Navigation Links for Large Screens */}
         <div className="hidden lg:flex items-center space-x-5 text-sm justify-center ">
@@ -179,13 +197,13 @@ function Navbar() {
             
         </div>
 
-        <div ref={proRef} className='flex'>
+        <div ref={proRef} className='hidden lg:flex'>
         <div className='flex items-center space-x-5 mr-10'>
           <div className='flex items-center'>
           <h1 className='cursor-pointer text-xs lg:text-sm flex items-center gap-1' onClick={profileToggle}>{user?.firstName} {user?.lastName}<FaAngleDown/></h1>
           
           {profile && <>
-            <div className='absolute top-[50px] translate-y-0 ease-in-out duration-500 right-5 flex items-center shadow-md  text-red-600 bg-white p-5 z-20  transition translate '>
+            <div className='flex absolute top-[50px] translate-y-0 ease-in-out duration-500 right-5 items-center shadow-md  text-red-600 bg-white p-5 z-20  transition translate '>
               <span className='flex rounded-md text-red-500 items-center gap-2'>
                 <AiOutlineLogout className='cursor-pointer' onClick={logout} />
                 <button className='cursor-pointer' onClick={logout} >Logout</button>
