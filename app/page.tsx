@@ -88,13 +88,13 @@ export default function Home() {
 
       {/* platforms */}
       <div className='flex flex-col gap-5 md:flex-row w-screen md:gap-5 md:p-5'>
-          <div className='flex flex-col bg-blue-950 text-white gap-5 px-8 py-12 text-wrap hover:shadow-md translate transform ease-out duration-150 md:hover:scale-105 md:flex-1'>
+          <div className='flex flex-col bg-gray-800 text-white gap-5 px-8 py-12 text-wrap hover:shadow-md translate transform ease-out duration-150 md:hover:scale-105 md:flex-1'>
             <h1 className='text-3xl font-bold md:text-wrap'>Online Class</h1>
             <p>The Loveworld Foundation School is a Christian education platform by Pastor Lanre Alabi, offering courses to strengthen faith and spiritual growth. It equips believers with foundational biblical teachings and practical insights for victorious living.</p>
             <a href='https://online.lwfoundationschool.org/' target="blank" className='px-5 py-2 rounded-md bg-yellow-500 w-32 text-center text-black hover:bg-opacity-0 hover:border-2 hover:border-solid hover:border-white  hover:text-white transform duration-300 '>Apply Now</a>
           </div>
 
-          <div className='flex flex-col bg-blue-950 text-white gap-5 px-8 py-12 text-wrap hover:shadow-md translate transform ease-out duration-150 md:hover:scale-105 md:flex-1'>
+          <div className='flex flex-col bg-gray-800 text-white gap-5 px-8 py-12 text-wrap hover:shadow-md translate transform ease-out duration-150 md:hover:scale-105 md:flex-1'>
             <h1 className='text-3xl font-bold'>Testimony Bank</h1>
             <p>The Loveworld Foundation School Testimony Bank is a platform where students share testimonies of life transformation and spiritual growth through the teachings of Pastor Chris Oyakhilome.</p>
             <a href='https://lwfoundationschool.org/testimonybank/' target="_blank" className='px-5 py-2 rounded-md bg-yellow-500 w-56 text-center text-black hover:bg-opacity-0 hover:border-2 hover:border-solid hover:border-white hover:text-white transform duration-300'>Share Your Testimony</a>
@@ -131,14 +131,6 @@ export default function Home() {
           </div>
         ))}
         </div>
-
-
-      {/* Store */}
-      <div className='flex flex-col justify-center items-center' >
-        <h1>Loveworld Foundation School Products</h1>
-        <div></div>
-        <button>Visit Store</button>
-      </div>
 
       {/* Prayer of Salvation */}
 

@@ -28,7 +28,7 @@ function Navbar() {
     const pathname  = usePathname();
 
     // Hide navbar on these routes
-    const hideNavbar = ["/signin", "/signup", "/signup/verify"].includes(pathname);
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/welcome"].includes(pathname);
     const router = useRouter();
 
     // const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,7 @@ function Navbar() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState(false);
-    const [active, setActive] = useState(0);
+    // const [active, setActive] = useState(0);
 
     const activeClass = "flex px-3 py-2 rounded-lg font-medium bg-opacity-90 transform duration-300 bg-red-500 text-white";
     const inactiveClass = "flex text-black px-3 py-2 rounded-lg hover:bg-gray-300 hover:bg-opacity-25 hover:text-black transform transform ease-out duration-300 hover:scale-95";
@@ -48,11 +48,11 @@ function Navbar() {
     const proRef = useRef<HTMLDivElement | null>(null);
 
     const Navbar = [
-      {name: "Home", route: "/", icon: <IoHomeOutline/>, dis: "translate-x-0"},
-      {name: "Training", route: "/training",icon: <MdModelTraining />, dis: "translate-x-16"},
-      {name: "Livetv", route: "/livetv", icon: <MdLiveTv />, dis: "translate-x-32"},
-      {name: "Store", route: "/store", icon: <IoMdAppstore />, dis: "translate-x-48"},
-      {name: "Profile", route: "/profile", icon: <CgProfile />, dis: "translate-x-64"},
+      {name: "Home", route: "/", icon: <IoHomeOutline/>,icon2: <IoHomeOutline/> , dis: "translate-x-0"},
+      {name: "Training", route: "/training",icon: <MdModelTraining />,icon2: <MdModelTraining /> , dis: "translate-x-16"},
+      {name: "Livetv", route: "/livetv", icon: <MdLiveTv />,icon2: <MdLiveTv /> , dis: "translate-x-32"},
+      {name: "Store", route: "/store", icon: <IoMdAppstore />, icon2: <IoMdAppstore />, dis: "translate-x-48"},
+      {name: "Profile", route: "/profile", icon: <CgProfile/>, icon2: <img src="images/profile_outline.svg" className='w-4 h-4'/> , dis: "translate-x-64"},
     ]
 
     // Function to handle clicks outside the nav
@@ -155,13 +155,6 @@ function Navbar() {
               Home
             </Link>
 
-            <Link href="/livetv"
-              className={pathname === "/livetv" ? activeClass : inactiveClass}
-              onClick={() => router.push("/livetv")}
-            >
-              Live - TV
-            </Link>
-            
             <Link href="/training"
               className={pathname === "/training" ? activeClass : inactiveClass}
               onClick={() => router.push("/training")}
@@ -169,26 +162,39 @@ function Navbar() {
               Training
             </Link>
 
+            <Link href="/livetv"
+              className={pathname === "/livetv" ? activeClass : inactiveClass}
+              onClick={() => router.push("/livetv")}
+            >
+              Live - TV
+            </Link>
+
+            <Link href="/store"
+              className={pathname === "/store" ? activeClass : inactiveClass}
+              onClick={() => router.push("/store")}
+            >
+              Store
+            </Link>
             
             
         </div>
-        <div ref={proRef} className='hidden lg:flex'>
 
-        {!loggedIn ? <div className='hidden lg:flex items-center space-x-5 mr-10'>
-          <h1 onClick={()=> router.push("/signin")} className='cursor-pointer'>Login/Register</h1>
-        </div> : <div className='flex items-center'>
-          <h1 className='cursor-pointer text-sm flex items-center gap-1' onClick={profileToggle}>{user?.firstName} {user?.lastName}<FaAngleDown/></h1>
+        <div ref={proRef} className='flex'>
+        <div className='flex items-center space-x-5 mr-10'>
+          <div className='flex items-center'>
+          <h1 className='cursor-pointer text-xs lg:text-sm flex items-center gap-1' onClick={profileToggle}>{user?.firstName} {user?.lastName}<FaAngleDown/></h1>
           
           {profile && <>
-            <div className='absolute top-[60px] right-5 flex items-center shadow-md  text-red-600 bg-white p-5 z-20  transition translate duration-150'>
-              <div className='flex rounded-md text-lw_red items-center gap-2'>
+            <div className='absolute top-[50px] translate-y-0 ease-in-out duration-500 right-5 flex items-center shadow-md  text-red-600 bg-white p-5 z-20  transition translate '>
+              <span className='flex rounded-md text-red-500 items-center gap-2'>
                 <AiOutlineLogout className='cursor-pointer' onClick={logout} />
                 <button className='cursor-pointer' onClick={logout} >Logout</button>
-              </div>
+              </span>
               
             </div>
           </>}
-          </div> }
+          </div>
+        </div>
         </div>
         
         
@@ -197,17 +203,17 @@ function Navbar() {
     </div>
   
 
-      <div className='flex w-screen h-auto px-2 py-1 fixed shadow-2xl bg-white bottom-0 justify-center z-50 items-center rounded-t-xl md:none'>
+      <div className='flex w-screen h-auto px-2 py-1 fixed shadow-2xl bg-white bottom-0 justify-center z-50 items-center rounded-t-xl lg:hidden'>
         <ul className='flex relative gap-2'>
                 {Navbar.map((menu, i)=>(
-                  <li key={i} className={`w-16 cursor-pointer py-2 duration-500 ${active === i ? " border border-white border-t-black" : "border-none"}`}>
-                    <a className='flex flex-col items-center text-center ' onClick={()=> {
-                      setActive(i);
-                      router.push(`${menu.route}`)
-                      }}>
-                      <span className={`text-xl duration-500 ${active === i ? "text-black" : "text-gray-500"}` }>{menu.icon}</span>
-                      <span className={`text-xs ${active === i ? "translate-y-0.5 duration-700 text-black" : "text-gray-500" } `}>{menu.name}</span>
-                    </a>
+                  <li key={i} className={`w-16 cursor-pointer py-2 duration-500 ${pathname === `${menu.route}` ? " border border-white border-t-black" : "border-none"}`}>
+                    <Link href={menu.route} className='flex flex-col items-center text-center'>
+                      <span className={`text-xl duration-500 ${pathname === `${menu.route}` ? "text-black" : "text-gray-500"}` }>
+                        {menu.icon} 
+                      </span>
+                      <span className={`text-xs ${pathname === `${menu.route}` ? "translate-y-0.5 duration-700 text-black" : "text-gray-500" } `}>{menu.name}
+                      </span>
+                    </Link>
                   </li>
                   ))
                 }

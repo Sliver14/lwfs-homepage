@@ -9,8 +9,12 @@ export default {
   theme: {
     extend: {
       colors: {
+        
         background: "var(--background)",
         foreground: "var(--foreground)",
+        lwfs_blue: "#390da0",
+        lwfs_yellow: "#f0cc05",
+        lwfs_orange: "#ff9501",
       },
     },
   },
