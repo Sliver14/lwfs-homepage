@@ -4,11 +4,13 @@ import axios, { AxiosError } from "axios";
 import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import Image from 'next/image.js';
 import country from '../utils/country.js';
 import zones from "../utils/zones.js";
 import { useRouter } from 'next/navigation';
 import { FaChevronLeft } from "react-icons/fa6";
 import { AiFillHome } from "react-icons/ai";
+import { Eye, EyeOff, Mail, Lock, User, Phone, Church } from 'lucide-react';
 
 // Define the type for the form values
 interface SignupFormValues {
@@ -26,8 +28,9 @@ const Signup = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null)
+    const [success, setSuccess] = useState<string | null>(null)
     const [loading, setLoading] = useState(false); // Loading state
+    const [showPassword, setShowPassword ] = useState(false);
     const initialValues = {
         // title: "",
         firstName: "",
@@ -91,55 +94,75 @@ const Signup = () => {
     }
 
   return (
-    <div className='flex flex-col  w-screen h-screen'>
-        <div className='flex w-full p-5 justify-between opacity-50'>
-            <FaChevronLeft className='text-xl cursor-pointer transition transform duration-150 ease-out hover:shadow-sm' onClick={()=> router.back()}/>
-            <AiFillHome className='text-3xl cursor-pointer transition transform duration-150 ease-out hover:shadow-sm' onClick={()=> router.push("/")}/>
-        </div>
-        <div className='flex flex-col my-auto gap-5'>
+    <div className='flex relative flex-col  w-screen h-screen overflow-hidden overflow-y-scroll'>
+      <Image 
+      src="/welcome/bg welcome app.png"
+      alt=""
+      layout="fill"
+      objectFit="cover"
+      className="flex -z-10"
+      />
+
+      <Image
+        src="/welcome/Logo-shadow.png"
+        alt="Background"
+        // layout="fill"
+        width="90"
+        height="90"
+        objectFit="contain"
+        className="flex absolute top-5 self-center justify-self-center"
+      />
+      <div className='flex flex-col bg-white rounded-t-2xl mt-14'>
+
+        <div className='flex flex-col my-auto gap-5 mt-16'>
                 <div className='flex flex-col justify-center items-center' >
-                  <h2 className='text-2xl font-bold ' >Create Account</h2>
+                  <h2 className='text-4xl text-lwfs_blue font-bold ' >Create Account</h2>
               </div>
-              <div className='pb-10'>
+              
+              <div className='pb-10'>   
               <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
               {({ values, handleChange, setFieldValue }) => (
                 <Form className="max-w-md mx-auto bg-white  rounded-lg p-6 space-y-4">
+
                   {/* First Name */}
                   <div className="flex flex-col">
-                    <label htmlFor="firstName" className="text-gray-700 font-medium mb-1">
-                      First Name
-                    </label>
-                    <Field
-                      id="firstName"
-                      name="firstName"
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-                    />
-                    <ErrorMessage name="firstName" component="span" className="text-red-500 text-sm mt-1" />
+                    <div className='flex relative justify-center items-center'>
+                    <User className="absolute left-[5%] opacity-50"/>
+                      <Field
+                        id="firstName"
+                        name="firstName"
+                        placeholder="First Name"
+                        className="p-2 w-full border border-lwfs_blue pl-[15%] rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
+                      />
+                    </div>
+                    <ErrorMessage name="firstName" component="span" className="text-red-500 text-xs mt-1" />
                   </div>
 
                   {/* Last Name */}
                   <div className="flex flex-col">
-                    <label htmlFor="lastName" className="text-gray-700 font-medium mb-1">
-                      Last Name
-                    </label>
-                    <Field
-                      id="lastName"
-                      name="lastName"
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-                    />
-                    <ErrorMessage name="lastName" component="span" className="text-red-500 text-sm mt-1" />
+                    <div className='flex relative justify-center items-center'>
+                    <User className="absolute left-[5%] opacity-50"/>
+                      <Field
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Last Name"
+                        className="p-2 w-full border border-lwfs_blue pl-[15%] rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
+                      />
+                    </div>
+                    
+                    <ErrorMessage name="lastName" component="span" className="text-red-500 text-xs mt-1" />
                   </div>
 
                   {/* Country */}
                   <div className="flex flex-col">
-                    <label htmlFor="country" className="text-gray-700 font-medium mb-1">
+                    {/* <label htmlFor="country" className="text-gray-700 font-medium mb-1">
                       Country
-                    </label>
+                    </label> */}
                     <Field
                       as="select"
                       name="country"
                       id="country"
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                      className="p-2 w-full border border-lwfs_blue rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
                     >
                       <option value="" disabled>
                         Select your country
@@ -150,32 +173,34 @@ const Signup = () => {
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage name="countryCode" component="span" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage name="countryCode" component="span" className="text-red-500 text-xs mt-1" />
                   </div>
 
                   {/* Phone Number */}
                   <div className="flex flex-col">
-                    <label htmlFor="phoneNumber" className="text-gray-700 font-medium mb-1">
-                      Phone Number
-                    </label>
-                    <Field
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-                    />
-                    <ErrorMessage name="phoneNumber" component="span" className="text-red-500 text-sm mt-1" />
+                    <div className='flex relative justify-center items-center'>
+                      <Phone className="absolute left-[5%] opacity-50"/>
+                      <Field
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        placeholder="Phone Number"
+                        className="p-2 w-full pl-[15%] border border-lwfs_blue rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
+                      />
+                    </div>
+                  
+                    <ErrorMessage name="phoneNumber" component="span" className="text-red-500 text-xs mt-1" />
                   </div>
 
                   {/* Zone */}
                   <div className="flex flex-col">
-                    <label htmlFor="zone" className="text-gray-700 font-medium mb-1">
+                    {/* <label htmlFor="zone" className="text-gray-700 font-medium mb-1">
                       Zone
-                    </label>
+                    </label> */}
                     <Field
                       as="select"
                       name="zone"
                       id="zone"
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                      className="p-2 w-full border border-lwfs_blue rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
                     >
                       <option value="" disabled>
                         Select your zone
@@ -186,59 +211,86 @@ const Signup = () => {
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage name="zone" component="span" className="text-red-500 text-sm mt-1" />
+                    <ErrorMessage name="zone" component="span" className="text-red-500 text-xs mt-1" />
                   </div>
 
                   {/* Church */}
                   <div className="flex flex-col">
-                    <label htmlFor="church" className="text-gray-700 font-medium mb-1">
-                      Church
-                    </label>
-                    <Field
-                      id="church"
-                      name="church"
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-                    />
-                    <ErrorMessage name="church" component="span" className="text-red-500 text-sm mt-1" />
+                    <div className='flex relative justify-center items-center'>
+                    <Church className="absolute left-[5%] opacity-50"/>
+                      <Field
+                        id="church"
+                        name="church"
+                        placeholder="Church"
+                        className="p-2 pl-[15%] w-full border border-lwfs_blue rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
+                      />
+                    </div>
+                    
+                    <ErrorMessage name="church" component="span" className="text-red-500 text-xs mt-1" />
                   </div>
 
                   {/* Email */}
                   <div className="flex flex-col">
-                    <label htmlFor="email" className="text-gray-700 font-medium mb-1">
-                      Email
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="text"
-                      value={values.email}
-                      // Update Formik's state and external `setEmail`
-                      onChange={(e) => {
-                        handleChange(e);
-                        setEmail(e.target.value); // Update external state
-                        setFieldValue("email", e.target.value); // Update Formik state
-                      }}
-                      
-                      className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-                    />
-                    <ErrorMessage name="email" component="span" className="text-red-500 text-sm mt-1" />
+                    <div className='flex relative justify-center items-center'>
+                      <Mail className="absolute left-[5%] opacity-50"/>
+                      <input
+                        id="email"
+                        name="email"
+                        type="text"
+                        placeholder='Email'
+                        value={values.email}
+                        // Update Formik's state and external `setEmail`
+                        onChange={(e) => {
+                          handleChange(e);
+                          setEmail(e.target.value); // Update external state
+                          setFieldValue("email", e.target.value); // Update Formik state
+                        }}
+                        
+                        className="p-2 pl-[15%] w-full border border-lwfs_blue rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
+                      />
+                    </div>
+                    
+                    <ErrorMessage name="email" component="span" className="text-red-500 text-xs mt-1" />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <div className='flex relative justify-center items-center'>
+                      <Lock className="absolute left-[5%] opacity-50"/>
+                      <Field
+                        id="password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        className="p-2 pl-[15%] w-full border border-lwfs_blue rounded-full focus:outline-none focus:ring-1 focus:ring-lwfs_blue"
+                      />
+                      <button onClick={()=> setShowPassword(!showPassword)} className='flex justify-center items-center'>
+                      {showPassword ? <Eye size={24} className='absolute right-[10%] opacity-50'/> : <EyeOff size={24} className='absolute  opacity-50 right-[10%] ' />}
+                      </button>
+                    </div>
+
                   </div>
 
                   {/* Error & Success Messages */}
-                  {error && <p className="text-red-500 text-center">{error}</p>}
-                  {success && <p className="text-green-500 text-center">{success}</p>}
+                  {error && <p className="text-red-500 text-center text-xs">{error}</p>}
+                  {success && <p className="text-green-500 text-center text-xs">{success}</p>}
 
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="bg-blue-950 text-white font-medium rounded-md p-2 mt-4 w-full transition transform ease-out duration-200 hover:scale-95 hover:shadow-sm"
+                    className="bg-lwfs_blue text-white text-2xl  font-medium rounded-full p-2 mt-4 w-full transition transform ease-out duration-200 hover:scale-95 hover:shadow-sm"
                     disabled={loading}
                   >
-                    {loading ? "Registering..." : "Register" }
+                    {loading ? "Signing up..." : "Sign up" }
                   </button>
                 </Form>
               )}
               </Formik>
+
+              <div className="flex items-center gap-2 px-10">
+                <div className="flex-1 border-t border-gray-300"></div>
+                  <span className="text-gray-500">OR</span>
+                <div className="flex-1 border-t border-gray-300"></div>
+              </div>
 
               {/* Already Registered */}
               <span className="block text-center mt-2 text-md">
@@ -253,6 +305,8 @@ const Signup = () => {
 
               </div>
         </div>
+      </div>
+        
     </div>
   )
 }
