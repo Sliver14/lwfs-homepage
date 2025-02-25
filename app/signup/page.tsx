@@ -117,7 +117,7 @@ const Signup = () => {
 
       <Image
         src="/welcome/Logo-shadow.png"
-        alt="Background"
+        alt=""
         // layout="fill"
         width="90"
         height="90"

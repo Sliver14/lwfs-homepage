@@ -93,12 +93,12 @@ const Signin: React.FC = () => {
 
            <Image
             src="/welcome/Logo-shadow.png"
-            alt="Background"
+            alt=""
             // layout="fill"
-            width="200"
-            height="200"
+            width="90"
+            height="90"
             objectFit="contain"
-            className="hidden lg:flex"
+            className="hidden lg:flex w-[90px] h-auto"
           />
         </div>
 
@@ -111,6 +111,7 @@ const Signin: React.FC = () => {
         objectFit="cover"
         className='hidden lg:flex -z-10'
         />
+        
           <div className='hidden lg:flex flex-col w-full h-full'>
           <div className='flex flex-col my-auto gap-8'>
             <div className='flex justify-center items-center'>
@@ -135,7 +136,7 @@ const Signin: React.FC = () => {
                 
 
                 <button onClick={handleSubmit} 
-                className={`bg-lwfs_blue m-5 w-[90%] transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm rounded-2xl text-white p-3 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]text-white"}`} 
+                className={`bg-lwfs_blue m-5 w-[90%] rounded-full transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm text-white p-2 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]text-white"}`} 
                 disabled={loading} >{loading ? "Logging..." : "Login"}</button>
                 {error && <p className='text-red-500'>{error}</p>}
                 {success && <p className='text-green-500'>{success}</p>}
@@ -166,13 +167,13 @@ const Signin: React.FC = () => {
 
         {/* Mobile view */}
         <Image
-          src="/welcome/logo-shadow.png"
-          alt="Background"
+          src="/welcome/Logo-shadow.png"
+          alt=""
           // layout="fill"
           width="90"
           height="90"
           objectFit="contain"
-          className="flex absolute top-10 lg:hidden"
+          className="flex absolute top-10 z-20 lg:hidden"
         />
 
         <div className='flex flex-col w-screen h-screen bg-white mt-20 rounded-t-3xl lg:hidden'>
