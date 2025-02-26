@@ -6,7 +6,7 @@ export function middleware(req: NextRequest) {
     // console.log(token)
   if (!token) {
     // If no token, redirect to signin page
-    return NextResponse.redirect(new URL("/signin", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next(); // Allow access if token exists
@@ -14,5 +14,5 @@ export function middleware(req: NextRequest) {
 
 // // Apply middleware to these pages
 export const config = {
-  matcher: [ "/home", "/livetv", "/training", "/makepost", "/profile" ],
+  matcher: [ "/home", "/livetv", "/training", "/store", "/profile" ],
 };

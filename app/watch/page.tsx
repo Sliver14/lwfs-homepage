@@ -102,7 +102,7 @@ function WatchContent() {
             src={videoUrl}
             controls
             muted={false}
-            autoPlay={false}
+            autoPlay
             controlsList="nodownload"
             className="w-full h-full object-contain"
           />

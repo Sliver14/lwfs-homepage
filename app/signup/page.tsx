@@ -22,15 +22,17 @@ interface SignupFormValues {
   country: string;
   church: string;
   email: string;
+  password: string;
 }
 
 const Signup = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null)
+    // const [success, setSuccess] = useState<string | null>(null)
     const [loading, setLoading] = useState(false); // Loading state
     const [showPassword, setShowPassword ] = useState(false);
+
     const initialValues = {
         // title: "",
         firstName: "",
@@ -58,12 +60,12 @@ const Signup = () => {
         email: Yup.string().email("Invalid email address").required("Email is required"),
         country: Yup.string().required("Country is required"),
         password: Yup.string()
-        .required("Password is required")
-        .min(8, "Password must be at least 8 characters long")
-        .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-        .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-        .matches(/[0-9]/, "Password must contain at least one number")
-        .matches(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
+        .required("Password is required"),
+        // .min(8, "Password must be at least 8 characters long"),
+        // .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+        // .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+        // .matches(/[0-9]/, "Password must contain at least one number")
+        // .matches(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
       
         confirmPassword: Yup.string()
         .required("Confirm Password is required")
@@ -79,11 +81,11 @@ const Signup = () => {
     const onSubmit = async (data: SignupFormValues) => {
         setLoading(true);
         setError(null);
-        setSuccess(null);
+        // setSuccess(null);
         try {
-            const response = await axios.post("/api/auth/signup", data);
+            await axios.post("/api/auth/signup", data);
             router.push("/signup/verify");
-            setSuccess(response.data.message);
+            // setSuccess(response.data.message);
             
         } catch(error){
             // console.error("Error Signing up", error);
@@ -339,7 +341,7 @@ const Signup = () => {
 
                     {/* Error & Success Messages */}
                     {error && <p className="text-red-500 text-center text-xs">{error}</p>}
-                    {success && <p className="text-green-500 text-center text-xs">{success}</p>}
+                    {/* {success && <p className="text-green-500 text-center text-xs">{success}</p>} */}
 
                     {/* Submit Button */}
                     <button

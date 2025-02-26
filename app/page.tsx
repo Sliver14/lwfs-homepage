@@ -1,26 +1,64 @@
 "use client";
 
 import React from 'react'
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import dynamic from "next/dynamic";
+
+// Dynamically import Lottie to prevent SSR issues
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+import loadingAnimation from "@/public/loading.json"; // Ensure you have a Lottie JSON file
 
 const Welcome = () => {
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true); // Track loading state
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication status
 
     useEffect(() => {
       const fetchUserDetails = async () => {
         try {
           await axios.get("/api/auth/tokenverify", { withCredentials: true });
-          router.replace("/home"); // Replace prevents going back to Welcome after login
+          setIsAuthenticated(true);
         } catch (error) {
+          setIsAuthenticated(false);
           console.error("Error verifying user:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
   
       fetchUserDetails();
-    }, [router]); // Adding router as a dependency is best practice
+    }, []); // Adding router as a dependency is best practice
+
+    // Redirect when authentication succeeds
+    useEffect(() => {
+      if (isAuthenticated) {
+        router.replace("/home");
+      }
+    }, [isAuthenticated, router]);
+
+    // if (isLoading) {
+    //   return (
+    //     <div className="w-screen h-screen flex items-center justify-center bg-black text-white">
+    //       <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-400"></div>
+    //     </div>
+    //   );
+    // }
+
+    if (isLoading) {
+      return (
+        <div className="w-screen h-screen flex items-center justify-center bg-black">
+          <Lottie animationData={loadingAnimation} className="w-40 h-40 text-white" />
+        </div>
+      );
+    }
+
+    if (isAuthenticated) {
+      return null; // Prevent rendering the Welcome page if authenticated
+    }
+  
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
@@ -77,7 +115,7 @@ const Welcome = () => {
             // objectFit="cover"
             className="flex w-[150px] h-auto lg:w-[200px] "
         />
-        <div className='flex items-center justify-center text-center gap-2'>
+        <div className='flex flex-col items-center justify-center text-center gap-2'>
             <h1 className='text-yellow-400 text-2xl '>
                 LOVEWORLD
             </h1>

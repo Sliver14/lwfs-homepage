@@ -2,16 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import SignUp from "@/lib/models/SignUp"; 
 import syncDatabase from "@/lib/syncDatabase";
+import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
     try {
       await syncDatabase(); // Sync the database on server start
       
-      const { email } = await req.json();
+      const { email, password } = await req.json();
       
         // Basic validation
       if (!email) {
         return NextResponse.json({ error: 'Email is required.' }, {status: 400});
+      }
+
+      if (!password) {
+        return NextResponse.json({ error: 'Password is required.' }, {status: 400});
       }
   
       // Find the user by email
@@ -27,13 +32,20 @@ export async function POST(req: NextRequest) {
       // }
 
       // Type assertion (convert user to typed model)
-      const userData = user as unknown as { id: number; email: string; verified: boolean };
+      const userData = user as unknown as { id: number; email: string; verified: boolean, password: string };
 
       // Check verification status
       if (!userData.verified) {
           return NextResponse.json({ error: 'User not verified' }, { status: 400 });
       }
 
+      // Compare provided password with stored hashed password
+      const isMatch = await bcrypt.compare(password, userData.password); // ✅ Use async bcrypt.compare()
+
+  
+      if (!isMatch){
+        return NextResponse.json({error: 'wrong password combination'}, {status:400});
+      }
 
       // Generate a JWT token
       // const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '30d' });

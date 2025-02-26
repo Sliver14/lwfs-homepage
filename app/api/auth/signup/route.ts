@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     try {
         await syncDatabase(); // Sync the database on server start
         
-        const { firstName, lastName, phoneNumber, zone, church, country, email } = await req.json() as {
+        const { firstName, lastName, phoneNumber, zone, church, country, email, password } = await req.json() as {
             firstName: string;
             lastName: string;
             phoneNumber?: string;
@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
             church?: string;
             country?: string;
             email: string;
+            password: string;
           };
 
         if (!firstName || !email) {
@@ -37,10 +38,11 @@ export async function POST(req: NextRequest) {
         // Generate a 6-digit verification code
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
         const hashedCode = bcrypt.hashSync(verificationCode, 10);
+        const hashedPassword = bcrypt.hashSync(password, 10);
 
         // Create user in DB
         await SignUp.create({
-            firstName, lastName, phoneNumber, zone, church, email, country,
+            firstName, lastName, phoneNumber, zone, church, email, country, password: hashedPassword,
             verificationCode: hashedCode, verified: false
         });
 

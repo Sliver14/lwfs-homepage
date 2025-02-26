@@ -40,7 +40,7 @@ export default function Home() {
             autoPlay
             muted
             loop
-            controls
+            // controls
             controlsList="nodownload"
             className="w-full h-full object-cover"
           />
@@ -96,6 +96,7 @@ export default function Home() {
         <div className='flex w-full p-3 text-xl font-semibold'>
           <h1>Testimony Bank</h1>
         </div>
+        
         {/* Testimony slider*/}
         <div className='flex relative w-full h-auto overflow-x-scroll gap-2 items-center justify-center md:flex md:flex-row'>
           {testimonySlides.map((testimony, index)=>(

@@ -10,13 +10,13 @@ import { FaAngleDown } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 // import { LiaPowerOffSolid } from "react-icons/lia";
 import { IoHomeOutline } from "react-icons/io5";
-import { MdModelTraining } from "react-icons/md";
+// import { MdModelTraining } from "react-icons/md";
 import { MdLiveTv } from "react-icons/md";
 import { IoMdAppstore } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import axios from 'axios';
 import Image from 'next/image';
-import { CircleUser } from "lucide-react"
+import { CircleUser, CircleGauge } from "lucide-react"
 
 
 // Define user type
@@ -50,7 +50,7 @@ function Navbar() {
 
     const Navbar = [
       {name: "Home", route: "/home", icon: <IoHomeOutline/>,icon2: <IoHomeOutline/> , dis: "translate-x-0"},
-      {name: "Training", route: "/training",icon: <MdModelTraining />,icon2: <MdModelTraining /> , dis: "translate-x-16"},
+      {name: "Training", route: "/training",icon: <CircleGauge />,icon2: <CircleGauge /> , dis: "translate-x-16"},
       {name: "Livetv", route: "/livetv", icon: <MdLiveTv />,icon2: <MdLiveTv /> , dis: "translate-x-32"},
       {name: "Store", route: "/store", icon: <IoMdAppstore />, icon2: <IoMdAppstore />, dis: "translate-x-48"},
       {name: "Profile", route: "/profile", icon: <CgProfile/>, icon2: <Image src="images/profile_outline.svg" alt="" layout="fill" objectFit="cover"  className='w-4 h-4'/> , dis: "translate-x-64"},

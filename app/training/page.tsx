@@ -26,28 +26,28 @@ const Signin = () => {
           img_url: 
             "/welcome/15th summit.png",
           video_url: 
-            "https://res.cloudinary.com/dfi8bpolg/video/upload/v1736329276/samples/dance-2.mp4"
+            "https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4"
         },
         { id: 2, 
           title: "Jesus Today and Forever Campfire", 
           img_url: 
             "/welcome/15th summit.png",
           video_url: 
-            "https://res.cloudinary.com/dfi8bpolg/video/upload/v1736329275/samples/elephants.mp4"
+            "https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4"
         },
         { id: 3, 
           title: "The Holy Spirit", 
           img_url: 
             "/welcome/15th summit.png",
           video_url: 
-            "https://res.cloudinary.com/dfi8bpolg/video/upload/v1736329275/samples/sea-turtle.mp4"
+            "https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4"
         },
         {
           id: 4,
           title: "Communion",
           img_url:
             "/welcome/15th summit.png",
-          video_url: "",
+          video_url: "https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4",
         },
     ]
 

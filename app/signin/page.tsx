@@ -12,8 +12,9 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 const Signin: React.FC = () => {
     const router = useRouter();
     const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
+    // const [success, setSuccess] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [showPassword, setShowPassword ] = useState(false);
 
@@ -22,35 +23,15 @@ const Signin: React.FC = () => {
   e.preventDefault();
   setLoading(true);
   setError(null);
-  setSuccess(null);
+  // setSuccess(null);
 
   try {
-    const response = await axios.post("/api/auth/signin", { email });
-    // const { token } = response.data;
-
-    // Success message
-    // setSuccess(response.data.message);
-
-    // ✅ Cookies are set from the **server**, so no need for js-cookie here
-
-    setSuccess(response.data.message);
+    await axios.post("/api/auth/signin", { email, password });
     router.push("/home"); // Redirect to dashboard or home page
     router.refresh();
 
   } catch (error: unknown) {
     console.error("Sign-in error:", error);
-
-    // const errorMessage = error.response?.data?.error ?? "Sign-in failed";
-
-  //   if (errorMessage.includes("user not verified")) {
-  //     setError("User not verified. Redirecting to verification...");
-  //     setTimeout(() => router.push("/signup/verify"), 2000); // Give user time to see the message
-  //   } else {
-  //     setError(errorMessage);
-  //   }
-  // } finally {
-  //   setLoading(false);
-  // }
 
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data?.error ?? "Sign-in failed";
@@ -122,12 +103,12 @@ const Signin: React.FC = () => {
               
               <div className='flex relative w-full justify-center items-center'>
               <Mail className='absolute left-[9%] text-xl opacity-50' />
-                <input onChange={(event) => setEmail(event.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type="email" autoComplete="email" placeholder='Email'/>
+                <input onChange={(event) => setEmail(event.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type="email" autoComplete="email" placeholder='Email' required/>
               </div>
 
               <div className='flex relative w-full justify-center items-center'>
               <Lock className='absolute left-[9%] text-xl opacity-50'/>
-                <input className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"}  placeholder='Password'/>
+                <input onChange={(event)=> setPassword(event?.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"} placeholder='Password' required/>
                 <button onClick={()=> setShowPassword(!showPassword)} className='flex justify-center items-center'>
                   {showPassword ? <Eye size={24} className='absolute right-[10%] opacity-50'/> : <EyeOff size={24} className='absolute  opacity-50 right-[10%] ' />}
                 </button>
@@ -139,7 +120,7 @@ const Signin: React.FC = () => {
                 className={`bg-lwfs_blue m-5 w-[90%] rounded-full transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm text-white p-2 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]text-white"}`} 
                 disabled={loading} >{loading ? "Logging..." : "Login"}</button>
                 {error && <p className='text-red-500'>{error}</p>}
-                {success && <p className='text-green-500'>{success}</p>}
+                {/* {success && <p className='text-green-500'>{success}</p>} */}
 
                 
             </div>
@@ -191,7 +172,7 @@ const Signin: React.FC = () => {
 
               <div className='flex relative w-full justify-center items-center'>
               <Lock className='absolute left-[9%] text-xl opacity-50'/>
-                <input className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"}  placeholder='Password'/>
+                <input onChange={(event)=> setPassword(event?.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"}  placeholder='Password'/>
                 <button onClick={()=> setShowPassword(!showPassword)} className='flex justify-center items-center'>
                   {showPassword ? <Eye size={24} className='absolute right-[10%] opacity-50'/> : <EyeOff size={24} className='absolute  opacity-50 right-[10%] ' />}
                 </button>
@@ -203,7 +184,7 @@ const Signin: React.FC = () => {
                 className={`bg-lwfs_blue m-5 w-[90%] transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm rounded-2xl text-white p-3 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]text-white"}`} 
                 disabled={loading} >{loading ? "Logging..." : "Login"}</button>
                 {error && <p className='text-red-500'>{error}</p>}
-                {success && <p className='text-green-500'>{success}</p>}
+                {/* {success && <p className='text-green-500'>{success}</p>} */}
 
                 
             </div>
