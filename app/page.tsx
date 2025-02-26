@@ -9,24 +9,18 @@ import { useRouter } from 'next/navigation';
 const Welcome = () => {
     const router = useRouter();
 
-    useEffect(()=>{
-        const fetchUserDetails = async () => {
-          try {
-            const response = await axios.get("/api/auth/tokenverify", {
-              withCredentials: true, // Ensure proper spelling
-            });
-            // setUser(response.data.user);
-            // setLoggedIn(true);
-            return router.push("/home");
-          } catch (error) {
-            console.error("Error verifying user:", error)
-            // setUser(null);  // Ensure user is null if not logged in
-            // setLoggedIn(false);
-          }
-        };
+    useEffect(() => {
+      const fetchUserDetails = async () => {
+        try {
+          await axios.get("/api/auth/tokenverify", { withCredentials: true });
+          router.replace("/home"); // Replace prevents going back to Welcome after login
+        } catch (error) {
+          console.error("Error verifying user:", error);
+        }
+      };
   
-        fetchUserDetails();
-      },[]);
+      fetchUserDetails();
+    }, [router]); // Adding router as a dependency is best practice
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
@@ -83,7 +77,7 @@ const Welcome = () => {
             // objectFit="cover"
             className="flex w-[150px] h-auto lg:w-[200px] "
         />
-        <div className='felx items-center justify-center text-center gap-2'>
+        <div className='flex items-center justify-center text-center gap-2'>
             <h1 className='text-yellow-400 text-2xl '>
                 LOVEWORLD
             </h1>
