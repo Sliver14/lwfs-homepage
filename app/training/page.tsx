@@ -62,7 +62,7 @@ const Signin = () => {
 
   return (
     
-    <div className="flex flex-col gap-3 px-1 pt-16 w-screen bg-zinc-100 lg:pl-48 overflow-hidden">
+    <div className="flex flex-col gap-3 px-1 py-16 w-screen bg-zinc-100 lg:pl-48 overflow-hidden">
       {/* Training */}
       <div className="relative flex items-center w-full h-auto overflow-x-auto ">
       <div className="flex gap-2">

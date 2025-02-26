@@ -114,7 +114,7 @@ const updateAttendance = async (): Promise<void> => {
 
   return (
     
-    <div className='flex flex-col pt-16 text-sm md:w-screen'>
+    <div className='flex flex-col py-16 text-sm md:w-screen'>
       {/* <AdminDashboard individualParticipation/> */}
 
       <div className='flex flex-col md:flex-row md:w-screen md:overflow-x-hidden md:gap-3 md:px-2'>

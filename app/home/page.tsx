@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <div className='flex flex-col w-screen text-sm bg-white font-sans gap-5'>
 
-       <div className='flex flex-col pt-14 pb-20 gap-5' >
+       <div className='flex flex-col py-14 pb-20 gap-5' >
 
       {/* Top video */}
       <div className="w-screen ">
