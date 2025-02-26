@@ -48,48 +48,64 @@ export default function Home() {
         </div> 
         </div>
 
-        {/* Training */}
-        <div className="relative flex items-center w-full h-auto overflow-x-auto ">
-        <div className="flex gap-2">
-          {training.map((train, index) => (
-            <div key={index} onClick={()=> router.push("/training")} className="relative w-52 h-40 shadow-lg flex-shrink-0 cursor-pointer">
-              <Image 
-                src={train.url} 
-                alt="" 
-                fill               
-                className='h-full w-full object-cover rounded-xl'
-              />
-            </div>
-          ))}
-        </div>
-        </div>
-
-        {/* Up coming programmes */}
-        <div className="relative flex items-center w-full h-auto overflow-x-auto ">
-        <div className="flex gap-2">
-          {slides.map((slide, index) => (
-            <div key={index} className="relative w-72 h-40 shadow-lg flex-shrink-0">
-              <Image 
-                src={slide.url} 
-                alt="" 
-                fill               
-                className='h-full w-full object-cover'
-              />
-            </div>
-          ))}
-        </div>
-</div>
-
-
-
-      {/* Testimony slider*/}
-      <div className='flex relative w-full h-auto overflow-x-scroll gap-2 items-center justify-center md:flex md:flex-row'>
-        {testimonySlides.map((testimony, index)=>(
-          <div key={index} className='flex relative group h-48 w-48'>
-            <Image src={testimony?.url} className='w-full h-full object-contain' fill alt=''/>
+        <div className='flex flex-col'>
+          <div className='flex w-full p-3 text-xl font-semibold'>
+            <h1>Recent Training</h1>
           </div>
-        ))}
+          {/* Training */}
+          <div className="relative flex items-center w-full h-auto overflow-x-auto ">
+            <div className="flex gap-2">
+              {training.map((train, index) => (
+                <div key={index} onClick={()=> router.push("/training")} className="relative w-52 h-40 shadow-lg flex-shrink-0 cursor-pointer">
+                  <Image 
+                    src={train.url} 
+                    alt="" 
+                    fill               
+                    className='h-full w-full object-cover rounded-xl'
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+        
+
+        <div className='flex flex-col'>
+          <div className='flex w-full p-3 text-xl font-semibold'>
+            <h1>Upcoming Program</h1>
+          </div>
+          {/* Up coming programmes */}
+          <div className="relative flex items-center w-full h-auto overflow-x-auto ">
+            <div className="flex gap-2">
+              {slides.map((slide, index) => (
+                <div key={index} className="relative w-72 h-40 shadow-lg flex-shrink-0">
+                  <Image 
+                    src={slide.url} 
+                    alt="" 
+                    fill               
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+
+      <div className='flex flex-col'>
+        <div className='flex w-full p-3 text-xl font-semibold'>
+          <h1>Testimony Bank</h1>
+        </div>
+        {/* Testimony slider*/}
+        <div className='flex relative w-full h-auto overflow-x-scroll gap-2 items-center justify-center md:flex md:flex-row'>
+          {testimonySlides.map((testimony, index)=>(
+            <div key={index} className='flex relative group h-48 w-48'>
+              <Image src={testimony?.url} className='w-full h-full object-contain' fill alt=''/>
+            </div>
+          ))}
+        </div>
+      </div>
+      
 
        </div>     
     </div>

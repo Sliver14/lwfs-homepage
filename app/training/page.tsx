@@ -62,7 +62,7 @@ const Signin = () => {
 
   return (
     
-    <div className="flex flex-col gap-3 px-1 pt-16 w-screen lg:pl-48 overflow-hidden">
+    <div className="flex flex-col gap-3 px-1 pt-16 w-screen bg-zinc-100 lg:pl-48 overflow-hidden">
       {/* Training */}
       <div className="relative flex items-center w-full h-auto overflow-x-auto ">
       <div className="flex gap-2">
@@ -85,9 +85,9 @@ const Signin = () => {
 
       <div className="grid grid-cols-2  md:grid md:grid-cols-3 gap-2 lg:grid-cols-4">
         {trainingVideos.map((video)=>(
-          <div key={video.id} onClick={()=> handleSelect(video)} className="flex flex-col cursor-pointer bg-gray-100  w-full items-center px-5 justify-center gap-2 transition tranform duration-300 ease-out md:hover:scale-105 ">
+          <div key={video.id} onClick={()=> handleSelect(video)} className="flex flex-col cursor-pointer bg-white p-2  w-full items-center px-5 justify-center gap-2 transition tranform duration-300 ease-out md:hover:scale-105 ">
 
-            <div className="relative w-48 h-32 lg:h-[120px]">
+            <div className="relative w-48 h-48 lg:h-[120px]">
               <Image src={video.img_url} alt="" fill className="w-full h-full object-cover rounded-md"/>
             </div>
             <h1 className="w-full text-wrap">{video.title}</h1>
