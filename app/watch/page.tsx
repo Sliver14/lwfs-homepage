@@ -35,39 +35,32 @@ function WatchContent() {
   const trainingVideos:Video[] = [
     { 
       id: 1, 
-      title: "Introduction to Dancing", 
+      title: "Why you must go to Church", 
       img_url: 
-        "https://res.cloudinary.com/dfi8bpolg/image/upload/v1738850381/kraoewzabh80yttg1t4x.png",
+        "/welcome/15th summit.png",
       video_url: 
         "https://res.cloudinary.com/dfi8bpolg/video/upload/v1736329276/samples/dance-2.mp4"
     },
     { id: 2, 
-      title: "video 2", 
+      title: "Jesus Today and Forever Campfire", 
       img_url: 
-        "https://res.cloudinary.com/dfi8bpolg/image/upload/v1737187751/vnk3s8x5l4zla8novtw9.jpg",
+        "/welcome/15th summit.png",
       video_url: 
         "https://res.cloudinary.com/dfi8bpolg/video/upload/v1736329275/samples/elephants.mp4"
     },
     { id: 3, 
-      title: "video 3", 
+      title: "The Holy Spirit", 
       img_url: 
-        "https://res.cloudinary.com/dfi8bpolg/image/upload/v1737189705/uyfdklu0hoozpkxy4ixr.jpg",
+        "/welcome/15th summit.png",
       video_url: 
         "https://res.cloudinary.com/dfi8bpolg/video/upload/v1736329275/samples/sea-turtle.mp4"
     },
     {
       id: 4,
-      title: "Cloudy Skies",
+      title: "Communion",
       img_url:
-        "https://res.cloudinary.com/dfi8bpolg/image/upload/v1736329281/cld-sample.jpg",
+        "/welcome/15th summit.png",
       video_url: "",
-    },
-    {
-      id: 5,
-      title: "Morning Coffee",
-      img_url:
-        "https://res.cloudinary.com/dfi8bpolg/image/upload/v1736329280/samples/coffee.jpg",
-      video_url: "https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4",
     },
     ]
 
@@ -76,7 +69,7 @@ function WatchContent() {
   if (!videoUrl) return <p>No Video selected</p>;
 
   return (
-    <div className="flex flex-col w-screen">
+    <div className="flex flex-col w-screen gap-5">
 
       {/* Header */}
       <div className="grid grid-cols-3 w-screen p-2 fixed top-0 z-20 shadow-md justify-center items-center">
@@ -116,7 +109,7 @@ function WatchContent() {
         </div>
       </div>
 
-      <div className="text-xl p-5 font-bold">Recent Training</div>
+      <div className="text-xl px-5 font-bold">Recent Training</div>
 
         {/* Recent Training */}
         <div className="relative flex items-center w-full h-auto overflow-x-auto ">
