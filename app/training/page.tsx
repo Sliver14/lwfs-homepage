@@ -64,19 +64,19 @@ const Signin = () => {
     
     <div className="flex flex-col gap-3 px-1 py-16 w-screen bg-zinc-100 lg:pl-48 overflow-hidden">
       {/* Training */}
-      <div className="relative flex items-center w-full h-auto overflow-x-auto ">
-      <div className="flex gap-2">
-        {training.map((train, index) => (
-          <div key={index} onClick={()=> router.push("/training")} className="relative w-52 h-40 shadow-lg flex-shrink-0 cursor-pointer">
-            <Image 
-              src={train.url} 
-              alt="" 
-              fill               
-              className='h-full w-full object-cover rounded-xl'
-            />
-          </div>
-        ))}
-      </div>
+      <div className="relative flex items-center bg-white p-2 w-full h-auto overflow-x-auto ">
+        <div className="flex gap-2">
+          {training.map((train, index) => (
+            <div key={index} onClick={()=> router.push("/training")} className="relative w-52 h-40 shadow-lg flex-shrink-0 cursor-pointer">
+              <Image 
+                src={train.url} 
+                alt="" 
+                fill               
+                className='h-full w-full object-cover rounded-xl'
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className='flex w-full text-2xl font-bold'>

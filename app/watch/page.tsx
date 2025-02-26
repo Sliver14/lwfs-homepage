@@ -69,7 +69,7 @@ function WatchContent() {
   if (!videoUrl) return <p>No Video selected</p>;
 
   return (
-    <div className="flex flex-col w-screen gap-5">
+    <div className="flex flex-col bg-zinc-100 w-screen gap-5">
 
       {/* Header */}
       <div className="grid grid-cols-3 w-screen p-2 fixed top-0 z-20 shadow-md justify-center items-center">
@@ -112,7 +112,7 @@ function WatchContent() {
       <div className="text-xl px-5 font-bold">Recent Training</div>
 
         {/* Recent Training */}
-        <div className="relative flex items-center w-full h-auto overflow-x-auto ">
+        <div className="relative flex items-center bg-white p-2 w-full h-auto overflow-x-auto ">
         <div className="flex gap-2">
             {training.map((train, index) => (
             <div key={index} onClick={()=> router.push("/training")} className="relative w-52 h-40 shadow-lg flex-shrink-0 cursor-pointer">
@@ -128,7 +128,7 @@ function WatchContent() {
         </div>
 
 
-        <div className="grid grid-cols-2  md:grid md:grid-cols-3 gap-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 bg-white p-2 md:grid md:grid-cols-3 gap-2 lg:grid-cols-4">
         {trainingVideos.map((video)=>(
             <div key={video.id} onClick={()=> handleSelect(video)} className="flex flex-col cursor-pointer bg-gray-100  w-full items-center px-5 justify-center gap-2 transition tranform duration-300 ease-out md:hover:scale-105 ">
                 <div className="relative w-48 h-32 lg:h-[120px]">

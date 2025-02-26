@@ -28,7 +28,7 @@ export default function Home() {
   ]
 
   return (
-    <div className='flex flex-col w-screen text-sm bg-white font-sans gap-5'>
+    <div className='flex flex-col w-screen text-sm bg-zinc-100 font-sans gap-5'>
 
        <div className='flex flex-col py-14 pb-20 gap-5' >
 
@@ -48,7 +48,7 @@ export default function Home() {
         </div> 
         </div>
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col bg-white p-2'>
           <div className='flex w-full p-3 text-xl font-semibold'>
             <h1>Recent Training</h1>
           </div>
@@ -70,7 +70,7 @@ export default function Home() {
         </div>
         
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col bg-white p-2'>
           <div className='flex w-full p-3 text-xl font-semibold'>
             <h1>Upcoming Program</h1>
           </div>
@@ -92,7 +92,7 @@ export default function Home() {
         </div>
         
 
-      <div className='flex flex-col'>
+      <div className='flex flex-col bg-white p-2'>
         <div className='flex w-full p-3 text-xl font-semibold'>
           <h1>Testimony Bank</h1>
         </div>
