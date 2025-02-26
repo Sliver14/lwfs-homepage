@@ -220,16 +220,16 @@ function Navbar() {
       </div>
     </div>
   
-
+            {/* Bottom Navbar */}
       <div className='flex w-screen h-auto px-2 py-1 fixed shadow-2xl bg-white bottom-0 justify-center z-50 items-center rounded-t-xl lg:hidden'>
         <ul className='flex relative gap-2'>
                 {Navbar.map((menu, i)=>(
-                  <li key={i} className={`w-16 cursor-pointer py-2 duration-500 ${pathname === `${menu.route}` ? " border border-white border-t-black" : "border-none"}`}>
+                  <li key={i} className={`w-16 cursor-pointer py-2 duration-500 ${pathname === `${menu.route}` ? " border border-white border-t-lwfs_blue" : "border-none"}`}>
                     <Link href={menu.route} className='flex flex-col items-center text-center'>
-                      <span className={`text-xl duration-500 ${pathname === `${menu.route}` ? "text-black" : "text-gray-500"}` }>
+                      <span className={`text-xl duration-500 ${pathname === `${menu.route}` ? "text-lwfs_blue" : "text-gray-500"}` }>
                         {menu.icon} 
                       </span>
-                      <span className={`text-xs ${pathname === `${menu.route}` ? "translate-y-0.5 duration-700 text-black" : "text-gray-500" } `}>{menu.name}
+                      <span className={`text-xs ${pathname === `${menu.route}` ? "translate-y-0.5 duration-700 text-lwfs_blue" : "text-gray-500" } `}>{menu.name}
                       </span>
                     </Link>
                   </li>

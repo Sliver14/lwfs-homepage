@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import axios, { AxiosError } from "axios";
@@ -16,6 +17,25 @@ const Signin: React.FC = () => {
     const [success, setSuccess] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [showPassword, setShowPassword ] = useState(false);
+
+    useEffect(()=>{
+      const fetchUserDetails = async () => {
+        try {
+          const response = await axios.get("/api/auth/tokenverify", {
+            withCredentials: true, // Ensure proper spelling
+          });
+          // setUser(response.data.user);
+          // setLoggedIn(true);
+          return router.push("/home");
+        } catch (error) {
+          console.error("Error verifying user:", error)
+          // setUser(null);  // Ensure user is null if not logged in
+          // setLoggedIn(false);
+        }
+      };
+
+      fetchUserDetails();
+    },[]);
 
   // Function to handle sign-in
   const handleSubmit = async (e: React.FormEvent) => {

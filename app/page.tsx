@@ -1,11 +1,33 @@
 "use client";
 
 import React from 'react'
+import { useEffect } from 'react';
+import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 const Welcome = () => {
     const router = useRouter();
+
+    useEffect(()=>{
+        const fetchUserDetails = async () => {
+          try {
+            const response = await axios.get("/api/auth/tokenverify", {
+              withCredentials: true, // Ensure proper spelling
+            });
+            // setUser(response.data.user);
+            // setLoggedIn(true);
+            return router.push("/home");
+          } catch (error) {
+            console.error("Error verifying user:", error)
+            // setUser(null);  // Ensure user is null if not logged in
+            // setLoggedIn(false);
+          }
+        };
+  
+        fetchUserDetails();
+      },[]);
+
   return (
     <div className="relative w-screen h-screen overflow-hidden">
         <Image

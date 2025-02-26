@@ -14,5 +14,5 @@ export function middleware(req: NextRequest) {
 
 // // Apply middleware to these pages
 export const config = {
-  matcher: ["/home", "/livetv", "/training", "/makepost", "/profile", ],
+  matcher: [ "/home", "/livetv", "/training", "/makepost", "/profile" ],
 };
