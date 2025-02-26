@@ -29,7 +29,7 @@ function Navbar() {
     const pathname  = usePathname();
 
     // Hide navbar on these routes
-    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/"].includes(pathname);
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch"].includes(pathname);
     const router = useRouter();
 
     // const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +53,7 @@ function Navbar() {
       {name: "Training", route: "/training",icon: <MdModelTraining />,icon2: <MdModelTraining /> , dis: "translate-x-16"},
       {name: "Livetv", route: "/livetv", icon: <MdLiveTv />,icon2: <MdLiveTv /> , dis: "translate-x-32"},
       {name: "Store", route: "/store", icon: <IoMdAppstore />, icon2: <IoMdAppstore />, dis: "translate-x-48"},
-      {name: "Profile", route: "/profile", icon: <CgProfile/>, icon2: <img src="images/profile_outline.svg" className='w-4 h-4'/> , dis: "translate-x-64"},
+      {name: "Profile", route: "/profile", icon: <CgProfile/>, icon2: <Image src="images/profile_outline.svg" alt="" layout="fill" objectFit="cover"  className='w-4 h-4'/> , dis: "translate-x-64"},
     ]
 
     // Function to handle clicks outside the nav

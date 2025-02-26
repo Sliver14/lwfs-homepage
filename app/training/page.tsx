@@ -12,6 +12,12 @@ interface Video {
 
 const Signin = () => {
   const router = useRouter();
+    
+    const training = [
+      {url: "/welcome/NEW TEACHERS.jpg", link: ""},
+      {url: "/welcome/NEW PRINCIPALS.jpg", link: ""},
+      {url: "/welcome/15th summit.png", link: ""},
+    ]
 
     const trainingVideos:Video[] = [
         { 
@@ -63,13 +69,32 @@ const Signin = () => {
 
   return (
     
-    <div className="flex flex-col px-1 w-screen lg:pl-48 overflow-hidden">
-      <div className="flex text-4xl items-center py-5">Training Videos</div>
-      <div className="flex flex-col  md:grid md:grid-cols-3 gap-5 lg:grid-cols-4">
+    <div className="flex flex-col gap-3 px-1 pt-16 w-screen lg:pl-48 overflow-hidden">
+      {/* Training */}
+      <div className="relative flex items-center w-full h-auto overflow-x-auto ">
+      <div className="flex gap-2">
+        {training.map((train, index) => (
+          <div key={index} onClick={()=> router.push("/training")} className="relative w-52 h-40 shadow-lg flex-shrink-0 cursor-pointer">
+            <Image 
+              src={train.url} 
+              alt="" 
+              fill               
+              className='h-full w-full object-cover rounded-xl'
+            />
+          </div>
+        ))}
+      </div>
+      </div>
+
+      <div className='flex w-full text-2xl font-bold'>
+        <h1>Training</h1>
+      </div>
+
+      <div className="grid grid-cols-2  md:grid md:grid-cols-3 gap-5 lg:grid-cols-4">
         {trainingVideos.map((video)=>(
-          <div key={video.id} onClick={()=> handleSelect(video)} className="flex flex-col cursor-pointer bg-gray-100  w-full rounded-md items-center justify-center gap-2 transition tranform duration-300 ease-out md:hover:scale-105 ">
+          <div key={video.id} onClick={()=> handleSelect(video)} className="flex flex-col cursor-pointer bg-gray-100  w-full items-center justify-center gap-2 transition tranform duration-300 ease-out md:hover:scale-105 ">
           <div className="relative w-full h-[200px] lg:h-[120px]">
-          <Image src={video.img_url} alt="" fill className="w-full h-full object-cover"/>
+          <Image src={video.img_url} alt="" fill className="w-full h-full object-cover rounded-md"/>
           </div>
           <h1 className="w-screen text-center">{video.title}</h1>
           </div>
