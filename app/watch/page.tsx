@@ -118,7 +118,7 @@ function WatchContent() {
 
       <div className="text-xl p-5 font-bold">Recent Training</div>
 
-        {/* Training */}
+        {/* Recent Training */}
         <div className="relative flex items-center w-full h-auto overflow-x-auto ">
         <div className="flex gap-2">
             {training.map((train, index) => (
@@ -134,13 +134,14 @@ function WatchContent() {
         </div>
         </div>
 
-        <div className="grid grid-cols-2  md:grid md:grid-cols-3 gap-5 lg:grid-cols-4">
+
+        <div className="grid grid-cols-2  md:grid md:grid-cols-3 gap-2 lg:grid-cols-4">
         {trainingVideos.map((video)=>(
-            <div key={video.id} onClick={()=> handleSelect(video)} className="flex flex-col cursor-pointer bg-gray-100  w-full items-center justify-center gap-2 transition tranform duration-300 ease-out md:hover:scale-105 ">
-                <div className="relative w-auto min-h-[200px] lg:h-[120px]">
+            <div key={video.id} onClick={()=> handleSelect(video)} className="flex flex-col cursor-pointer bg-gray-100  w-full items-center px-5 justify-center gap-2 transition tranform duration-300 ease-out md:hover:scale-105 ">
+                <div className="relative w-48 h-32 lg:h-[120px]">
                     <Image src={video.img_url} alt="" fill className="w-full h-full object-cover rounded-md"/>
                 </div>
-                <h1 className="w-screen text-center">
+                <h1 className="w-full text-wrap">
                     {video.title}
                 </h1>
             </div>
