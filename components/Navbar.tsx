@@ -152,9 +152,9 @@ function Navbar() {
           LWFS
         </div>
 
-        <div className='flex w-full h-auto justify-end pr-10 relative  items-center '>
+        <div className='flex w-full h-auto justify-end pr-5 relative  items-center '>
           <div>
-           <CircleUser className='flex w-10 h-auto bg-zinc-800 rounded-full p-2 text-white'/>
+           <CircleUser className='flex w-10 h-10 bg-zinc-800 rounded-full p-2 text-white'/>
           </div>
           
         </div>
