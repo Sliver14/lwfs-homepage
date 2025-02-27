@@ -48,8 +48,14 @@ const Signup = () => {
       };
     
       const validationSchema = Yup.object().shape({
-        firstName: Yup.string().required("First Name is required"),
-        lastName: Yup.string().required("Last Name is required"),
+        firstName: Yup.string()
+          .trim()
+          .matches(/^[A-Za-z\s]+$/, "First Name must contain only letters")
+          .required("First Name is required"),
+        lastName: Yup.string()
+          .trim()
+          .matches(/^[A-Za-z\s]+$/, "Last Name must contain only letters")
+          .required("Last Name is required"),
         countryCode: Yup.string().required("Country Code is required"),
         phoneNumber: Yup.string()
           .max(15, "Phone number must not exceed 15 digits")
