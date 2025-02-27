@@ -74,7 +74,7 @@ export default function Home() {
             {/* Mute/Unmute Button */}
             <button
               onClick={toggleMute}
-              className="absolute top-3 left-3 bg-black bg-opacity-50 text-opacity-50 text-white px-3 py-1 rounded-full text-xs z-20 transition-all hover:bg-opacity-90 hover:text-opacity-90 shadow-md"
+              className="absolute top-3 left-3 bg-black bg-opacity-50 text-opacity-50 text-white px-3 py-1 rounded-full text-xs z-20 transition translate duration-200 ease-in-out hover:bg-opacity-90 hover:text-opacity-90 shadow-md"
               aria-label={isMuted ? "Unmute Video" : "Mute Video"}
             >
               {isMuted ? <VolumeX /> : <Volume2 />}
