@@ -136,7 +136,7 @@ const Signin: React.FC = () => {
           <div className='flex flex-col gap-5 text-md justify-center items-center'>
             <span onClick={()=>{router.push("/signup")}}>Are you new here? <a className="font-bold text-md hover:underline cursor-pointer" >Signup</a></span>
 
-            <span onClick={()=>{router.push("/signup")}} className="font-bold hover:underline cursor-pointer">Forgot password? </span>
+            <span onClick={()=>{router.push("/resetpassword")}} className="font-bold hover:underline cursor-pointer">Forgot password? </span>
           </div>
           
           </div>
@@ -200,7 +200,7 @@ const Signin: React.FC = () => {
           <div className='flex flex-col gap-5 text-md justify-center items-center'>
             <span onClick={()=>{router.push("/signup")}}>Are you new here? <a className="font-bold text-md hover:underline cursor-pointer" >Signup</a></span>
 
-            <span onClick={()=>{router.push("/signup")}} className="font-bold hover:underline cursor-pointer">Forgot password? </span>
+            <span onClick={()=>{router.push("/resetpassword")}} className="font-bold hover:underline cursor-pointer">Forgot password? </span>
           </div>
           
           </div>
