@@ -7,12 +7,18 @@
           firstName: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notEmpty: true, isAlpha: true },
+            validate: {
+              is: /^[A-Za-z\s]+$/, // Allows letters and spaces
+              notEmpty: true, // Prevents empty strings
+            },
           },
           lastName: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notEmpty: true, isAlpha: true },
+            validate: {
+              is: /^[A-Za-z\s]+$/, // Allows letters and spaces
+              notEmpty: true, // Prevents empty strings
+            },
           },
           country: {
             type: DataTypes.STRING,
