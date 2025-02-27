@@ -90,7 +90,7 @@ const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
         <div className='flex flex-col justify-center items-center text-center text-wrap mb-10 gap-5' >
           <h2 className='text-3xl font-bold ' >Change Password</h2>
 
-        <form onSubmit={changePassword}>
+        <form onSubmit={changePassword} className='flex flex-col gap-5'>
             {/* Password */}
             <div className='flex relative w-full justify-center items-center'>
                 <input
@@ -126,10 +126,9 @@ const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
           </button>
         </form>
           
-        
 
         {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
+        {/* {success && <p style={{ color: "green" }}>{success}</p>} */}
         {/* <button className='underline' onClick={resendCode}>Resend Code</button> */}
 
         {/* <div className='flex gap-5 text-lg'>

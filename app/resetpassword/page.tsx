@@ -89,7 +89,7 @@ const verifyUser = async (e: React.FormEvent<HTMLFormElement>) => {
           <h2 className='text-3xl font-bold ' >Reset Password</h2>
         
         {/* <h2 className='flex text-wrap'>Enter the verification code sent to {email}</h2> */}
-        <form onSubmit={sendCode}>
+        <form onSubmit={sendCode} className='flex flex-col gap-2'>
             <input
                 className='pl-5 border border-lwfs_blue rounded-full p-2 focus:outline-none focus:ring-1 focus:ring-black text-md w-[300px]'
                 type="text"
@@ -104,7 +104,7 @@ const verifyUser = async (e: React.FormEvent<HTMLFormElement>) => {
             </button>
         </form>
             
-        <form onSubmit={verifyUser}>
+        <form onSubmit={verifyUser} className='flex flex-col gap-2'>
             <input
             className='pl-5 border border-lwfs_blue rounded-full p-2 focus:outline-none focus:ring-1 focus:ring-black text-md w-[300px]'
             type="text" 

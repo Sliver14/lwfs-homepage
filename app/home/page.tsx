@@ -1,14 +1,25 @@
 "use client";
 import React from 'react'
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 // import  ImageSlider from "./ImageSlider";
 // import  LogoSlider from "./LogoSlider";
 // import Modal from "../component/Modal"
 // import VideoSlider from "./VideoSlider";
 import Image from 'next/image';
+import { VolumeX, Volume2 } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
     const slides = [
       {url: "/images/hslhs.jpeg", link: "https://healingstreams.tv/LHS", title: "Healing Streams Live healing Services with Pastor Chris"},
       {url: "/images/jan-jan.jpg", link: "https://lwfoundationschool.org/homes/", title: "Jan-comm"},
@@ -33,7 +44,7 @@ export default function Home() {
        <div className='flex flex-col py-14 pb-20 gap-5' >
 
       {/* Top video */}
-      <div className="w-screen ">
+      {/* <div className="w-screen ">
         <div className="w-screen h-64 overflow-hidden md:h-[350px] md:w-1/2">
           <video 
             src="https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4"
@@ -46,6 +57,29 @@ export default function Home() {
           />
           
         </div> 
+        </div> */}
+
+        {/* Top video */}
+        <div className="relative w-screen">
+          <div className="w-screen h-64 overflow-hidden md:h-[350px] md:w-1/2 relative">
+            <video
+              ref={videoRef}
+              src="https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4"
+              autoPlay
+              muted={isMuted}
+              loop
+              controlsList="nodownload"
+              className="w-full h-full object-cover"
+            />
+            {/* Mute/Unmute Button */}
+            <button
+              onClick={toggleMute}
+              className="absolute top-3 left-3 bg-black bg-opacity-50 text-opacity-50 text-white px-3 py-1 rounded-full text-xs z-20 transition-all hover:bg-opacity-90 hover:text-opacity-90 shadow-md"
+              aria-label={isMuted ? "Unmute Video" : "Mute Video"}
+            >
+              {isMuted ? <VolumeX /> : <Volume2 />}
+            </button>
+          </div>
         </div>
 
         <div className='flex flex-col bg-white p-2'>
