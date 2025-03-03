@@ -1,6 +1,9 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Metadata } from "next";
+import BottomNav from "@/components/BottomNav"
+import { UserProvider } from "./context/UserContext";
+import { UserCartProvider } from "./context/UserCartContext";
 
 export const metadata: Metadata = {
   title: "Lwfoundationschool", // Change this to your site title
@@ -15,17 +18,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  // const pathname = usePathname();
-
-  // Hide navbar on these routes
-  // const hideNavbar = ["/signin", "/signup", "/signup/verify"].includes(pathname);
-
   return (
     <html lang="en">
       <body className="bg-white text-black">
-      <Navbar />
-        {children}
+        <UserProvider>
+          <UserCartProvider>
+            <Navbar />
+              {children}
+            <BottomNav />
+          </UserCartProvider>
+          
+        </UserProvider>
+        
       </body>
     </html>
   );

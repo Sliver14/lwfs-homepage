@@ -69,31 +69,34 @@ function WatchContent() {
   if (!videoUrl) return <p>No Video selected</p>;
 
   return (
-    <div className="flex flex-col bg-zinc-100 w-screen gap-5">
+    <div className="flex relative flex-col bg-zinc-100 w-screen gap-5">
 
       {/* Header */}
-      <div className="grid grid-cols-3 w-screen p-2 fixed top-0 z-20 shadow-md justify-center items-center">
-        <Image
-          src="/welcome/bg welcome app.png"
-          alt=""
-          fill
-          className="flex self-center justify-self-center -z-20 lg:hidden"
-        />
+      <div className="flex fixed w-full top-0 px-5 h-14 items-center">
+        <div className="flex w-full items-center">
+          {/* <Image
+            src="/welcome/bg welcome app.png"
+            alt=""
+            fill
+            className="flex self-center justify-self-center -z-20 lg:hidden"
+          /> */}
 
-        <div
-          onClick={() => router.push("/training")}
-          className="bg-zinc-800 rounded-full h-10 w-10 justify-center items-center p-2 text-white cursor-pointer"
-        >
-          <ChevronLeft />
+          <div
+            onClick={() => router.push("/training")}
+            className="bg-zinc-200 rounded-full h-8 w-8 p-1 justify-center items-center text-center text-lwfs_blue cursor-pointer"
+          >
+            <ChevronLeft />
+          </div>
+
+          <div className="flex mx-auto text-2xl font-bold text-lwfs_blue text-center">LWFS</div>
+
+          <div className="flex h-auto relative items-center">
+            {/* <CircleUser className="flex w-10 h-10 bg-zinc-800 rounded-full p-2 text-white" /> */}
+          </div>
+
         </div>
-
-        <div className="text-3xl font-bold text-white text-center">LWFS</div>
-
-        <div className="flex w-full h-auto justify-end pr-5 relative items-center">
-          <CircleUser className="flex w-10 h-10 bg-zinc-800 rounded-full p-2 text-white" />
-        </div>
-
       </div>
+      
 
       {/* Video player */}
       <div className="flex flex-col pt-8">

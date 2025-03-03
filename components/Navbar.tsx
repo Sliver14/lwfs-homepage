@@ -1,23 +1,14 @@
 "use client";
 
-// import Cookies from "js-cookie";
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link  from 'next/link';
-// import { GrMenu } from "react-icons/gr";
-// import { IoMdClose } from "react-icons/io";
 import { FaAngleDown } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
-// import { LiaPowerOffSolid } from "react-icons/lia";
-import { IoHomeOutline } from "react-icons/io5";
-// import { MdModelTraining } from "react-icons/md";
-import { MdLiveTv } from "react-icons/md";
-import { IoMdAppstore } from "react-icons/io";
-import { CgProfile } from "react-icons/cg";
 import axios from 'axios';
-import Image from 'next/image';
-import { CircleUser, CircleGauge } from "lucide-react"
-
+// import Image from 'next/image';
+import { ShoppingCart } from "lucide-react";
+import { useUserCart } from '@/app/context/UserCartContext';
 
 // Define user type
 interface User {
@@ -29,51 +20,24 @@ function Navbar() {
     const pathname  = usePathname();
 
     // Hide navbar on these routes
-    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset"].includes(pathname);
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/cart", "/productdetails"].includes(pathname);
     const router = useRouter();
 
-    // const [isOpen, setIsOpen] = useState(false);
-    // const [dropdownOpen, setDropdownOpen] = useState(false);
-    // const [dropdownOpen2, setDropdown2Open] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState(false);
     // const [active, setActive] = useState(0);
+    const { cart } = useUserCart();
 
     const activeClass = "flex px-3 py-2 rounded-lg font-medium bg-opacity-90 transform duration-300 bg-red-500 text-white";
     const inactiveClass = "flex text-black px-3 py-2 rounded-lg hover:bg-gray-300 hover:bg-opacity-25 hover:text-black transform transform ease-out duration-300 hover:scale-95";
 
-    // const navRef = useRef<HTMLDivElement | null>(null);
-    // const nav2Ref = useRef<HTMLDivElement | null>(null);
-    // const sidebarRef = useRef<HTMLDivElement | null>(null);
     const proRef = useRef<HTMLDivElement | null>(null);
-
-    const Navbar = [
-      {name: "Home", route: "/home", icon: <IoHomeOutline/>,icon2: <IoHomeOutline/> , dis: "translate-x-0"},
-      {name: "Training", route: "/training",icon: <CircleGauge />,icon2: <CircleGauge /> , dis: "translate-x-16"},
-      {name: "Livetv", route: "/livetv", icon: <MdLiveTv />,icon2: <MdLiveTv /> , dis: "translate-x-32"},
-      {name: "Store", route: "/store", icon: <IoMdAppstore />, icon2: <IoMdAppstore />, dis: "translate-x-48"},
-      {name: "Profile", route: "/profile", icon: <CgProfile/>, icon2: <Image src="images/profile_outline.svg" alt="" layout="fill" objectFit="cover"  className='w-4 h-4'/> , dis: "translate-x-64"},
-    ]
 
     // Function to handle clicks outside the nav
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
           const target = event.target as Node;
-        // if (navRef.current && !navRef.current.contains(target)) {
-        //     setDropdownOpen(false);
-        // }
-        // if (nav2Ref.current && !nav2Ref.current.contains(target)) { // Fix: Correct ref usage
-        //     setDropdown2Open(false);
-        // }
-        // if (
-        //   sidebarRef.current && 
-        //   !sidebarRef.current.contains(target) && 
-        //   target instanceof Element && // Ensure target is an Element
-        //   !target.closest(".toggle-btn") // Now safe to use closest()
-        // ) { 
-        //   setIsOpen(false); 
-        // }
         if (proRef.current && !proRef.current.contains(target)) {
             setProfile(false);
         }
@@ -132,38 +96,53 @@ function Navbar() {
     // Navbar
     <div className='relative flex flex-col w-screen'>
       
-      {/* Modal */}
-     {/* {letsLogin && <Modal isOpen={letsLogin} onClick={() =>setLetsLogin(true) } />}  */}
+    {/* Modal */}
+    {/* {letsLogin && <Modal isOpen={letsLogin} onClick={() =>setLetsLogin(true) } />}  */}
 
-      {/* Navbar */}
-    <div className='flex flex-col w-screen bg-white fixed top-0 z-20 shadow-md ' >
-      <Image
-        src="/welcome/bg welcome app.png"
-        alt=""
-        // width="90"
-        // height="90"
-        layout="fill"
-        objectFit="cover"
-        className="flex self-center justify-self-center -z-20 lg:hidden"
-      />
-      <div className='grid grid-cols-3 items-center py-2 pl-2 pr-5 w-screen md:pr-10 md:pl-5 lg:px-10'>
+    {/* Navbar */}
+    <div className='flex flex-col w-screen fixed top-0 z-20 shadow-md ' >
+      {pathname === "/store" ? 
+      <div className='flex p3 bg-white px-8 h-14 w-full items-center'>
+        <div className='flex'></div>
+
+        <div className='flex mx-auto font-bold text-lwfs_blue text-center'>
+          PRODUCT STORE
+        </div>
+
+        <div onClick={()=> router.push("/cart")} className='flex h-auto justify-end relative items-center cursor-pointer'>
+          <div className='flex relative'>
+            <ShoppingCart className='text-lwfs_blue text-2xl '/>
+            <div className='w-5 h-5 rounded-full bg-black absolute items-center text-center text-sm justify-center text-white -top-2 -right-2'>{cart?.cartItems?.length || 0}</div>
+          </div>  
+        </div>
+      </div>
+      : 
+        <div className='flex flex-col bg-white p3 h-14 justify-center items-center'>
+        {/* <Image
+          src="/welcome/bg welcome app.png"
+          alt=""
+          // width="90"
+          // height="90"
+          layout="fill"
+          objectFit="cover"
+          className="flex self-center justify-self-center -z-20 lg:hidden"
+        /> */}
+        {/* <div className='grid grid-cols-3 items-center py-2 pl-2 pr-5 w-screen md:pr-10 md:pl-5 lg:px-10'> */}
         <div></div>
-        <div className='text-3xl font-bold text-white text-center'>
+
+        <div className='flex text-2xl mx-auto font-bold text-lwfs_blue text-center'>
           LWFS
         </div>
 
-        <div className='flex w-full h-auto justify-end pr-5 relative  items-center '>
+        <div className='flex w-full h-auto relative  items-center cursor-pointer'>
           <div>
-           <CircleUser className='flex w-10 h-10 bg-zinc-800 rounded-full p-2 text-white'/>
-          </div>
-          
+           {/* <CircleUser className='flex w-10 h-10 bg-zinc-800 rounded-full p-2 text-white'/> */}
+          </div>  
         </div>
-        
 
-        {/* <div className='flex h-auto w-44 self-center'>
-         <Image onClick={() => {router.push("/home")}} className='cursor-pointer object-contain w-full h-full' width={250} height={150} src="/images/LWFS_LOGO.png" alt="lwfs_logo" />
-        </div> */}
-
+        </div>
+      }
+      
         {/* Navigation Links for Large Screens */}
         <div className="hidden lg:flex items-center space-x-5 text-sm justify-center ">
             <Link href="/home"
@@ -198,45 +177,30 @@ function Navbar() {
         </div>
 
         <div ref={proRef} className='hidden lg:flex'>
-        <div className='flex items-center space-x-5 mr-10'>
-          <div className='flex items-center'>
-          <h1 className='cursor-pointer text-xs lg:text-sm flex items-center gap-1' onClick={profileToggle}>{user?.firstName} {user?.lastName}<FaAngleDown/></h1>
-          
-          {profile && <>
-            <div className='flex absolute top-[50px] translate-y-0 ease-in-out duration-500 right-5 items-center shadow-md  text-red-600 bg-white p-5 z-20  transition translate '>
-              <span className='flex rounded-md text-red-500 items-center gap-2'>
-                <AiOutlineLogout className='cursor-pointer' onClick={logout} />
-                <button className='cursor-pointer' onClick={logout} >Logout</button>
-              </span>
-              
+          <div className='flex items-center space-x-5 mr-10'>
+            <div className='flex items-center'>
+            <h1 className='cursor-pointer text-xs lg:text-sm flex items-center gap-1' onClick={profileToggle}>{user?.firstName} {user?.lastName}<FaAngleDown/></h1>
+            
+            {profile && <>
+              <div className='flex absolute top-[50px] translate-y-0 ease-in-out duration-500 right-5 items-center shadow-md  text-red-600 bg-white p-5 z-20  transition translate '>
+                <span className='flex rounded-md text-red-500 items-center gap-2'>
+                  <AiOutlineLogout className='cursor-pointer' onClick={logout} />
+                  <button className='cursor-pointer' onClick={logout} >Logout</button>
+                </span>
+                
+              </div>
+            </>}
+
             </div>
-          </>}
           </div>
-        </div>
         </div>
         
         
 
-      </div>
+      {/* </div> */}
     </div>
   
-            {/* Bottom Navbar */}
-      <div className='flex w-screen h-auto px-2 py-1 fixed shadow-2xl bg-white bottom-0 justify-center z-50 items-center rounded-t-xl lg:hidden'>
-        <ul className='flex relative gap-2'>
-                {Navbar.map((menu, i)=>(
-                  <li key={i} className={`w-16 cursor-pointer py-2 duration-500 ${pathname === `${menu.route}` ? " border border-white border-t-lwfs_blue" : "border-none"}`}>
-                    <Link href={menu.route} className='flex flex-col items-center text-center'>
-                      <span className={`text-xl duration-500 ${pathname === `${menu.route}` ? "text-lwfs_blue" : "text-gray-500"}` }>
-                        {menu.icon} 
-                      </span>
-                      <span className={`text-xs ${pathname === `${menu.route}` ? "translate-y-0.5 duration-700 text-lwfs_blue" : "text-gray-500" } `}>{menu.name}
-                      </span>
-                    </Link>
-                  </li>
-                  ))
-                }
-        </ul>
-      </div>
+     
   
 </div>
 
