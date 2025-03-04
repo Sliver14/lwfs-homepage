@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -10,21 +10,18 @@ import { useUserCart } from "../context/UserCartContext";
 // import { useCart } from "@/app/context/CartContext";
 import { ChevronLeft, ShoppingCart } from "lucide-react";
 
-const ProductDetails = () => {
+const ProductDetailsComponent = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const productId = searchParams.get("id");
-    const name = searchParams.get("name");
+    const productId = searchParams.get("id") || "";
+    const name = searchParams.get("name") || "Unknown Product";
     const imageUrl = searchParams.get("imageUrl");
-    const description = searchParams.get("description");
-    const price = searchParams.get("price");
+    const description = searchParams.get("description") || "No description available";
+    const price = searchParams.get("price") || "0";
     // const searchParams = new URLSearchParams(window.location.search);
     const colors = JSON.parse(decodeURIComponent(searchParams.get("colors") || "[]"));
-    const [ quantity, setProductCount ] = useState(1); 
-    // const totalAmount = (Number(price) || 0) * quantity;
+    const [ quantity, setProductCount ] = useState<number>(1); 
     const [selectedColor, setSelectedColor] = useState<{ hex: string, name: string } | null>(null);
-    // const [ userId, setUserId ] = useState("");
-    // const { addToCart } = useCart();
     const { userId } = useUser(); // Get user ID from context
     const { cart, fetchCart } = useUserCart();
 
@@ -33,19 +30,7 @@ const ProductDetails = () => {
         if (colors?.length > 0) {
             setSelectedColor(colors[0]); // Store the whole color object
         }
-    }, []);
-    
-    // useEffect(()=>{
-    //     const fetchUserId = async () => {
-    //         try{
-    //             const response = await axios.get("/api/auth/tokenverify", {withCredentials: true});
-    //             setUserId(response.data.user.id);
-    //         }catch(error){
-                
-    //         }
-    //     }
-    //     fetchUserId();
-    // },[])
+    }, [colors]);
 
    const handleAddToCart = async () => {
     if (!userId) {
@@ -62,7 +47,7 @@ const ProductDetails = () => {
         console.log("Added to cart:", response.data);
         await fetchCart();
     }catch(error){
-        console.error("Error adding to cart:", error.response?.data || error.message);
+        console.error("Error adding to cart:", error);
     }
    }
 
@@ -98,9 +83,8 @@ const ProductDetails = () => {
             <Image 
                 src={imageUrl}
                 alt=""
-                layout="fill"
-                objectFit="cover"
-                className="rounded-2xl"
+                fill
+                className="rounded-2xl object-cover"
             />
         </div>
 
@@ -158,5 +142,12 @@ const ProductDetails = () => {
     </div>
   )
 }
+
+// Wrap in Suspense for SSR safety
+const ProductDetails = () => (
+    <Suspense fallback={<p>Loading product details...</p>}>
+        <ProductDetailsComponent />
+    </Suspense>
+);
 
 export default ProductDetails

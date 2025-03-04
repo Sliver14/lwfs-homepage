@@ -4,7 +4,7 @@ import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { CircleUser, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 type Video = {
   id: number;

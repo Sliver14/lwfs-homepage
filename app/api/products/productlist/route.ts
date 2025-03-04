@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { Products } from "@/lib/models";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try{
 
         const productlist = await Products.findAll();

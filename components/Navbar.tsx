@@ -20,7 +20,7 @@ function Navbar() {
     const pathname  = usePathname();
 
     // Hide navbar on these routes
-    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/cart", "/productdetails"].includes(pathname);
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/cart", "/productdetails", "/profile"].includes(pathname);
     const router = useRouter();
 
     const [loggedIn, setLoggedIn] = useState(false);

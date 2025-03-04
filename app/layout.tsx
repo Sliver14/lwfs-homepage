@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import BottomNav from "@/components/BottomNav"
 import { UserProvider } from "./context/UserContext";
 import { UserCartProvider } from "./context/UserCartContext";
+import { PaymentProvider } from "./context/PaymentContext";
 
 export const metadata: Metadata = {
   title: "Lwfoundationschool", // Change this to your site title
@@ -23,9 +24,12 @@ export default function RootLayout({
       <body className="bg-white text-black">
         <UserProvider>
           <UserCartProvider>
-            <Navbar />
-              {children}
-            <BottomNav />
+            <PaymentProvider>
+              <Navbar />
+                {children}
+              <BottomNav />
+            </PaymentProvider>
+            
           </UserCartProvider>
           
         </UserProvider>

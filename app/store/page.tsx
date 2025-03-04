@@ -20,22 +20,7 @@ type Item = {
 function Store() {
   const router = useRouter();
   // const [ paymentRef, setPaymentRef ] = useState("");
-  const [ productList, setProductList ] = useState([]);
-  // const apiUrl = process.env.NEXT_PUBLIC_URL;
-
-  // if (role === null) return null; // Prevent rendering until hydration is complete
-
-  // useEffect(() => {
-  //   if (paymentRef) {
-  //     window.location.href = `https://payment.espees.org/pay/${paymentRef}`;
-  //   }
-  // }, [paymentRef]);
-
-  // useEffect(() => {
-  //   if (paymentRef && typeof window !== "undefined") {
-  //     window.location.href = `https://payment.espees.org/pay/${paymentRef}`;
-  //   }
-  // }, [paymentRef]);
+  const [ productList, setProductList ] = useState<Item[]>([]);
 
   useEffect(()=>{
     const fetchProduct = async () => {

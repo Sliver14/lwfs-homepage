@@ -1,15 +1,24 @@
 "use client"; // Ensure it's a client component
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { usePayment } from "../context/PaymentContext";
+
+interface TransactionStatus {
+  transaction_status: string;
+  status_details?: string; // ✅ Make this optional to handle cases where it's missing
+}
+
 
 function SuccessPaymentContent() {
-    const [transactionStatus, setTransactionStatus] = useState<string | null>(null);
-    const router = useRouter();const searchParams = useSearchParams();
-    const paymentRef = searchParams.get("payment_ref");
+    const [transactionStatus, setTransactionStatus] = useState<TransactionStatus | null>(null);
+    const router = useRouter(); 
+    // const searchParams = useSearchParams();
+    // const paymentRef = searchParams.get("payment_ref");
+    const { paymentRef } = usePayment();
 
     // useEffect(()=>{
     //   setTransactionStatus(null);
@@ -43,8 +52,8 @@ function SuccessPaymentContent() {
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <h1 className="text-2xl font-bold text-wrap px-5 text-center">Congratulations you payment was successful</h1>
-            <span>{transactionStatus}</span>
+            <h1 className="text-2xl font-bold text-wrap px-5 text-center">{transactionStatus?.status_details}</h1>
+            <span>{transactionStatus?.transaction_status}</span>
             <button onClick={()=> router.push("/")} className="bg-blue-950 py-2 px-5 cursor-pointer text-white rounded-md">Back to Rosources</button>
         </div>
       

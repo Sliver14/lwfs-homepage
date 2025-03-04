@@ -1,20 +1,34 @@
 "use client";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ShoppingCart, ChevronLeft, CircleX } from "lucide-react";
 import { useUserCart } from '../context/UserCartContext';
-import axios from 'axios';
+import { usePayment } from '../context/PaymentContext';
 
+// Define the CartItem type
+interface CartItem {
+    id: number;
+    productId: number;
+    quantity: number;
+    product: {
+      name: string;
+      price: number;
+      imageUrl: string;
+    };
+  }
+  
+  // Define the Cart type
+  interface Cart {
+    id: number;
+    userId: string;
+    cartItems: CartItem[];
+  }
 
 const Cart = () => {
     const router = useRouter();
-    // const [cart, setCart] = useState({ cartItems: [] }); // Ensure cart is an object
-    // const { userId } = useUser();
     const { cart, handleRemoveItem } = useUserCart();
-    const [ paymentRef, setPaymentRef ] = useState("");
-    const apiUrl = process.env.NEXT_PUBLIC_URL;
-    const merchant_wallet = process.env.NEXT_WALLET_ADDRESS;
+    const { paymentRef, handleCheckout } = usePayment();
 
     useEffect(() => {
         if (paymentRef && typeof window !== "undefined") {
@@ -22,33 +36,10 @@ const Cart = () => {
         }
       }, [paymentRef]);
 
-    const totalCartPrice = cart?.cartItems?.reduce((acc, item) => {
+    const totalCartPrice:number = 
+        cart?.cartItems?.reduce((acc, item) => {
         return acc + (item.product?.price || 0) * item.quantity;
-    }, 0) || 0;
-
-    const handleCheckout = async () => {
-        try{
-            const response = await axios.post("/api/cart/checkout", {
-                product_sku: cart.id,
-                narration: "Order Payment",
-                price: totalCartPrice,
-                merchant_wallet: merchant_wallet || "",
-                success_url: `${apiUrl}/success`,
-                fail_url: `${apiUrl}/fail`,
-                user_data: { userId: cart.userId }
-            });
-              console.log(response.data.payment_ref);
-              setPaymentRef(response.data.payment_ref);
-              alert("Redirecting to payment...");  
-              
-    
-          }catch(error){
-            console.error("Payment error:", error);
-            alert("Error Verifying product. Please try again.");
-          }
-    }
-
-    
+    }, 0) || 0; 
 
   return (
     <div className='flex flex-col min-h-screen w-screen overflow-hidden bg-zinc-100 gap-5'>
@@ -64,7 +55,7 @@ const Cart = () => {
             </div>
 
             <div className='flex font-bold mx-auto text-lwfs_blue text-center'>
-            PRODUCT STORE
+            CART
             </div>
 
             <div className='flex h-auto justify-end relative items-center cursor-pointer'>
@@ -112,21 +103,13 @@ const Cart = () => {
             <div onClick={()=>handleRemoveItem(item.id)} className=' w-8 h-8 transition transform duration-200 ease-in-out hover:scale-95 bg-red-500 text-white cursor-pointer justify-center items-center text-center p-1'>
                 <CircleX />
             </div>
-
-            {/* <div className='flex w-full justify-between text-sm items-center px-3 py-1'>
-                <span className='text-red-500'>Remove</span>
-                <div>
-                    <span>{item.quantity}</span>
-                </div>
-                
-            </div> */}
             
         </div>        
         
     ))}
     
     <button 
-        onClick={() => handleCheckout()}  
+        onClick={() => handleCheckout(cart as Cart, totalCartPrice)}  
     
     className='flex w-72 bg-lwfs_orange text-white font-bold py-3 rounded-xl justify-center self-center text-center gap-2 items-center'>
         CHECKOUT 
@@ -145,10 +128,6 @@ const Cart = () => {
 
 </div>}
 
-        
-        
-     
-      
     </div>
   )
 }

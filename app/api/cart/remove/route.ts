@@ -12,6 +12,7 @@ export async function DELETE(req: Request) {
     await cartItem.destroy();
     return NextResponse.json({ message: "Item removed" });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const err = error as Error; // ✅ Explicitly cast to Error
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

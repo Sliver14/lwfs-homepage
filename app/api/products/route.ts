@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { Products } from "@/lib/models";
 import syncDatabase
 from "@/lib/syncDatabase";
-import { Json } from "sequelize/lib/utils";
 
 export async function POST(req: NextRequest) {
     try{

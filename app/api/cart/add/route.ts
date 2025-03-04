@@ -2,9 +2,16 @@ import { NextResponse } from "next/server";
 import Cart from "@/lib/models/Cart";
 import CartItem from "@/lib/models/CartItem";
 
+interface CartRequest {
+  userId: number;
+  productId: number;
+  quantity?: number;
+  color?: string;
+}
+
 export async function POST(req: Request) {
   try {
-    const { userId, productId, quantity, color } = await req.json();
+    const { userId, productId, quantity, color }:CartRequest = await req.json();
     if (!userId || !productId) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
@@ -23,7 +30,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ message: "Added to cart", cartItem });
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error ) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
   }
 }

@@ -1,19 +1,18 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import React from 'react';
+import { usePathname } from 'next/navigation';
 import Link  from 'next/link';
 import { IoHomeOutline } from "react-icons/io5";
 import { MdLiveTv } from "react-icons/md";
 import { IoMdAppstore } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
-import axios from 'axios';
 import Image from 'next/image';
-import { CircleUser, CircleGauge } from "lucide-react"
+import { CircleGauge } from "lucide-react"
 
 const BottomNav = () => {
     const pathname = usePathname();
-    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/productdetails", "/cart"].includes(pathname);
-    const router = useRouter();
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/productdetails", "/cart", "/failed", "/success", "/profile"].includes(pathname);
+    
     const Navbar = [
           {name: "Home", route: "/home", icon: <IoHomeOutline/>,icon2: <IoHomeOutline/> , dis: "translate-x-0"},
           {name: "Training", route: "/training",icon: <CircleGauge />,icon2: <CircleGauge /> , dis: "translate-x-16"},
