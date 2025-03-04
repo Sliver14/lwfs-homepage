@@ -11,7 +11,7 @@ import { CircleGauge } from "lucide-react"
 
 const BottomNav = () => {
     const pathname = usePathname();
-    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/productdetails", "/cart", "/failed", "/success", "/profile"].includes(pathname);
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/productdetails", "/cart", "/failed", "/success"].includes(pathname);
     
     const Navbar = [
           {name: "Home", route: "/home", icon: <IoHomeOutline/>,icon2: <IoHomeOutline/> , dis: "translate-x-0"},
