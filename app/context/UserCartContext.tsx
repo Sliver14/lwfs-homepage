@@ -35,6 +35,7 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
     // ✅ Wrap fetchCart in useCallback to prevent unnecessary re-creations
     const fetchCart = useCallback(async () => {
         if (!userId) return;
+
         try {
             const response = await axios.post("/api/cart", { userId });
             setCart(response.data);
@@ -55,10 +56,12 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    // ✅ Now fetchCart is memoized, and useEffect won't cause unnecessary warnings
+    // ✅ Only fetch when userId is set
     useEffect(() => {
-        fetchCart();
-    }, [fetchCart]);
+        if (userId) {
+            fetchCart();
+        }
+    }, [userId, fetchCart]);
 
     return (
         <UserCartContext.Provider value={{ cart, fetchCart, handleRemoveItem }}>

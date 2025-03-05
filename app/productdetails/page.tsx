@@ -20,7 +20,7 @@ const ProductDetailsComponent = () => {
     const price = searchParams.get("price") || "0";
     // const searchParams = new URLSearchParams(window.location.search);
     const colors = JSON.parse(decodeURIComponent(searchParams.get("colors") || "[]"));
-    const [ quantity, setProductCount ] = useState<number>(1); 
+    const [ quantity, setQuantity ] = useState<number>(1); 
     const [selectedColor, setSelectedColor] = useState<{ hex: string, name: string } | null>(null);
     const { userId } = useUser(); // Get user ID from context
     const { cart, fetchCart } = useUserCart();
@@ -30,7 +30,7 @@ const ProductDetailsComponent = () => {
         if (colors?.length > 0) {
             setSelectedColor(colors[0]); // Store the whole color object
         }
-    }, [colors]);
+    }, []);
 
    const handleAddToCart = async () => {
     if (!userId) {
@@ -106,9 +106,9 @@ const ProductDetailsComponent = () => {
                     </span>
                 </div>
                 <div className="flex gap-5 px-5">
-                    <span onClick={() => setProductCount(prev => Math.max(1, prev - 1))} className="flex bg-lwfs_orange rounded-md w-7 h-7 text-white text-center text-2xl font-bold justify-center items-center cursor-pointer select-none">-</span>
+                    <span onClick={() => setQuantity(prev => Math.max(1, prev - 1))} className="flex bg-lwfs_orange rounded-md w-7 h-7 text-white text-center text-2xl font-bold justify-center items-center cursor-pointer select-none">-</span>
                     <span className="flex w-5 justify-center items-center select-none">{Math.max(1, Number(quantity) || 0)}</span>
-                    <span onClick={() => setProductCount(prev => prev + 1)} className="flex bg-lwfs_orange rounded-md w-7 h-7 text-white text-center font-bold justify-center items-center cursor-pointer select-none">+</span>
+                    <span onClick={() => setQuantity(prev => prev + 1)} className="flex bg-lwfs_orange rounded-md w-7 h-7 text-white text-center font-bold justify-center items-center cursor-pointer select-none">+</span>
                 </div>
             </div>
             </div>

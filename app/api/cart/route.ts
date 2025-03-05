@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(cart);
   } catch (error) {
-    const err = error as Error; // ✅ Explicitly cast to Error
+    const err = error as Error; // ✅ Explicitly cast to Errors
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

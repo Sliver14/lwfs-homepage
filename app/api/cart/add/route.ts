@@ -17,14 +17,20 @@ export async function POST(req: Request) {
     }
 
     let cart = await Cart.findOne({ where: { userId } });
+
     if (!cart) {
       cart = await Cart.create({ userId });
+      cart = await Cart.findOne({ where: { userId } }); // Ensure we fetch the newly created cart
+    }
+
+    if (!cart || !cart.id) {
+      return NextResponse.json({ error: "Failed to create or retrieve cart" }, { status: 500 });
     }
 
     let cartItem = await CartItem.findOne({ where: { cartId: cart.id, productId } });
 
     if (cartItem) {
-      await cartItem.update({ quantity: cartItem.quantity + (quantity || 1), color: color });
+      await cartItem.update({ quantity: cartItem.quantity + (quantity || 1), color: color || cartItem.color});
     } else {
       cartItem = await CartItem.create({ cartId: cart.id, productId, quantity: quantity || 1, color });
     }
