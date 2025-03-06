@@ -1,25 +1,25 @@
 "use client";
 import React from 'react'
-import { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRef, useState } from 'react';
+// import { useRouter } from 'next/navigation';
 // import  ImageSlider from "./ImageSlider";
 // import  LogoSlider from "./LogoSlider";
 // import Modal from "../component/Modal"
 // import VideoSlider from "./VideoSlider";
 import Image from 'next/image';
-import { VolumeX, Volume2 } from 'lucide-react';
+// import { VolumeX, Volume2 } from 'lucide-react';
 
 export default function Home() {
-  const router = useRouter();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
+  // const router = useRouter();
+  // const videoRef = useRef<HTMLVideoElement>(null);
+  // const [isMuted, setIsMuted] = useState(true);
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
+  // const toggleMute = () => {
+  //   if (videoRef.current) {
+  //     videoRef.current.muted = !isMuted;
+  //     setIsMuted(!isMuted);
+  //   }
+  // };
     const slides = [
       {url: "/images/hslhs.jpeg", link: "https://healingstreams.tv/LHS", title: "Healing Streams Live healing Services with Pastor Chris"},
       {url: "/images/jan-jan.jpg", link: "https://lwfoundationschool.org/homes/", title: "Jan-comm"},
@@ -27,11 +27,11 @@ export default function Home() {
       
     ];
 
-    const training = [
-      {url: "/welcome/NEW TEACHERS.jpg", link: ""},
-      {url: "/welcome/NEW PRINCIPALS.jpg", link: ""},
-      {url: "/welcome/15th summit.png", link: ""},
-    ]
+    // const training = [
+    //   {url: "/welcome/NEW TEACHERS.jpg", link: ""},
+    //   {url: "/welcome/NEW PRINCIPALS.jpg", link: ""},
+    //   {url: "/welcome/15th summit.png", link: ""},
+    // ]
     
   const testimonySlides = [
     {url: "/images/2@2x.jpg"},

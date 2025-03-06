@@ -101,10 +101,10 @@ const BottomNav = () => {
                     {Navbar.map((menu, i) => (
                         <li key={i} className={`w-16 cursor-pointer py-2 duration-700 z-50 ${pathname === menu.route ? "-mt-5" : "border-none"}`}>
                             <Link href={menu.route} className='flex flex-col items-center text-center'>
-                                <span className={`text-xl duration-500 ${pathname === menu.route ? "text-white" : "text-gray-500"}`}>
+                                <span className={`text-xl duration-500 ${pathname === menu.route ? "text-white" : "text-black"}`}>
                                     {menu.icon}
                                 </span>
-                                <span className={`text-xs ${pathname === menu.route ? "translate-y-0.5 duration-700 text-white" : "text-gray-500"}`}>
+                                <span className={`text-xs ${pathname === menu.route ? "translate-y-0.5 duration-700 text-white" : "text-black"}`}>
                                     {menu.name}
                                 </span>
                             </Link>
