@@ -1,37 +1,15 @@
 "use client";
 import React from 'react'
-// import { useRef, useState } from 'react';
-// import { useRouter } from 'next/navigation';
-// import  ImageSlider from "./ImageSlider";
-// import  LogoSlider from "./LogoSlider";
-// import Modal from "../component/Modal"
-// import VideoSlider from "./VideoSlider";
 import Image from 'next/image';
-// import { VolumeX, Volume2 } from 'lucide-react';
 
 export default function Home() {
-  // const router = useRouter();
-  // const videoRef = useRef<HTMLVideoElement>(null);
-  // const [isMuted, setIsMuted] = useState(true);
 
-  // const toggleMute = () => {
-  //   if (videoRef.current) {
-  //     videoRef.current.muted = !isMuted;
-  //     setIsMuted(!isMuted);
-  //   }
-  // };
     const slides = [
       {url: "/images/hslhs.jpeg", link: "https://healingstreams.tv/LHS", title: "Healing Streams Live healing Services with Pastor Chris"},
       {url: "/images/jan-jan.jpg", link: "https://lwfoundationschool.org/homes/", title: "Jan-comm"},
       {url: "/images/hslhs.jpeg", link: "https://healingstreams.tv/LHS", title: "Healing Streams Live healing Services with Pastor Chris"},
       
     ];
-
-    // const training = [
-    //   {url: "/welcome/NEW TEACHERS.jpg", link: ""},
-    //   {url: "/welcome/NEW PRINCIPALS.jpg", link: ""},
-    //   {url: "/welcome/15th summit.png", link: ""},
-    // ]
     
   const testimonySlides = [
     {url: "/images/2@2x.jpg"},
@@ -40,23 +18,26 @@ export default function Home() {
 
   return (
     <div className='flex flex-col w-screen text-sm bg-zinc-100 font-sans gap-5'>
-        <div className='flex relative w-full h-full'>
-            <div className='flex h-48 w-36'>
+        
+        <div className='relative w-full h-64'>
               <Image
                 src="/lwfsbg.png"
-                alt=''
+                alt='background'
                 fill
-                className='flex z-10 bg-cover'
+                priority
+                className='object-cover --z-10 '
               />
-            </div>
+
+            <div className='absolute inset-0 bg-black bg-opacity-50 --z-10'/>
             
-            <div className='flex w-full h-full absolute flex-col justify-center text-xl gap-3 font-semibold items-center z-50'>
-              <h1 className='flex w-44 text-center text-wrap'>Preparing the Saints for Ministry</h1>
+            <div className='flex h-full relative flex-col justify-center text-xl gap-3 font-semibold items-center z-10'>
+              <h1 className='flex w-64 text-center text-white text-3xl text-wrap'>Preparing the Saints for Ministry</h1>
               <button className='flex rounded-md bg-lwfs_blue text-white px-5 py-2'>Enrol Today
               </button>
             </div>
           
         </div>
+
        <div className='flex flex-col pb-20 gap-5' >       
 
         {/* <div className='flex flex-col bg-white p-2'> */}
