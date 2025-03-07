@@ -43,7 +43,7 @@ const Profile =  () => {
         
       </div>
 
-      <div className='flex flex-col relative h-36 w-full items-center bg-lwfs_blue'>
+      <div className='flex flex-col relative h-36 w-full items-center bg-blue-950'>
         <div className='flex absolute -bottom-8 justify-between items-center shadow-lg bg-white rounded-md h-auto p-3 w-[80%]'>
           <div className='w-14 h-14 rounded-full bg-lwfs_orange text-white text-2xl font-medium justify-center items-center text-center p-3.5'>{userDetails?.firstName?.charAt(0).toUpperCase() || "?"}</div>
           <div >
