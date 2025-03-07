@@ -2,9 +2,10 @@
 import React, { useEffect } from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, ChevronLeft, CircleX } from "lucide-react";
+import { CircleX } from "lucide-react";
 import { useUserCart } from '../context/UserCartContext';
 import { usePayment } from '../context/PaymentContext';
+import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
 
 // Define the CartItem type
 interface CartItem {
@@ -49,19 +50,19 @@ const Cart = () => {
             
             <div
                 onClick={() => router.back()}
-                className= "flex bg-zinc-200 rounded-full h-8 w-8 justify-center items-center  text-lwfs_blue cursor-pointer"
+                className= "flex hover:bg-gray-100 rounded-full h-8 w-8 justify-center items-center   cursor-pointer"
                 >
-                <ChevronLeft />
+                <ArrowLeftIcon className="w-5 h-5" />
             </div>
 
-            <div className='flex font-bold mx-auto text-lwfs_blue text-center'>
-            CART
+            <div className='flex font-bold text-xl mx-auto  text-center'>
+            Cart
             </div>
 
             <div className='flex h-auto justify-end relative items-center cursor-pointer'>
                 <div className='flex relative'>
-                    <ShoppingCart className='text-lwfs_blue text-2xl '/>
-                    <div className='w-5 h-5 rounded-full bg-black absolute items-center text-center text-sm justify-center text-white -top-2 -right-2'>{cart?.cartItems?.length || 0}</div>
+                <ShoppingCartIcon className='text-lwfs_blue w-6 h-6 text-2xl '/>
+                    <div className='w-5 h-5 rounded-full bg-lwfs_blue absolute items-center text-center text-sm justify-center text-white -top-2 -right-2'>{cart?.cartItems?.length || 0}</div>
                 </div>  
             </div>
         </div>

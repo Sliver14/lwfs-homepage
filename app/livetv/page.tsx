@@ -114,8 +114,33 @@ const updateAttendance = async (): Promise<void> => {
 
   return (
     
-    <div className='flex flex-col py-16 text-sm md:w-screen'>
+    <div className='flex flex-col pb-16 text-sm md:w-screen'>
       {/* <AdminDashboard individualParticipation/> */}
+
+      <div className='flex flex-col bg-white p3 h-14 justify-center items-center'>
+        {/* <Image
+          src="/welcome/bg welcome app.png"
+          alt=""
+          // width="90"
+          // height="90"
+          layout="fill"
+          objectFit="cover"
+          className="flex self-center justify-self-center -z-20 lg:hidden"
+        /> */}
+        {/* <div className='grid grid-cols-3 items-center py-2 pl-2 pr-5 w-screen md:pr-10 md:pl-5 lg:px-10'> */}
+        <div></div>
+
+        <div className='flex text-xl font-semibold mx-auto  text-center'>
+          Watch LWFS-TV
+        </div>
+
+        <div className='flex w-full h-auto relative  items-center cursor-pointer'>
+          <div>
+           {/* <CircleUser className='flex w-10 h-10 bg-zinc-800 rounded-full p-2 text-white'/> */}
+          </div>  
+        </div>
+
+        </div>
 
       <div className='flex flex-col md:flex-row md:w-screen md:overflow-x-hidden md:gap-3 md:px-2'>
         {/* LIVE TV */}

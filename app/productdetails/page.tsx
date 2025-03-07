@@ -7,8 +7,7 @@ import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import { useUserCart } from "../context/UserCartContext";
-// import { useCart } from "@/app/context/CartContext";
-import { ChevronLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
 
 const ProductDetailsComponent = () => {
     const searchParams = useSearchParams();
@@ -60,19 +59,19 @@ const ProductDetailsComponent = () => {
             
             <div
                 onClick={() => router.back()}
-                className= "flex bg-zinc-200 rounded-full h-8 w-8 justify-center items-center  text-lwfs_blue cursor-pointer"
-                >
-                <ChevronLeft />
+                className="hover:bg-gray-100 rounded-full p-2"
+            >
+                <ArrowLeftIcon className="w-5 h-5" />
             </div>
 
-            <div className='flex font-bold mx-auto text-lwfs_blue text-center'>
-            PRODUCT DETAILS
+            <div className='flex font-bold mx-auto '>
+            Product Details
             </div>
 
             <div onClick={()=> router.push("/cart")} className='flex h-auto justify-end relative items-center cursor-pointer'>
                 <div className='flex relative'>
-                    <ShoppingCart className='text-lwfs_blue text-2xl '/>
-                    <div className='w-5 h-5 rounded-full bg-black absolute items-center text-center text-sm justify-center text-white -top-2 -right-2'>{cart?.cartItems?.length || 0}</div>
+                    <ShoppingCartIcon className='text-lwfs_blue w-6 h-6 text-2xl '/>
+                    <div className='w-5 h-5 rounded-full bg-lwfs_blue absolute items-center text-center text-sm justify-center text-white -top-2 -right-2'>{cart?.cartItems?.length || 0}</div>
                 </div>  
             </div>
         </div>

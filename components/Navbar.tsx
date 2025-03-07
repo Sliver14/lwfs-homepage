@@ -20,7 +20,7 @@ function Navbar() {
     const pathname  = usePathname();
 
     // Hide navbar on these routes
-    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/cart", "/productdetails", "/profile", "/home"].includes(pathname);
+    const hideNavbar = ["/signin", "/signup", "/signup/verify", "/", "/watch", "/resetpassword", "/reset", "/cart", "/productdetails", "/profile", "/home", "/livetv"].includes(pathname);
     const router = useRouter();
 
     const [loggedIn, setLoggedIn] = useState(false);
@@ -116,6 +116,7 @@ function Navbar() {
           </div>  
         </div>
       </div>
+
       : 
         <div className='flex flex-col bg-white p3 h-14 justify-center items-center'>
         {/* <Image

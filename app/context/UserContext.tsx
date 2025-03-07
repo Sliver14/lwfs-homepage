@@ -3,20 +3,34 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import axios from "axios";
 
+interface UserDetails {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    zone: string;
+    // Add other fields if necessary
+}
+
 interface UserContextType {
     userId: string | null;
+    userDetails: UserDetails | null;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [userId, setUserId] = useState<string | null>(null);
+    const [ userDetails, setUserDetails ] = useState<UserDetails | null>(null);
 
     useEffect(() => {
         const fetchUserId = async () => {
             try {
                 const response = await axios.get("/api/auth/tokenverify", { withCredentials: true });
                 setUserId(response.data.user.id);
+                setUserDetails(response.data.user)
+                console.log(response.data.user)
+
             } catch (error) {
                 console.error("Error fetching user ID:", error);
             }
@@ -25,7 +39,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ userId }}>
+        <UserContext.Provider value={{ userId, userDetails }}>
             {children}
         </UserContext.Provider>
     );
