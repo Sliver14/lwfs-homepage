@@ -72,8 +72,8 @@ const BottomNav = () => {
     
     const Navbar = [
         { name: "Home", route: "/home", icon: <HomeIcon className="h-6 w-6"/>, dis: "translate-x-0" },
-        { name: "Livetv", route: "/livetv", icon: <TvIcon className="h-6 w-6"/>, dis: "translate-x-[80px]" },
-        { name: "Store", route: "/store", icon: <ArchiveBoxIcon className="h-6 w-6"/>, dis: "translate-x-[160px]" },
+        { name: "Livetv", route: "/livetv", icon: <TvIcon className="h-6 w-6"/>, dis: "translate-x-[92px]" },
+        { name: "Store", route: "/store", icon: <ArchiveBoxIcon className="h-6 w-6"/>, dis: "translate-x-[184px]" },
         { 
             name: "Profile", 
             route: "/profile", 
@@ -83,7 +83,7 @@ const BottomNav = () => {
                     <Image src="/images/profile_outline.svg" alt="Profile" fill style={{ objectFit: "cover" }} />
                 </div>
             ), 
-            dis: "translate-x-[240px]" 
+            dis: "translate-x-[276px]" 
         }
     ];
     
@@ -95,9 +95,9 @@ const BottomNav = () => {
         <div className='flex relative w-screen shadow-md rounded-tr-lg'>
             {/* Bottom Navbar */}
             <div className='flex w-screen h-auto px-2 py-1 fixed shadow-2xl bg-white bottom-0 justify-center z-50 items-center rounded-t-xl lg:hidden'>
-                <ul className='flex relative gap-4'>
+                <ul className='flex relative gap-7'>
                     {/* Active Indicator */}
-                    <span className={`bg-lwfs_blue duration-500 h-16 w-16 shadow-md ${activeNav ? activeNav.dis : ""} absolute rounded-full border-4 border-white -top-3.5`}></span>
+                    <span className={`bg-lwfs_blue duration-500 h-16 w-16 shadow-sm ${activeNav ? activeNav.dis : ""} absolute rounded-full border-4 border-white -top-3.5`}></span>
 
                     {Navbar.map((menu, i) => (
                         <li key={i} className={`w-16 cursor-pointer py-2 duration-700 z-50 ${pathname === menu.route ? "-mt-3" : "border-none"}`}>
