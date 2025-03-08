@@ -75,6 +75,21 @@ const Cart = () => {
         </span> 
         : 
         <div className='flex flex-col w-screen gap-2'>
+            <div className='flex justify-between px-5'>
+                <span className='font-medium'>Subtotal</span>
+                <span>
+                <div className="flex relative w-5 h-5 ">
+                    <Image 
+                    src="/welcome/epees.png"
+                    alt="Espees"
+                    width={20}  // 8 * 4 = 32px
+                    height={20} // 8 * 4 = 32px
+                    className="object-cover rounded-full"
+                    />
+                    </div> 
+                    {totalCartPrice.toFixed(2)}
+                </span>
+            </div>
         {cart.cartItems.map((item)=>(
             <div key={item.productId} className='flex w-full bg-white gap-1 items-center py-2 px-3'>
                 <div className='flex w-full gap-5 p-2 '>
@@ -122,17 +137,8 @@ const Cart = () => {
         onClick={() => handleCheckout(cart as Cart, totalCartPrice)}  
     
     className='flex w-72 bg-lwfs_orange text-white font-bold py-3 rounded-xl justify-center self-center text-center gap-2 items-center'>
-        CHECKOUT 
-        <div className="flex relative w-5 h-5 ">
-            <Image 
-            src="/welcome/epees.png"
-            alt="Espees"
-            width={32}  // 8 * 4 = 32px
-            height={32} // 8 * 4 = 32px
-            className="object-cover rounded-full"
-            />
-        </div> 
-        {totalCartPrice.toFixed(2)}
+        Checkout 
+        
     </button>
     
 
