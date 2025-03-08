@@ -69,45 +69,49 @@ const Cart = () => {
         
       </div>
 
-      {!cart || !cart.cartItems ? <span className="text-center text-gray-500">No items in the cart</span> : 
-    <div className='flex flex-col w-screen gap-2'>
-    {cart.cartItems.map((item)=>(
-        <div key={item.productId} className='flex w-full bg-white gap-1 items-center py-2 px-3'>
-            <div className='flex w-full gap-5 p-2 '>
-                <div className='flex relative rounded-xl bg-black w-16 h-16'>
-                    <Image
-                        src={item.product.imageUrl}
-                        alt=""
-                        layout='fill'
-                        objectFit='cover'
-                        className='flex rounded-xl'
-                    />
-                </div>
-                <div className='flex flex-col justify-center text-lg font-bold'>
-                    <h1>{item.product.name}</h1>
-                    <div className='flex items-center gap-2'>
-                        <div className="flex relative w-5 h-5 ">
-                            <Image 
-                            src="/welcome/epees.png"
-                            alt="Espees"
-                            width={32}  // 8 * 4 = 32px
-                            height={32} // 8 * 4 = 32px
-                            className="object-cover rounded-full"
-                            />
-                        </div>
-                        <h1 className='font-extrabold'>{(item.product.price * item.quantity).toFixed(2)}</h1>
+      {!cart || cart.cartItems.length === 0 ? 
+        <span className="text-center text-gray-500">
+            No items in the cart
+        </span> 
+        : 
+        <div className='flex flex-col w-screen gap-2'>
+        {cart.cartItems.map((item)=>(
+            <div key={item.productId} className='flex w-full bg-white gap-1 items-center py-2 px-3'>
+                <div className='flex w-full gap-5 p-2 '>
+                    <div className='flex relative rounded-xl bg-black w-16 h-16'>
+                        <Image
+                            src={item.product.imageUrl}
+                            alt=""
+                            layout='fill'
+                            objectFit='cover'
+                            className='flex rounded-xl'
+                        />
                     </div>
-                    
+                    <div className='flex flex-col justify-center text-lg font-bold'>
+                        <h1>{item.product.name}</h1>
+                        <div className='flex items-center gap-2'>
+                            <div className="flex relative w-5 h-5 ">
+                                <Image 
+                                src="/welcome/epees.png"
+                                alt="Espees"
+                                width={32}  // 8 * 4 = 32px
+                                height={32} // 8 * 4 = 32px
+                                className="object-cover rounded-full"
+                                />
+                            </div>
+                            <h1 className='font-extrabold'>{(item.product.price * item.quantity).toFixed(2)}</h1>
+                        </div>
+                        
+                    </div>
                 </div>
-            </div>
+                
+                <div onClick={()=>handleRemoveItem(item.id)} className=' w-8 h-8 transition transform duration-200 ease-in-out hover:scale-95 bg-red-500 text-white cursor-pointer justify-center items-center text-center p-1'>
+                    <CircleX />
+                </div>
+                
+            </div>        
             
-            <div onClick={()=>handleRemoveItem(item.id)} className=' w-8 h-8 transition transform duration-200 ease-in-out hover:scale-95 bg-red-500 text-white cursor-pointer justify-center items-center text-center p-1'>
-                <CircleX />
-            </div>
-            
-        </div>        
-        
-    ))}
+        ))}
     
     <button 
         onClick={() => handleCheckout(cart as Cart, totalCartPrice)}  

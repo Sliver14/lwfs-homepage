@@ -37,6 +37,7 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await axios.post("/api/cart", { userId });
             setCart(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error("Error fetching user cart:", error);
         }
@@ -122,6 +123,7 @@ export const useUserCart = () => {
 //         try {
 //             const response = await axios.post("/api/cart", { userId });
 //             setCart(response.data);
+//             console.log(response.data);
 //         } catch (error) {
 //             console.error("Error fetching user cart:", error);
 //         }
