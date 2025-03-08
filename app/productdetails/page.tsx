@@ -78,7 +78,7 @@ const ProductDetailsComponent = () => {
         
       </div>
       
-        <div className="bg-black relative w-96 h-60 rounded-2xl self-center">
+        <div className="bg-black relative w-48 h-64 rounded-2xl self-center">
             <Image 
                 src={imageUrl}
                 alt=""
