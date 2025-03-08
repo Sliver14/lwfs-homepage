@@ -77,8 +77,8 @@ const Cart = () => {
         <div className='flex flex-col w-screen gap-2'>
             <div className='flex justify-between px-5'>
                 <span className='font-medium'>Subtotal</span>
-                <span>
-                <div className="flex relative w-10 h-5 ">
+                <span className='flex'>
+                <div className="flex relative w-5 h-5 ">
                     <Image 
                     src="/welcome/epees.png"
                     alt="Espees"
@@ -87,7 +87,8 @@ const Cart = () => {
                     className="object-cover rounded-full"
                     />
                     </div> 
-                    {totalCartPrice.toFixed(2)}
+                    <span>{totalCartPrice.toFixed(2)}</span>
+                    
                 </span>
             </div>
         {cart.cartItems.map((item)=>(
