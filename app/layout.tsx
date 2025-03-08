@@ -5,6 +5,9 @@ import BottomNav from "@/components/BottomNav"
 import { UserProvider } from "./context/UserContext";
 import { UserCartProvider } from "./context/UserCartContext";
 import { PaymentProvider } from "./context/PaymentContext";
+import { Figtree } from "next/font/google";
+
+const figtree = Figtree({ weight: ["400", "700"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Lwfoundationschool", // Change this to your site title
@@ -21,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-white text-black">
+      <body className="bg-white text-black font-figtree figtree.className">
         <UserProvider>
           <UserCartProvider>
             <PaymentProvider>
