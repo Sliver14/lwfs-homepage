@@ -78,16 +78,20 @@ const Cart = () => {
         {cart.cartItems.map((item)=>(
             <div key={item.productId} className='flex w-full bg-white gap-1 items-center py-2 px-3'>
                 <div className='flex w-full gap-5 p-2 '>
-                    <div className='flex flex-col relative rounded-xl bg-black w-16 h-16'>
-                        <Image
-                            src={item.product.imageUrl}
-                            alt=""
-                            layout='fill'
-                            objectFit='cover'
-                            className='flex rounded-xl'
-                        />
+                    <div className='flex flex-col'>
+                        <div className='flex relative rounded-xl bg-black w-16 h-16'>
+                            <Image
+                                src={item.product.imageUrl}
+                                alt=""
+                                layout='fill'
+                                objectFit='cover'
+                                className='flex rounded-xl'
+                            />
+                            
+                        </div>
                         <span onClick={()=>handleRemoveItem(item.id)} className='text-red-500 text-sm' >Remove item</span>
                     </div>
+                    
                     <div className='flex flex-col justify-center text-lg font-bold'>
                         <h1>{item.product.name}</h1>
                         <div className='flex items-center gap-2'>
