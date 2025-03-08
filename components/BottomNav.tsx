@@ -6,7 +6,7 @@ import Link from 'next/link';
 // import { MdLiveTv } from "react-icons/md";
 // import { IoMdAppstore } from "react-icons/io";
 // import { CgProfile } from "react-icons/cg";
-import { HomeIcon, TvIcon, ArchiveBoxIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, TvIcon, ArchiveBoxIcon, EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
 import Image from 'next/image';
 
 const BottomNav = () => {
@@ -15,7 +15,7 @@ const BottomNav = () => {
     const hideNavbar = [
         "/signin", "/signup", "/signup/verify", "/", 
         "/watch", "/resetpassword", "/reset", "/productdetails", 
-        "/cart", "/failed", "/success", "/profile"
+        "/cart", "/failed", "/success", "/profile", "/more"  
     ].includes(pathname);
     
     const Navbar = [
@@ -23,12 +23,12 @@ const BottomNav = () => {
         { name: "Livetv", route: "/livetv", icon: <TvIcon className="h-6 w-6"/>, dis: "translate-x-[91px]" },
         { name: "Store", route: "/store", icon: <ArchiveBoxIcon className="h-6 w-6"/>, dis: "translate-x-[183px]" },
         { 
-            name: "Profile", 
-            route: "/profile", 
-            icon: <UserCircleIcon className="h-6 w-6"/>, 
+            name: "More", 
+            route: "/more", 
+            icon: <EllipsisHorizontalCircleIcon className="h-6 w-6"/>, 
             icon2: (
                 <div className="relative w-4 h-4">
-                    <Image src="/images/profile_outline.svg" alt="Profile" fill style={{ objectFit: "cover" }} />
+                    <Image src="/images/profile_outline.svg" alt="More" fill style={{ objectFit: "cover" }} />
                 </div>
             ), 
             dis: "translate-x-[274px]" 

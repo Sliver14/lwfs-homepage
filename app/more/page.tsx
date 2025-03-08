@@ -7,7 +7,7 @@ import { ArrowLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 // import { ArrowRight,  } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 
-const Profile =  () => {
+const More =  () => {
   const router = useRouter();
   const { userDetails } = useUser();
   const handleLogout = async () => {
@@ -32,7 +32,7 @@ const Profile =  () => {
                 <ArrowLeftIcon className="w-5 h-5" />
             </div>
 
-            <div className='flex text-2xl font-medium mx-auto '>
+            <div className='flex text-center text-2xl font-medium mx-auto '>
               More
             </div>
 
@@ -71,4 +71,4 @@ const Profile =  () => {
   )
 }
 
-export default Profile
+export default More
