@@ -29,7 +29,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 const response = await axios.get("/api/auth/tokenverify", { withCredentials: true });
                 setUserId(response.data.user.id);
                 setUserDetails(response.data.user)
-                console.log(response.data.user)
+                // console.log(response.data.user)
 
             } catch (error) {
                 console.error("Error fetching user ID:", error);

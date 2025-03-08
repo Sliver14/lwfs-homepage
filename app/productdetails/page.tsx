@@ -51,6 +51,7 @@ const ProductDetailsComponent = () => {
    }
 
   if (!imageUrl) return <p>No item selected</p>;
+  
   return (
     <div className="flex relative flex-col bg-zinz-100 w-screen pt-16 h-full">
         {/* Header */}
