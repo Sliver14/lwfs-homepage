@@ -78,7 +78,7 @@ const Cart = () => {
             <div className='flex justify-between px-5'>
                 <span className='font-medium'>Subtotal</span>
                 <span>
-                <div className="flex relative w-auto h-5 ">
+                <div className="flex relative w-10 h-5 ">
                     <Image 
                     src="/welcome/epees.png"
                     alt="Espees"
