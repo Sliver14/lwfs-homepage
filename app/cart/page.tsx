@@ -78,7 +78,7 @@ const Cart = () => {
             <div className='flex justify-between px-5'>
                 <span className='font-medium'>Subtotal</span>
                 <span>
-                <div className="flex relative w-5 h-5 ">
+                <div className="flex relative w-auto h-5 ">
                     <Image 
                     src="/welcome/epees.png"
                     alt="Espees"
@@ -93,7 +93,7 @@ const Cart = () => {
         {cart.cartItems.map((item)=>(
             <div key={item.productId} className='flex w-full bg-white gap-1 items-center py-2 px-3'>
                 <div className='flex w-full gap-5 p-2 '>
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col gap-2'>
                         <div className='flex relative rounded-xl bg-black w-16 h-16'>
                             <Image
                                 src={item.product.imageUrl}
