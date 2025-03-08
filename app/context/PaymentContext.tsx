@@ -47,9 +47,7 @@ export const PaymentProvider = ({ children }: { children: ReactNode }) => {
                 user_data: { userId: cart.userId }
             });
               console.log(response.data.payment_ref);
-              setPaymentRef(response.data.payment_ref);
-              alert("Redirecting to payment...");  
-              
+              setPaymentRef(response.data.payment_ref);              
     
           }catch(error){
             console.error("Payment error:", error);
