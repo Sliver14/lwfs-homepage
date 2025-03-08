@@ -32,9 +32,9 @@ const More =  () => {
                 <ArrowLeftIcon className="w-5 h-5" />
             </div>
 
-            <div className='flex text-center text-2xl font-medium mx-auto '>
+            {/* <div className='flex text-center text-2xl font-medium mx-auto '>
               More
-            </div>
+            </div> */}
 
             <div>
                 
