@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Cart from "@/lib/models/Cart";
 import CartItem from "@/lib/models/CartItem";
+import syncDatabase from "@/lib/syncDatabase";
 
 interface CartRequest {
   userId: number;
@@ -11,7 +12,10 @@ interface CartRequest {
 
 export async function POST(req: Request) {
   try {
+    await syncDatabase(); // Sync the database on server start
+
     const { userId, productId, quantity, color }:CartRequest = await req.json();
+
     if (!userId || !productId) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }

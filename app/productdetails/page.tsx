@@ -23,6 +23,7 @@ const ProductDetailsComponent = () => {
     const [selectedColor, setSelectedColor] = useState<{ hex: string, name: string } | null>(null);
     const { userId } = useUser(); // Get user ID from context
     const { cart, fetchCart } = useUserCart();
+    const [loading, setLoading] = useState(false);
 
     // Set first color as default when colorsArray is available
     useEffect(() => {
@@ -32,6 +33,7 @@ const ProductDetailsComponent = () => {
     }, []);
 
    const handleAddToCart = async () => {
+    setLoading(true);
     if (!userId) {
         console.error("User ID is missing");
         return;
@@ -47,6 +49,8 @@ const ProductDetailsComponent = () => {
         await fetchCart();
     }catch(error){
         console.error("Error adding to cart:", error);
+    }finally{
+        setLoading(false);
     }
    }
 
@@ -130,10 +134,10 @@ const ProductDetailsComponent = () => {
             </div>
             <div className="flex w-full justify-center items-center mt-10">
                 <button 
-                    onClick={handleAddToCart}
-                    className="flex bg-lwfs_orange w-80 py-2 text-white justify-center items-center text-center rounded-xl font-bold text-xl"
+                    onClick={handleAddToCart} disabled={loading}
+                    className={`flex bg-lwfs_orange w-80 py-2 ${loading && "opacity-50 cursor-none"} text-white justify-center items-center text-center rounded-xl font-bold text-xl`}
                 >
-                    Add to Cart
+                    {loading ? "Adding to cart.....": "Add to Cart"}
                 </button>
             </div>
         </div>
