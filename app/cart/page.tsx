@@ -75,17 +75,17 @@ const Cart = () => {
         </span> 
         : 
         <div className='flex flex-col w-screen gap-2'>
-            <div className='flex justify-between px-5'>
+            <div className='flex items-center justify-between px-5'>
                 <span className='font-medium'>Subtotal</span>
-                <span className='flex'>
-                <div className="flex relative w-5 h-5 ">
-                    <Image 
-                    src="/welcome/epees.png"
-                    alt="Espees"
-                    width={20}  // 8 * 4 = 32px
-                    height={20} // 8 * 4 = 32px
-                    className="object-cover rounded-full"
-                    />
+                <span className='flex justify-items-center items-center gap-2'>
+                    <div className="flex relative w-5 h-5 ">
+                        <Image 
+                        src="/welcome/epees.png"
+                        alt="Espees"
+                        width={20}  // 8 * 4 = 32px
+                        height={20} // 8 * 4 = 32px
+                        className="object-cover rounded-full"
+                        />
                     </div> 
                     <span>{totalCartPrice.toFixed(2)}</span>
                     
