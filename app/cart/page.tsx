@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { CircleX } from "lucide-react";
+// import { CircleX } from "lucide-react";
 import { useUserCart } from '../context/UserCartContext';
 import { usePayment } from '../context/PaymentContext';
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
@@ -78,7 +78,7 @@ const Cart = () => {
         {cart.cartItems.map((item)=>(
             <div key={item.productId} className='flex w-full bg-white gap-1 items-center py-2 px-3'>
                 <div className='flex w-full gap-5 p-2 '>
-                    <div className='flex relative rounded-xl bg-black w-16 h-16'>
+                    <div className='flex flex-col relative rounded-xl bg-black w-16 h-16'>
                         <Image
                             src={item.product.imageUrl}
                             alt=""
@@ -86,6 +86,7 @@ const Cart = () => {
                             objectFit='cover'
                             className='flex rounded-xl'
                         />
+                        <span onClick={()=>handleRemoveItem(item.id)} className='text-red-500 text-sm' >Remove item</span>
                     </div>
                     <div className='flex flex-col justify-center text-lg font-bold'>
                         <h1>{item.product.name}</h1>
@@ -105,9 +106,9 @@ const Cart = () => {
                     </div>
                 </div>
                 
-                <div onClick={()=>handleRemoveItem(item.id)} className=' w-8 h-8 transition transform duration-200 ease-in-out hover:scale-95 bg-red-500 text-white cursor-pointer justify-center items-center text-center p-1'>
+                {/* <div onClick={()=>handleRemoveItem(item.id)} className=' w-8 h-8 transition transform duration-200 ease-in-out hover:scale-95 bg-red-500 text-white cursor-pointer justify-center items-center text-center p-1'>
                     <CircleX />
-                </div>
+                </div> */}
                 
             </div>        
             
