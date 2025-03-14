@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios';
 import Image from 'next/image';
-// import VideoPlayer from './VideoPlayer';
+import VideoPlayer from './VideoPlayer';
 
 const LiveTv: React.FC = () => {
   const [content, setContent] = useState<string>('');
@@ -146,7 +146,7 @@ const updateAttendance = async (): Promise<void> => {
         {/* LIVE TV */}
         <div className='flex flex-col md:w-[60%]'>
           <div className='w-screen h-auto md:w-full  '>
-            <video 
+            {/* <video 
               src="https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4" 
               // type="application/x-mpegURL"
               className="w-full h-full object-cover" 
@@ -154,8 +154,8 @@ const updateAttendance = async (): Promise<void> => {
               muted={false}
               controlsList="nodownload"
             >
-            </video>
-            {/* <VideoPlayer src="https://vcpout-sf01-altnetro.internetmultimediaonline.org/vcp/07636ad7/playlist.m3u8" /> */}
+            </video> */}
+            <VideoPlayer src="https://vcpout-sf01-altnetro.internetmultimediaonline.org/ext/ext1.smil/playlist.m3u8" />
           {/* <video ref={videoRef} controls width="100%" /> */}
           {/* <HlsPlayer className="w-full h-full object-contain" src="https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4" /> */}
           </div>

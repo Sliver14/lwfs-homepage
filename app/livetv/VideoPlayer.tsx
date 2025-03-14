@@ -21,5 +21,5 @@ export default function VideoPlayer({ src }: VideoPlayerProps) {
     }
   }, [src]);
 
-  return <video ref={videoRef} controls className="w-full h-auto" />;
+  return <video ref={videoRef} controls autoPlay className="w-full h-auto" />;
 }

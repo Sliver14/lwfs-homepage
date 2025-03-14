@@ -25,14 +25,15 @@ export default function Home() {
                 alt='background'
                 fill
                 priority
-                className='object-cover --z-10 '
+                className='object-cover --z-10'
               />
 
             <div className='absolute inset-0 bg-black bg-opacity-50 --z-10'/>
             
             <div className='flex h-full relative flex-col justify-center text-xl gap-3 font-semibold items-center z-10'>
               <h1 className='flex w-64 text-center text-white text-3xl text-wrap'>Preparing the Saints for Ministry</h1>
-              <button className='flex rounded-md bg-lwfs_blue text-white px-5 py-2'>Enrol Today
+              <button className='flex rounded-md bg-lwfs_blue text-white px-5 py-2 '>Enrol Today
+              
               </button>
             </div>
           

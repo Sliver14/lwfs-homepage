@@ -5,9 +5,9 @@ import BottomNav from "@/components/BottomNav"
 import { UserProvider } from "./context/UserContext";
 import { UserCartProvider } from "./context/UserCartContext";
 import { PaymentProvider } from "./context/PaymentContext";
-import { Figtree } from "next/font/google";
+// import { Figtree } from "next/font/google";
 
-const figtree = Figtree({ weight: ["400", "700"], subsets: ["latin"] });
+// const figtree = Figtree({ weight: ["400", "700"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Lwfoundationschool", // Change this to your site title
