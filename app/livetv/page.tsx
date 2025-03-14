@@ -156,7 +156,7 @@ const updateAttendance = async (): Promise<void> => {
             >
             </video> */}
             <VideoPlayer src="
-https://pvqybrzodz24-hls-live.5centscdn.com/HSOP/955ad3298db330b5ee880c2c9e6f23a0.sdp/chunks.m3u8" />
+https://2nbyjxnbl53k-hls-live.5centscdn.com/RTV/59a49be6dc0f146c57cd9ee54da323b1.sdp/chunks.m3u8" />
           {/* <video ref={videoRef} controls width="100%" /> */}
           {/* <HlsPlayer className="w-full h-full object-contain" src="https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4" /> */}
           </div>
