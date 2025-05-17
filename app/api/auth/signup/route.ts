@@ -70,8 +70,8 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ message: "Check your email for verification code" }, { status: 201 });
 
-    } catch (error) {
-        console.error("Error during signup:", error); // Log the error for debugging
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-    }
+    } catch (error: any) {
+  console.error("Signup Error:", error?.message, error);
+  return NextResponse.json({ error: error?.message || "Internal server error" }, { status: 500 });
+}
 }

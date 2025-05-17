@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-white text-black font-figtree figtree.className">
+      <body className="bg-white text-black">
         <UserProvider>
           <UserCartProvider>
             <PaymentProvider>
