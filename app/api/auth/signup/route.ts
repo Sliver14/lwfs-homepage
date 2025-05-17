@@ -71,13 +71,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Check your email for verification code" }, { status: 201 });
 
     } catch (error: unknown) {
+  console.error("Signup Error:", error);
   if (error instanceof Error) {
-    console.error("Signup Error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  console.error("Unknown error during signup:", error);
-  return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  return NextResponse.json({ error: "Unknown server error" }, { status: 500 });
 }
 
 }
