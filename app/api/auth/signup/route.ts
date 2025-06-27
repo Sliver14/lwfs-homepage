@@ -1,81 +1,95 @@
 import { NextRequest, NextResponse } from "next/server";
-import SignUp from "@/lib/models/SignUp"; // Adjust import path
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
-import syncDatabase from "@/lib/syncDatabase";
+import { v4 as uuidv4 } from "uuid";
+import { sendEmail } from "@/utils/email";
 
 export async function POST(req: NextRequest) {
     try {
-        await syncDatabase(); // Sync the database on server start
-        
-        const { firstName, lastName, phoneNumber, zone, church, country, email, password } = await req.json() as {
-            firstName: string;
-            lastName: string;
-            phoneNumber?: string;
-            zone?: string;
-            church?: string;
-            country?: string;
-            email: string;
-            password: string;
-          };
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            zone,
+            kcUsername,
+            phoneNumber,
+            church,
+            city,
+            country,
+        } = await req.json();
 
-        if (!firstName || !email) {
-            return NextResponse.json({ error: "Name and email are required." }, { status: 400 });
+        if (!firstName || !email || !password) {
+            return NextResponse.json({ error: "Name, email, and password are required." }, { status: 400 });
         }
-        
-        const user = await SignUp.findOne({where: {email}}) as InstanceType<typeof SignUp> | null;
 
+        if (!process.env.NEXT_PUBLIC_APP_URL || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+        }
 
-        if (user) {
-            if (user.getDataValue("verified")
-            ) {
+        const existingUser = await prisma.user.findUnique({ where: { email } });
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        const verificationToken = uuidv4();
+
+        if (existingUser) {
+            if (existingUser.verified) {
                 return NextResponse.json({ error: "User already verified" }, { status: 400 });
             } else {
-                return NextResponse.json({ error: "User not verified. Check your email." }, { status: 400 });
+                // Update existing unverified user
+                await prisma.user.update({
+                    where: { email },
+                    data: {
+                        firstName,
+                        lastName,
+                        password: hashedPassword,
+                        verificationToken,
+                        zone,
+                        phoneNumber,
+                        church,
+                        city,
+                        country,
+                        kcUsername,
+                        verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+                    },
+                });
             }
+        } else {
+            // Create new user
+            await prisma.user.create({
+                data: {
+                    firstName,
+                    lastName,
+                    email,
+                    password: hashedPassword,
+                    zone,
+                    phoneNumber,
+                    church,
+                    city,
+                    country,
+                    kcUsername,
+                    verificationToken,
+                    verified: false,
+                    verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+                },
+            });
         }
 
-        // Generate a 6-digit verification code
-        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-        const hashedCode = bcrypt.hashSync(verificationCode, 10);
-        const hashedPassword = bcrypt.hashSync(password, 10);
-
-        // Create user in DB
-        await SignUp.create({
-            firstName, lastName, phoneNumber, zone, church, email, country, password: hashedPassword,
-            verificationCode: hashedCode, verified: false
-        });
-
-        // Configure Nodemailer transporter
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-
         // Send verification email
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: "Your Verification Code",
-            html: `
-                <p>Hello ${firstName},</p>
-                <p>Your verification code is: <b>${verificationCode}</b></p>
-                <p>Please use this code within 15 minutes to verify your email address.</p>
-                <p>Thanks,<br>Loveworld Foundation School Inc.</p>
-             `,
-        });
+        const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/signup/verify?token=${verificationToken}`;
+        try {
+            await sendEmail(email, firstName, verificationLink, "signup");
+        } catch (emailError) {
+            console.error("Email sending failed:", emailError);
+            return NextResponse.json(
+                { message: "User created but email sending failed. Please contact support." },
+                { status: 201 }
+            );
+        }
 
-        return NextResponse.json({ message: "Check your email for verification code" }, { status: 201 });
-
-    } catch (error: unknown) {
-  console.error("Signup Error:", error);
-  if (error instanceof Error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-  return NextResponse.json({ error: "Unknown server error" }, { status: 500 });
-}
-
+        return NextResponse.json({ message: "Verification link sent to your email." }, { status: 201 });
+    } catch (error) {
+        console.error("Signup Error:", error);
+        const errorMessage = error instanceof Error ? error.message : "Server error";
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
+    }
 }

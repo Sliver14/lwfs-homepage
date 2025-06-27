@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" // or mysql / sqlite
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                         String    @id @default(uuid())
+  firstName                  String
+  lastName                   String
+  zone                       String
+  city                       String
+  country                    String
+  phoneNumber                String
+  church                     String
+  email                      String    @unique
+  password                   String
+  verificationToken          String?
+  verified                   Boolean   @default(false)
+  verifiedAt                 DateTime?
+  verificationTokenExpiresAt DateTime?
+  resetToken                 String? // Optional for password reset
+  resetTokenExpiresAt        DateTime?
+  createdAt                  DateTime  @default(now())
+  updatedAt                  DateTime  @updatedAt
+
+  programs UserProgram[]
+  comments Comment[]
+  orders   Order[]
+  CartItem CartItem[]
+}
+
+model Program {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  videoUrl    String
+  isLive      Boolean  @default(false)
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  participants UserProgram[]
+  comments     Comment[]
+}
+
+model UserProgram {
+  id              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  program         Program  @relation(fields: [programId], references: [id])
+  programId       String
+  joinedAt        DateTime @default(now())
+  watchedDuration Int? // in seconds
+  participated    Boolean  @default(true)
+
+  @@unique([userId, programId]) // Prevent duplicate participation
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  program   Program  @relation(fields: [programId], references: [id])
+  programId String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Decimal  @db.Decimal(10, 2)
+  imageUrl    String
+  stock       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems OrderItem[]
+  cartItems  CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId]) // Prevent duplicates
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  totalAmount Decimal     @db.Decimal(10, 2)
+  status      OrderStatus @default(pending)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+}
+
+enum OrderStatus {
+  pending
+  paid
+  shipped
+  delivered
+  cancelled
+}

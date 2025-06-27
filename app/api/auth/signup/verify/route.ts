@@ -1,38 +1,72 @@
 import { NextRequest, NextResponse } from "next/server";
-import SignUp from "@/lib/models/SignUp"; // Adjust import path
-import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/prisma";
 
-// verify code & signup
-export async function POST(req: NextRequest) {
-    try {      
-      const { email, code } = await req.json();
+export async function GET(req: NextRequest) {
+    try {
+        const token = req.nextUrl.searchParams.get("token");
 
-      // Find the record based on email and code
-      const record = await SignUp.findOne({ where: { email } });
-  
-      // Check if the record exists and if the code is not expired
-      if (!record) {
-        return NextResponse.json({ error: "User not found" }, {status:400});
-      }
-  
-      // compare provided code
-      const isMatch = bcrypt.compareSync(code, record.getDataValue("verificationCode"));
+        if (!token) {
+            return NextResponse.redirect(
+                `${process.env.NEXT_PUBLIC_APP_URL}/auth/verified-success?status=error&message=missing_token`
+            );
+        }
 
-  
-      if (!isMatch){
-        return NextResponse.json({error: 'invalid code'}, {status:400});
-      }
-  
-       //set data to null
-       await SignUp.update(
-        {verificationCode: "", verified: "true"},
-        {where:{email}}
-      )
-      
-      // Send success response
-      return NextResponse.json({ message: "Signup was Successfull!"}, {status: 200});
+        // Find user by verification token
+        const user = await prisma.user.findFirst({
+            where: { verificationToken: token },
+        });
+
+        if (!user) {
+            return NextResponse.redirect(
+                `${process.env.NEXT_PUBLIC_APP_URL}/auth/verified-success?status=error&message=invalid_token`
+            );
+        }
+
+        // Log for debugging
+        console.log(`Verification attempt for user: ${user.email}, token: ${token}`);
+
+        // Check if user is already verified
+        if (user.verified) {
+            console.log(`User ${user.email} is already verified`);
+            return NextResponse.redirect(
+                `${process.env.NEXT_PUBLIC_APP_URL}/auth/verified-success?status=already_verified&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.firstName || "")}`
+            );
+        }
+
+        // Check if token is expired
+        if (!user.verificationTokenExpiresAt || new Date() > new Date(user.verificationTokenExpiresAt)) {
+            console.log(`Verification token expired for user: ${user.email}`);
+            return NextResponse.redirect(
+                `${process.env.NEXT_PUBLIC_APP_URL}/auth/verified-success?status=expired&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.firstName || "")}`
+            );
+        }
+
+        // Update user verification status
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                verified: true,
+                verificationToken: null,
+                verificationTokenExpiresAt: null,
+                verifiedAt: new Date(),
+            },
+        });
+
+        console.log(`User ${user.email} successfully verified at ${new Date().toISOString()}`);
+
+        // Redirect to success page
+        return NextResponse.redirect(
+            `${process.env.NEXT_PUBLIC_APP_URL}/auth/verified-success?status=success&email=${encodeURIComponent(user.email)}&name=${encodeURIComponent(user.firstName || "")}`
+        );
     } catch (error) {
-      console.error("Error during code verification:", error);
-      return NextResponse.json({ error: "An error occurred during verification" }, {status: 500});
+        console.error("Email verification error:", {
+            message: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+            timestamp: new Date().toISOString(),
+        });
+
+        return NextResponse.redirect(
+            `${process.env.NEXT_PUBLIC_APP_URL}/auth/verified-success?status=error&message=server_error`
+        );
     }
-  }
+}

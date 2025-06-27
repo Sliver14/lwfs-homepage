@@ -1,74 +1,84 @@
-import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-import SignUp from "@/lib/models/SignUp"; 
-import syncDatabase from "@/lib/syncDatabase";
-import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
+import { sendEmail } from '@/utils/email';
 
 export async function POST(req: NextRequest) {
-    try {
-      await syncDatabase(); // Sync the database on server start
-      
-      const { email, password } = await req.json();
-      
-        // Basic validation
-      if (!email) {
-        return NextResponse.json({ error: 'Email is required.' }, {status: 400});
-      }
+  try {
+    const { email, password } = await req.json();
 
-      if (!password) {
-        return NextResponse.json({ error: 'Password is required.' }, {status: 400});
-      }
-  
-      // Find the user by email
-      const user = await SignUp.findOne({ where: { email } });
-  
-      // If user doesn't exist
-      if (!user) {
-        return NextResponse.json({ error: 'User not found.' }, {status: 400});
-      } 
-      
-      // if(user.verified === false ){
-      //   return NextResponse.json({error: 'user not verified'}, {status: 400});
-      // }
+    // Basic validation
+    if (!email || !password) {
+      return NextResponse.json({ error: 'Email and password are required.' }, { status: 400 });
+    }
 
-      // Type assertion (convert user to typed model)
-      const userData = user as unknown as { id: number; email: string; verified: boolean, password: string };
+    // Find the user by email
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-      // Check verification status
-      if (!userData.verified) {
-          return NextResponse.json({ error: 'User not verified' }, { status: 400 });
-      }
+    if (!user) {
+      return NextResponse.json({ error: 'Create your account' }, { status: 400 });
+    }
 
-      // Compare provided password with stored hashed password
-      const isMatch = await bcrypt.compare(password, userData.password); // ✅ Use async bcrypt.compare()
+    if (!user.verified) {
+      // Generate and update verification token
+      const verificationToken = uuidv4();
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-  
-      if (!isMatch){
-        return NextResponse.json({error: 'wrong password combination'}, {status:400});
-      }
+      await prisma.user.update({
+        where: { email },
+        data: {
+          verificationToken,
+          verificationTokenExpiresAt: expires,
+        },
+      });
 
-      // Generate a JWT token
-      // const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '30d' });
+      // Send verification email
+      const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/signup/verify?token=${verificationToken}`;
+      await sendEmail(user.email, user.firstName || 'User', verificationLink, 'resend');
 
-      // Generate a JWT token
-      const token = jwt.sign(
-        { id: userData.id, email: userData.email },
-        process.env.JWT_SECRET!,
-        { expiresIn: '30d' }
-    );
-  
-    // Set the cookie manually using headers
-    const response = NextResponse.json({ message: "Signin was Successful!", token });
+      return NextResponse.json(
+        { error: 'User not verified. A verification link has been sent to your email.' },
+        { status: 400 }
+      );
+    }
 
-    response.headers.set(
-      "Set-Cookie",
-      `authToken=${token}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === "production"}; SameSite=None; Max-Age=${30 * 24 * 60 * 60}`
-    );
+    // Check if user has a password
+    if (!user.password) {
+      return NextResponse.json({ error: 'Account setup incomplete.' }, { status: 400 });
+    }
+
+    // Compare passwords
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 400 });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET!, {
+      expiresIn: '30d',
+    });
+
+    const response = NextResponse.json({ message: 'Signin was Successful!', token });
+
+    // Set cookie
+    response.cookies.set('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: '/',
+    });
 
     return response;
-    
-    } catch (error) {
-      console.error(error);
-      return NextResponse.json({ error: 'Internal server error' }, {status:500});
-    }
-  };
+  } catch (error) {
+    console.error('Signin Error:', error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

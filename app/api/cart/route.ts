@@ -1,41 +1,39 @@
-import { NextResponse } from "next/server";
-import Cart from "@/lib/models/Cart";
-import CartItem from "@/lib/models/CartItem";
-import Products from "@/lib/models/Products";
-import syncDatabase from "@/lib/syncDatabase";
+// app/api/cart/route.ts
+import { prisma } from '@/lib/prisma';
+import { NextResponse, NextRequest } from 'next/server';
+import { getUserIdFromCookie } from '@/lib/getUserId';
 
-export async function POST(req: Request) {
-  try {
-    // const { searchParams } = new URL(req.url);
-    // const userId = searchParams.get("user_id");
-    await syncDatabase(); // Sync the database on server start
+export async function GET(request: NextRequest) {
+  const userId = getUserIdFromCookie(request); // ✅ Pass request
+  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { userId } = await req.json(); // Extract userId from body
+  const cart = await prisma.cartItem.findMany({
+    where: { userId },
+    include: { product: true },
+  });
 
-    if (!userId) return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+  return NextResponse.json(cart);
+}
 
-    const cart = await Cart.findOne({
-      where: { userId },
-      include: [
-        {
-          model: CartItem,
-          as: "cartItems", // ✅ Correct alias
-          
-          include: [
-            {
-              model: Products,
-              as: "product", // ✅ Correct alias
-            },
-          ],
-        },
-      ],
-    });
+export async function POST(request: NextRequest) {
+  const userId = getUserIdFromCookie(request); // ✅ Pass request
+  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    if (!cart) return NextResponse.json({ message: "Cart is empty" });
+  const { productId } = await request.json();
 
-    return NextResponse.json(cart);
-  } catch (error) {
-    const err = error as Error; // ✅ Explicitly cast to Errors
-    return NextResponse.json({ error: err.message }, { status: 500 });
-  }
+  const item = await prisma.cartItem.upsert({
+    where: {
+      userId_productId: { userId, productId }
+    },
+    update: {
+      quantity: { increment: 1 }
+    },
+    create: {
+      userId,
+      productId,
+      quantity: 1
+    }
+  });
+
+  return NextResponse.json(item);
 }

@@ -1,38 +1,67 @@
-import { NextRequest, NextResponse } from "next/server";
-import SignUp from "@/lib/models/SignUp"; 
-import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+import { prisma } from '@/lib/prisma';
 
-// Token verification route
 export async function GET(req: NextRequest) {
-    const token = req.cookies.get("authToken")?.value; // Get token correctly
-  
-    if (!token) {
-      return NextResponse.json({ valid: false, error: "Token is required" }, {status: 400});
-    }
-  
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
-      const email = decoded.email;
-  
-      const user = await SignUp.findOne({where:{email}});
-      
-      if (!user) {
-        return NextResponse.json({message: 'user not found'}, {status: 404});
-      }
-  
-      return NextResponse.json({
-        valid: true, 
-        user:{ 
-          id: user.getDataValue("id"),
-          firstName: user.getDataValue("firstName"),
-          lastName: user.getDataValue("lastName"),
-          email: user.getDataValue("email"),
-          zone: user.getDataValue("zone"),
-        },
-     }, {status: 200});
+  const token = req.cookies.get('authToken')?.value;
 
-    } catch (error) {
-      console.error("Error during code verification:", error); // Logs the error
-        return NextResponse.json({ valid: false, error: "Invalid or expired token" }, {status: 403});
+  if (!token) {
+    return NextResponse.json(
+      { valid: false, error: 'Token is required' },
+      { status: 401 }
+    );
+  }
+
+  try {
+    // Verify JWT
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
+    const email = decoded.email;
+
+    if (!email) {
+      return NextResponse.json(
+        { valid: false, error: 'Invalid token payload' },
+        { status: 401 }
+      );
     }
-  };
+
+    // Query user by email
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { valid: false, error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        userId: user.id.toString(), // Convert Int to String
+        user: {
+          id: user.id.toString(),
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      },
+      {
+        status: 200,
+        headers: { 'Cache-Control': 'no-store' },
+      }
+    );
+  } catch (error) {
+    console.error('Token verification error:', error);
+    return NextResponse.json(
+      { valid: false, error: 'Invalid or expired token' },
+      { status: 401 }
+    );
+  }
+}

@@ -1,242 +1,251 @@
 "use client";
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
-import VideoPlayer from './VideoPlayer';
+import VideoPlayer from './VideoPlayer'; // Assuming this component is correctly implemented
 
 const LiveTv: React.FC = () => {
-  const [content, setContent] = useState<string>('');
-  // const apiUrl = import.meta.env.VITE_API_URL;
-  const [comments, setComments] = useState<{ 
-    id: number; 
-    content: string; 
-    user?: 
-    { firstName: string }; createdAt: string }[]>([]);
-  const [ loading, setLoading ] = useState<boolean>(false);
-  const [groupParticipation, setGroupParticipation] = useState<number | "">("");
-  const [successMessage, setSuccessMessage] = useState<string>('');
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  
-  useEffect(() => {
-    const storedValue = localStorage.getItem("groupParticipation");
-    if (storedValue) {
-      setGroupParticipation(Number(storedValue) || "");
-    }
-  }, []);
+    const [content, setContent] = useState<string>('');
+    const [comments, setComments] = useState<{
+        id: number;
+        content: string;
+        user?: { firstName: string };
+        createdAt: string;
+    }[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [groupParticipation, setGroupParticipation] = useState<number | "">("");
+    const [successMessage, setSuccessMessage] = useState<string>('');
+    const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  // Fetch Comment
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get("/api/livetv/fetchcomment", {
-          withCredentials: true, // Ensure cookies are sent
-        });
-        setComments(response.data);
-        // console.log(response.data);
-      } catch (error) {
-        console.error('Error fetching comments:', error);
-      }
+    useEffect(() => {
+        const storedValue = localStorage.getItem("groupParticipation");
+        if (storedValue) {
+            setGroupParticipation(Number(storedValue) || "");
+        }
+    }, []);
+
+    // Fetch Comment
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const response = await axios.get("/api/livetv/fetchcomment", {
+                    withCredentials: true,
+                });
+                setComments(response.data);
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+            }
+        };
+
+        fetchComments();
+        const intervalId = setInterval(fetchComments, 5000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    //Auto-scroll to latest comment
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [comments]);
+
+    //Post comment
+    const postComment = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoading(true);
+        if (!content.trim()) {
+            alert('Comment cannot be empty');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await axios.post("/api/livetv/comment", { content }, {
+                withCredentials: true,
+            });
+            setComments(prevComments => [...prevComments, response.data]);
+            setContent('');
+        } catch (error) {
+            console.error('Error posting comment:', error);
+            alert('Failed to post comment. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
-  
-    fetchComments();
-    }, [content]);
 
-  //Auto-scroll to latest comment
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [comments]);
+    // Live-tv Attendance
+    // useEffect(() => {
+    //     const recordAttendance = async () => {
+    //         try {
+    //             await axios.post(
+    //                 "/api/livetv/attendance",
+    //                 { page: "live_tv" },
+    //                 {
+    //                     withCredentials: true,
+    //                 }
+    //             );
+    //         } catch (error) {
+    //             console.error("Error recording attendance:", error);
+    //         }
+    //     };
+    //     recordAttendance();
+    // }, []);
 
-  //Post comment
-  const postComment = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true)
-    if (!content.trim()) {
-      alert('Comment cannot be empty');
-      return;
-    }
+    // update groupAttendance
+    const updateAttendance = async (): Promise<void> => {
+        if (groupParticipation === "" || groupParticipation < 1) {
+            alert("Group participation must be a positive number.");
+            return;
+        }
+        localStorage.setItem("groupParticipation", String(groupParticipation));
+        setLoading(true);
+        try {
+            await axios.post("/api/livetv/update", { groupParticipation }, { withCredentials: true });
+            setSuccessMessage("Attendance successfully updated!");
 
-    try {
-      await axios.post("/api/livetv/comment", { content }, {
-        withCredentials: true, // Include user token from cookies
-      });
-      // const newComment = response.data;
-      // socketRef.current.emit("new-comment", newComment); // Send to other users
-      setContent(''); // Clear input
-    } catch (error) {
-      console.error('Error posting comment:', error);
-    } finally{
-      setLoading(false)
-    }
-  };
-
-  // Live-tv Attendance
-  useEffect(() => {
-    // if (!hasSubmitted) {
-    const recordAttendance = async () => {
-      try {
-        await axios.post(
-          "/api/livetv/attendance",
-          { page: "live_tv" },
-          {
-            withCredentials: true,
-          }
-        );
-
-      } catch (error) {
-        console.error("Error recording attendance:", error);
-      }
+            setTimeout(() => {
+                setSuccessMessage("");
+            }, 3000);
+        } catch (error) {
+            console.error("Error updating attendance:", error);
+            alert("Failed to update attendance. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
-  
-    recordAttendance();
-  },
-   []);
-  
-// update groupAttendance
-const updateAttendance = async (): Promise<void> => {
-  if (groupParticipation === "") return; // Prevent sending empty data
-  localStorage.setItem("groupParticipation", String(groupParticipation));
-  setLoading(true);
-  try {
-    await axios.post("/api/livetv/update", { groupParticipation }, { withCredentials: true });
-    setSuccessMessage("Attendance successfully updated!");
 
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
-  } catch (error) {
-    console.error("Error updating attendance:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+    return (
+        <div className='flex flex-col min-h-screen bg-gradient-to-br from-gray-900 via-zinc-800 to-gray-950 text-white font-sans antialiased'>
 
-  return (
-    
-    <div className='flex flex-col pb-16 text-sm md:w-screen lg:hidden'>
-      {/* <AdminDashboard individualParticipation/> */}
+            {/* Header/Title Section */}
+            <header className='flex items-center justify-between p-4 md:px-8 bg-gray-900 border-b border-gray-700 shadow-lg z-10'>
+                <h1 className='text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600'>
+                    LWFS-TV Live
+                </h1>
+                <nav className='hidden sm:flex space-x-6'>
+                    <a href="https://lwfoundationschool.org/testimonybank/" target='_blank' rel="noopener noreferrer" className='text-sm font-medium text-gray-300 hover:text-yellow-400 transition-colors duration-200'>Share Testimony</a>
+                    <button className='text-sm font-medium text-gray-300 hover:text-green-400 transition-colors duration-200'>Receive Salvation</button>
+                </nav>
+            </header>
 
-      <div className='flex flex-col bg-white p3 h-14 justify-center items-center'>
-        {/* <Image
-          src="/welcome/bg welcome app.png"
-          alt=""
-          // width="90"
-          // height="90"
-          layout="fill"
-          objectFit="cover"
-          className="flex self-center justify-self-center -z-20 lg:hidden"
-        /> */}
-        {/* <div className='grid grid-cols-3 items-center py-2 pl-2 pr-5 w-screen md:pr-10 md:pl-5 lg:px-10'> */}
-        <div></div>
+            {/* Main Content Area */}
+            <main className='flex flex-col flex-grow md:flex-row md:p-6 lg:p-8 gap-6 md:gap-8'>
 
-        <div className='flex text-xl font-semibold mx-auto  text-center'>
-          Watch LWFS-TV
+                {/* Video Player Section */}
+                <section className='flex flex-col w-full md:w-3/4 lg:w-2/3 xl:w-3/4 bg-gray-800 rounded-lg shadow-xl overflow-hidden'>
+                    <div className='w-full h-auto aspect-video'>
+                        <VideoPlayer src="https://2nbyjxnbl53k-hls-live.5centscdn.com/RTV/59a49be6dc0f146c57cd9ee54da323b1.sdp/chunks.m3u8" />
+                    </div>
+
+                    {/* Interaction Buttons & Attendance (below video for smaller screens, and flexible for larger) */}
+                    <div className='flex flex-wrap justify-center items-center gap-4 p-4 md:p-6 bg-gray-800 border-t border-gray-700'>
+                        {/* Only show on mobile/tablet, hidden on desktop if nav is present */}
+                        <a href="https://lwfoundationschool.org/testimonybank/" target='_blank' rel="noopener noreferrer" className='sm:hidden'>
+                            <button className='px-4 py-2 bg-yellow-500 text-gray-900 rounded-full text-sm font-semibold hover:bg-yellow-600 transition-colors shadow'>
+                                Share Testimony
+                            </button>
+                        </a>
+                        <button className='sm:hidden px-4 py-2 bg-green-600 text-white rounded-full text-sm font-semibold hover:bg-green-700 transition-colors shadow'>
+                            Receive Salvation
+                        </button>
+
+                        {/* Attendance Input */}
+                        <div className='flex items-center gap-2 relative bg-gray-700 rounded-full px-3 py-1 shadow-inner'>
+                            <label htmlFor="group-participation" className="text-gray-300 text-sm sr-only">Group Participation</label>
+                            <input
+                                id="group-participation"
+                                className='w-16 text-center bg-transparent text-white text-base focus:outline-none focus:ring-0 placeholder:text-gray-400'
+                                onChange={(e) => setGroupParticipation(e.target.value ? Number(e.target.value) : "")}
+                                type='number'
+                                min="1"
+                                value={groupParticipation}
+                                placeholder='1'
+                                aria-label="Group participation count"
+                            />
+                            <button
+                                onClick={updateAttendance}
+                                className={`px-4 py-1 text-white rounded-full text-sm font-semibold transition-colors ${loading ? "bg-red-700 cursor-not-allowed" : "bg-red-600 hover:bg-red-700 shadow"}`}
+                                disabled={loading}
+                            >
+                                {loading ? "Updating..." : "Update Attendance"}
+                            </button>
+
+                            {successMessage && (
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1 bg-green-500 text-white text-xs rounded-md shadow-lg z-50 animate-fade-in-out">
+                                    {successMessage}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+
+                {/* Live Chat & Programme Line-Up Section */}
+                <aside className='flex flex-col w-full md:w-1/4 lg:w-1/3 xl:w-1/4 bg-gray-800 rounded-lg shadow-xl p-4'>
+                    {/* Banner Image */}
+                    <div className='w-full mb-4 rounded-md overflow-hidden shadow'>
+                        <Image
+                            src="/images/year.jpeg"
+                            alt="Year of the Redemptive Work"
+                            width={800} height={250}
+                            className='object-cover w-full h-auto'
+                        />
+                    </div>
+
+                    {/* Chat/Programme Buttons */}
+                    <div className='flex w-full mb-4 text-sm font-medium bg-gray-700 rounded-md overflow-hidden shadow-inner'>
+                        <button className='flex-1 py-3 text-white bg-blue-700 hover:bg-blue-800 transition-colors rounded-l-md'>
+                            Live Chat
+                        </button>
+                        <button className='flex-1 py-3 text-gray-200 bg-gray-600 hover:bg-gray-500 transition-colors rounded-r-md'>
+                            Programme Line-UP
+                        </button>
+                    </div>
+
+                    {/* Comment Display Area */}
+                    <div className='flex flex-col flex-grow bg-gray-900 border border-gray-700 rounded-md overflow-hidden p-3 mb-4 shadow-inner'>
+                        {loading && comments.length === 0 ? (
+                            <div className='flex w-full justify-center items-center h-full text-gray-400'>
+                                <p>Loading comments...</p>
+                            </div>
+                        ) : (
+                            <div ref={scrollRef} className='flex flex-col overflow-y-auto custom-scrollbar flex-grow pr-2'>
+                                {comments.slice().reverse().map((comment) => (
+                                    <div key={comment.id} className='flex flex-col px-3 py-2 mb-3 bg-gray-700 rounded-lg shadow-sm border border-gray-600'>
+                                        <p className='text-sm text-gray-100 break-words'>{comment.content}</p>
+                                        <div className='flex flex-wrap gap-x-4 text-xs text-gray-400 mt-1'>
+                                            {comment.user?.firstName && (
+                                                <p className='font-medium text-blue-300'>{comment.user.firstName}</p>
+                                            )}
+                                            <p>{new Date(comment.createdAt).toLocaleString()}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Comment Input Form */}
+                    <form onSubmit={postComment} className='flex flex-col gap-3'>
+                        <textarea
+                            value={content}
+                            onChange={(event) => setContent(event.target.value)}
+                            className='p-3 w-full rounded-md border border-gray-600 bg-gray-700 text-white min-h-24 resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400'
+                            placeholder='Type your comment here...'
+                            aria-label="Your comment"
+                        />
+                        <button
+                            type="submit"
+                            className={`flex items-center justify-center w-full py-3 rounded-md text-base font-semibold transition-colors duration-200 shadow-lg ${loading ? "bg-gray-600 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+                            disabled={loading}
+                        >
+                            {loading ? "Posting Comment..." : "Post Comment"}
+                        </button>
+                    </form>
+                </aside>
+            </main>
         </div>
-
-        <div className='flex w-full h-auto relative  items-center cursor-pointer'>
-          <div>
-           {/* <CircleUser className='flex w-10 h-10 bg-zinc-800 rounded-full p-2 text-white'/> */}
-          </div>  
-        </div>
-
-        </div>
-
-      <div className='flex flex-col md:flex-row md:w-screen md:overflow-x-hidden md:gap-3 md:px-2'>
-        {/* LIVE TV */}
-        <div className='flex flex-col md:w-[60%]'>
-          <div className='w-screen h-auto md:w-full  '>
-            {/* <video 
-              src="https://lwfoundationschool.org/livetv/wp-content/uploads/2024/08/14TH%20SUMMIT%20REBROADCAST.mp4" 
-              // type="application/x-mpegURL"
-              className="w-full h-full object-cover" 
-              controls
-              muted={false}
-              controlsList="nodownload"
-            >
-            </video> */}
-            <VideoPlayer src="
-https://2nbyjxnbl53k-hls-live.5centscdn.com/RTV/59a49be6dc0f146c57cd9ee54da323b1.sdp/chunks.m3u8" />
-          {/* <video ref={videoRef} controls width="100%" /> */}
-          {/* <HlsPlayer className="w-full h-full object-contain" src="https://res.cloudinary.com/dfi8bpolg/video/upload/v1737680677/evtznnwqnmgyshvhzidd.mp4" /> */}
-          </div>
-
-          <div className='flex text-xs justify-center w-screen items-center my-5 md:w-full space-x-2 px-2 lg:space-x-5'>
-            <a href="https://lwfoundationschool.org/testimonybank/" target='_blank'>
-            <button className='px-2 py-1 text-black bg-yellow-400 rounded-md lg:py-3 lg:px-5 '>Share Testimony</button>
-            </a>
-            <button className='px-2 py-1 text-white bg-green-600 rounded-md lg:py-3 lg:px-5'>Receive Salvation</button>
-            <div className='flex relative w-auto space-x-2'>
-            <input
-              className='w-24 text-center text-gray-600 text-xl focus:outline-none focus:ring-0'
-              onChange={(e) => setGroupParticipation(e.target.value ? Number(e.target.value) : "")}
-              type='number'
-              min="1"
-              value={groupParticipation}
-              placeholder='1'
-            />
-              <button onClick={updateAttendance} className={`bg-red-600 px-2 py-1 text-white rounded-md lg:py-3 lg:px-5`} >Update Attendance</button>
-             
-              {successMessage && (
-                <div className="fixed top-10 left-20  bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
-                  {successMessage}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* LIVE CHAT */}
-        <div className='flex relative flex-col mt-5 pb-5 md:mt-0 md:w-[40%]'>
-          <div className='flex w-full'>
-            <Image
-              src="/images/year.jpeg"
-              alt=""
-              width={800} height={250}
-              className='object-contain'
-            />
-          </div>
-          <div className='flex mt-2 w-full'>
-            <button className='bg-blue-700 px-8 py-2 text-white md:px-5'>Live Chat</button>
-            <button className='bg-yellow-400 px-8 py-2 md:px-5'>Programme Line-UP</button>
-          </div>
-          
-          <div className='flex flex-col bg-white p-3 border-[1.5px] border-solid border-gray-400 w-full'>
-              {loading ? <h1 className='flex w-full justify-center p-10'>Comments Loading...... </h1> : 
-               <div ref={scrollRef} className='flex flex-col overflow-y-auto max-h-[250px] md:w-full md:max-h-[250px]'>
-               {comments.slice() // Create a copy to avoid mutating the original array
-               .reverse().map((comment) => (
-                   <div key={comment.id} className='flex flex-col px-2 py-1 mb-5 border-[0.1px] border-solid border-gray-300 rounded-md '>
-                     <p className='text-xs'>{comment.content}</p>
-                     <div className='flex gap-5'>
-                     <p className='text-xs text-gray-500 italic'>{comment.user?.firstName}</p> 
-                     <p className='text-xs text-gray-500'>{new Date(comment.createdAt).toLocaleString()}</p>
-                     </div>
-                   </div>
-               ))}
-               </div>  
-              }
-                   
-            
-            <form onSubmit={postComment} className='flex flex-col gap-2'>
-              <textarea 
-                value={content} 
-                onChange={(event) => setContent(event.target.value)} className='p-2 grow rounded-md border-[1px] border-solid border-black min-h-20'placeholder='Type your comment here'
-              />
-
-              <button className={`flex text-center items-center justify-center w-full text-lg text-white self-center  py-2 rounded-md cursor-pointer ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-950 text-white"}`} disabled={loading}>
-                {loading ? "Commment..." : "Comment"}
-              </button>
-            </form>
-          </div>
-          
-        </div>
-      </div>
-      
-
-    </div>
-    
-  )
+    );
 }
 
-export default LiveTv
+export default LiveTv;

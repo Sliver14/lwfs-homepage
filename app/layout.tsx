@@ -30,7 +30,7 @@ export default function RootLayout({
             <PaymentProvider>
               <Navbar />
                 {children}
-              <BottomNav />
+              {/* <BottomNav /> */}
             </PaymentProvider>
             
           </UserCartProvider>
