@@ -11,6 +11,7 @@ model User {
   id                         String    @id @default(uuid())
   firstName                  String
   lastName                   String
+  kcUsername                 String
   zone                       String
   city                       String
   country                    String

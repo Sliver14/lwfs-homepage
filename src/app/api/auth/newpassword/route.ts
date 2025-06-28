@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma"; // Ensure this points to your Prisma client
+import { prisma } from "../../../../../lib/prisma"; // Ensure this points to your Prisma client
 import bcrypt from "bcryptjs";
 
 interface RequestBody {

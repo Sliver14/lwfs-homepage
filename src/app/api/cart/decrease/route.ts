@@ -1,7 +1,7 @@
 // app/api/cart/decrease/route.ts
-import { prisma } from '@/lib/prisma';
+import { prisma } from '../../../../../lib/prisma';
 import { NextResponse, NextRequest } from 'next/server';
-import { getUserIdFromCookie } from '@/lib/getUserId';
+import { getUserIdFromCookie } from '../../../../../lib/getUserId';
 
 export async function PATCH(request: NextRequest) {
   const userId = getUserIdFromCookie(request);

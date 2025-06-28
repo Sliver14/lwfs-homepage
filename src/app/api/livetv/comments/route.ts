@@ -1,7 +1,7 @@
 // app/api/livetv/comments/route.ts
-import { prisma } from '@/lib/prisma';
+import { prisma } from '../../../../../lib/prisma';
 // import { NextResponse } from 'next/server';
-import { getUserIdFromCookie } from '@/lib/getUserId';
+import { getUserIdFromCookie } from '../../../../../lib/getUserId';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET() {

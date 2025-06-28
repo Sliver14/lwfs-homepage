@@ -1,6 +1,6 @@
 // app/api/livetv/participate/route.ts
-import { getUserIdFromCookie } from '@/lib/getUserId';
-import { prisma } from '@/lib/prisma';
+import { getUserIdFromCookie } from '../../../../../lib/getUserId';
+import { prisma } from '../../../../../lib/prisma';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function POST(request: NextRequest) {
