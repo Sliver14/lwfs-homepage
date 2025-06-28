@@ -4,25 +4,25 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Seed 1 User
-  const user = await prisma.user.upsert({
-    where: { email: 'user@example.com' },
-    update: {},
-    create: {
-      firstName: 'John',
-      lastName: 'Doe',
-      zone: 'North',
-      city: 'Lagos',
-      country: 'Nigeria',
-      phoneNumber: '+2348012345678',
-      church: 'Example Church',
-      email: 'user@example.com',
-      password: 'hashedPassword123', // In real apps, hash this!
-      verified: true,
-      verifiedAt: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  });
+  // const user = await prisma.user.upsert({
+  //   where: { email: 'user@example.com' },
+  //   update: {},
+  //   create: {
+  //     firstName: 'John',
+  //     lastName: 'Doe',
+  //     zone: 'North',
+  //     city: 'Lagos',
+  //     country: 'Nigeria',
+  //     phoneNumber: '+2348012345678',
+  //     church: 'Example Church',
+  //     email: 'user@example.com',
+  //     password: 'hashedPassword123', // In real apps, hash this!
+  //     verified: true,
+  //     verifiedAt: new Date(),
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //   },
+  // });
 
   // Seed 15 Products
   const products = await Promise.all(
@@ -56,15 +56,15 @@ async function main() {
   });
 
   // Link User to Program
-  await prisma.userProgram.create({
-    data: {
-      userId: user.id,
-      programId: program.id,
-      joinedAt: new Date(),
-      watchedDuration: 3600, // seconds
-      participated: true,
-    },
-  });
+  // await prisma.userProgram.create({
+  //   data: {
+  //     userId: user.id,
+  //     programId: program.id,
+  //     joinedAt: new Date(),
+  //     watchedDuration: 3600, // seconds
+  //     participated: true,
+  //   },
+  // });
 
   console.log('✅ Seeding completed');
 }
