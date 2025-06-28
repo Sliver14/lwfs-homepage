@@ -3,8 +3,8 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { Lock, Eye, EyeOff, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useUser } from '../../context/UserContext';
-import axios from 'axios';
+import { useUser } from '../../../context/UserContext';
+import axios from 'axios'; // Import AxiosError
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -40,7 +40,7 @@ const ResetPasswordForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError(''); // Clear previous error
     setIsLoading(true);
 
     if (password !== confirmPassword) {
@@ -50,11 +50,19 @@ const ResetPasswordForm: React.FC = () => {
       return;
     }
 
-    if (password.length < 6) {
+    if (password.length < 6) { // Consider increasing this for better security (e.g., 8 characters)
       setError('Password must be at least 6 characters long.');
       toast.error('Password must be at least 6 characters long.');
       setIsLoading(false);
       return;
+    }
+
+    // Add checks for token existence before proceeding with API call
+    if (!token) {
+        setError('Missing reset token. Please refresh the page or request a new link.');
+        toast.error('Missing reset token. Please refresh the page or request a new link.');
+        setIsLoading(false);
+        return;
     }
 
     try {
@@ -62,16 +70,28 @@ const ResetPasswordForm: React.FC = () => {
       setSuccess(true);
       toast.success('Password reset successfully! Redirecting to sign-in...');
       setTimeout(() => router.push('/auth?mode=signin'), 3000);
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.error || 'Failed to reset password. Please try again.';
+    } catch (error: unknown) { // Changed 'any' to 'unknown'
+      setIsLoading(false); // Ensure loading is reset in catch block
+
+      let errorMessage = 'Failed to reset password. Please try again.';
+
+      if (axios.isAxiosError(error)) { // Check if it's an AxiosError
+        // Axios errors have a response property
+        errorMessage = error.response?.data?.error || error.message || errorMessage;
+      } else if (error instanceof Error) {
+        // Standard JavaScript Error object
+        errorMessage = error.message;
+      }
+      // If it's neither, errorMessage remains the default generic message.
+
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false); // Moved inside catch block for earlier reset
     }
   };
 
-  if (userLoading || !token) {
+  if (userLoading || !token) { // Ensure token check is here for initial render based on param
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-purple-900 to-blue-900">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400"></div>

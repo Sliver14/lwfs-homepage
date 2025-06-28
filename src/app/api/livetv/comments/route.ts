@@ -1,7 +1,7 @@
 // app/api/livetv/comments/route.ts
 import { prisma } from '../../../../../lib/prisma';
 // import { NextResponse } from 'next/server';
-import { getUserIdFromCookie } from '../../../../../lib/getUserId';
+import { getUserIdFromHeader  } from '../../../../../lib/getUserId';
 import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET() {
@@ -18,7 +18,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const userId = getUserIdFromCookie(request);
+  const userId = getUserIdFromHeader (request);
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { content } = await request.json();
