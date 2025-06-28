@@ -7,6 +7,13 @@ export async function sendEmail(
     type: "signup" | "resend" | "reset"
 ) {
     try {
+        // --- ADD THESE DEBUGGING LOGS ---
+        console.log("--- DEBUGGING EMAIL ENV VARS ---");
+        console.log("EMAIL_USER:", process.env.EMAIL_USER);
+        console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "PASSWORD_IS_SET" : "PASSWORD_NOT_SET");
+        console.log("--------------------------------");
+        // --- END DEBUGGING LOGS ---
+
         const transporter = nodemailer.createTransport({
             service: "gmail",
             host: "smtp.gmail.com",
