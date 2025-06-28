@@ -1,9 +1,13 @@
-// lib/getUserId.ts
 import { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-export function getUserIdFromCookie(request: NextRequest): string | null {
-  const token = request.cookies.get('authToken')?.value;
+export function getUserIdFromHeader(request: NextRequest): string | null {
+  // Get the Authorization header
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader) return null;
+
+  // Expecting format: "Bearer <token>"
+  const token = authHeader.split(' ')[1];
   if (!token) return null;
 
   try {
