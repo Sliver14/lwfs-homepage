@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../lib/prisma";
 import { v4 as uuidv4 } from "uuid";
-import { sendEmail } from "../../../../../utils/email";
+import { sendEmail } from "../../../../utils/email";
 
 export async function POST(req: NextRequest) {
     try {
