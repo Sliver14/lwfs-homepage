@@ -5,8 +5,8 @@ import axios from "axios";
 
 // Define the structure of CartItem
 interface CartItem {
-    id: number;
-    productId: number;
+    id: string;
+    productId: string;
     quantity: number;
     product: {
       name: string;
@@ -17,8 +17,6 @@ interface CartItem {
   
   // Define the structure of Cart
   interface Cart {
-    id: number;
-    userId: string;
     cartItems: CartItem[];
   }
   
@@ -38,13 +36,13 @@ export const PaymentProvider = ({ children }: { children: ReactNode }) => {
     const handleCheckout = async (cart: Cart, totalCartPrice: number) => {
         try{
             const response = await axios.post("/api/cart/checkout", {
-                product_sku: cart.id,
+                product_sku: `cart_${Date.now()}`, // Generate a unique cart ID
                 narration: "Order Payment",
                 price: totalCartPrice,
                 merchant_wallet: merchant_wallet || "",
                 success_url: `${apiUrl}/success`,
                 fail_url: `${apiUrl}/failed`,
-                user_data: { userId: cart.userId }
+                user_data: { cartItems: cart.cartItems }
             });
               console.log(response.data.payment_ref);
               setPaymentRef(response.data.payment_ref);              

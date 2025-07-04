@@ -1,103 +1,142 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+import React from 'react'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import dynamic from "next/dynamic";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+// Dynamically import Lottie to prevent SSR issues
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+import loadingAnimation from "../../public/loading.json"; // Ensure you have a Lottie JSON file
+
+const Welcome = () => {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true); // Track loading state
+    const [isAuthenticated, setIsAuthenticated] = useState(false); // Track authentication status
+
+    useEffect(() => {
+      const fetchUserDetails = async () => {
+        try {
+          await axios.get("/api/auth/tokenverify", { withCredentials: true });
+          setIsAuthenticated(true);
+        } catch (error) {
+          setIsAuthenticated(false);
+          console.error("Error verifying user:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+      fetchUserDetails();
+    }, []); // Adding router as a dependency is best practice
+
+    // Redirect when authentication succeeds
+    useEffect(() => {
+      if (isAuthenticated) {
+        router.replace("/home");
+      }
+    }, [isAuthenticated, router]);
+
+    // if (isLoading) {
+    //   return (
+    //     <div className="w-screen h-screen flex items-center justify-center bg-black text-white">
+    //       <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-400"></div>
+    //     </div>
+    //   );
+    // }
+
+    if (isLoading) {
+      return (
+        <div className="w-screen h-screen flex items-center justify-center bg-black">
+          <Lottie animationData={loadingAnimation} className="w-40 h-40 text-white" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      );
+    }
+
+    if (isAuthenticated) {
+      return null; // Prevent rendering the Welcome page if authenticated
+    }
+  
+
+  return (
+    <div className="relative w-screen h-screen overflow-hidden">
+        <Image
+        src="/welcome/bg welcome app.png"
+        alt="Background"
+        layout="fill"
+        objectFit="cover"
+        className="-z-10"
+        />
+
+        <Image 
+            src="/welcome/Ellipse 1 copy.png"
+            alt="obj1"
+            width={150}
+            height={150}
+            className='absolute -right-14 -top-14 lg:-right-10 lg:-top-10'
+        />
+
+        <Image 
+            src="/welcome/Ellipse 1.png"
+            alt="obj2"
+            width={150}
+            height={150}
+            className='absolute -left-4 -bottom-4 lg:-left-2 lg:-bottom-2'
+        />
+
+        <Image 
+            src="/welcome/gcap.png"
+            alt="obj2"
+            width={70}
+            height={70}
+            className='absolute left-0 top-[65vh] lg:top-[60vh]'
+        />
+
+
+      <div className='flex flex-col relative w-full h-screen justify-center items-center gap-5'>
+        <Image
+            src="/welcome/welcome text.png"
+            alt="Welcome to"
+            width={250}
+            height={250}
+            // layout="fill"
+            // objectFit="cover"
+            className="flex w-[250px] h-auto lg:w-[350px]"
+        />
+
+        <Image
+            src="/welcome/Logo-shadow.png"
+            alt="Welcome to"
+            width={150}
+            height={150}
+            // layout="fill"
+            // objectFit="cover"
+            className="flex w-[150px] h-auto lg:w-[200px] "
+        />
+        <div className='flex flex-col items-center justify-center text-center gap-2'>
+            <h1 className='text-yellow-400 text-2xl '>
+                LOVEWORLD
+            </h1>
+            <h1 className='text-white text-3xl font-bold'>
+                FOUNDATION SCHOOL
+            </h1>
+        </div>
+
+        <div className='flex flex-col gap-3 mt-12 md:flex-row md:gap-8'>
+            <button onClick={() => router.push("/signin")} className='flex py-2 rounded-full bg-white text-2xl text-center items-center justify-center self-center font-bold text-black w-80 cursor-pointer'>Login
+            </button>
+
+            <button onClick={() => router.push("/signup")} className='flex py-2 rounded-full bg-yellow-400 text-2xl text-center items-center justify-center self-center font-bold text-indigo-950 w-80 cursor-pointer'>Sign-up
+            </button>
+        </div>
+        
+        
+      </div>
+      
     </div>
-  );
+  )
 }
+
+export default Welcome
