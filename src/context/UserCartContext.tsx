@@ -57,7 +57,7 @@ export const UserCartProvider = ({ children }: { children: ReactNode }) => {
     const addToCart = useCallback(async (productId: string) => {
         if (!userId) return;
         try {
-            const response = await axios.post("/api/cart", { productId }, { withCredentials: true });
+            await axios.post("/api/cart", { productId }, { withCredentials: true });
             await fetchCart(); // Refresh cart after adding item
             console.log("Item added to cart successfully");
         } catch (error: unknown) {

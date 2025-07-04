@@ -9,6 +9,18 @@ import { useUser } from "../../context/UserContext";
 import { useUserCart } from "../../context/UserCartContext";
 import { ArrowLeftIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
 
+// Define Product type based on Prisma schema
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  stock: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const ProductDetailsComponent = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -17,9 +29,9 @@ const ProductDetailsComponent = () => {
     const { userId } = useUser(); // Get user ID from context
     const { cart, fetchCart } = useUserCart();
     const [loading, setLoading] = useState(false);
-    const [product, setProduct] = useState<any>(null);
+    const [product, setProduct] = useState<Product | null>(null);
     const [productLoading, setProductLoading] = useState(true);
-        const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     // Fetch product data from API
     useEffect(() => {

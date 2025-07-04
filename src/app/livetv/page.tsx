@@ -4,7 +4,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import VideoPlayer from './VideoPlayer';
 import { useSocket } from '@/context/SocketContext';
-import { joinProgram, leaveProgram, sendMessage, subscribeToMessages } from '../../../lib/socket';
+import { joinProgram, leaveProgram, subscribeToMessages } from '../../../lib/socket';
 
 interface Comment {
     id: string;
@@ -40,7 +40,7 @@ const LiveTv: React.FC = () => {
     const [groupParticipation, setGroupParticipation] = useState<number | "">("");
     const [successMessage, setSuccessMessage] = useState<string>('');
     const [currentProgram, setCurrentProgram] = useState<Program | null>(null);
-    const [user, setUser] = useState<{ firstName: string; lastName: string } | null>(null);
+    // const [user, setUser] = useState<{ firstName: string; lastName: string } | null>(null);
     const scrollRef = useRef<HTMLDivElement | null>(null);
     const { isConnected } = useSocket();
 
@@ -48,8 +48,8 @@ const LiveTv: React.FC = () => {
     useEffect(() => {
         const getUserInfo = async () => {
             try {
-                const response = await axios.get('/api/auth/me', { withCredentials: true });
-                setUser(response.data);
+                await axios.get('/api/auth/me', { withCredentials: true });
+                // setUser(response.data);
             } catch (error) {
                 console.error('Error fetching user info:', error);
             }

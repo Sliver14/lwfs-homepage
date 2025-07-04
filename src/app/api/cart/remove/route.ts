@@ -36,7 +36,7 @@ export async function DELETE(request: NextRequest) {
     });
 
     return NextResponse.json({ message: 'Item removed from cart successfully' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('DELETE /api/cart/remove: Error removing item from cart:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

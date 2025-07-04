@@ -7,11 +7,11 @@ import { useState, useEffect } from 'react';
 // import { AiFillHome } from "react-icons/ai";
 import { ChevronLeft } from "lucide-react";
 import { Eye, EyeOff} from 'lucide-react';
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 // Dynamically import Lottie to prevent SSR issues
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
-import loadingAnimation from "@/public/Animation - 1739206742214.json"; // Ensure you have a Lottie JSON file
+// const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+// import loadingAnimation from "../../../public/Animation - 1739206742214.json"; // Ensure you have a Lottie JSON file
 
 const ChangePassword = () => {
   const router = useRouter();
@@ -81,7 +81,9 @@ const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
        
        {success ? (
         <div className="flex flex-col items-center justify-center text-center">
-          <Lottie animationData={loadingAnimation} loop={false} className="w-60 h-60" />
+          <div className="w-60 h-60 bg-green-100 rounded-full flex items-center justify-center">
+            <div className="text-6xl">✅</div>
+          </div>
           <h2 className="text-2xl font-bold mt-5 text-green-600">Password Changed Successfully!</h2>
           <p className="text-gray-600">Redirecting to sign-in...</p>
         </div>

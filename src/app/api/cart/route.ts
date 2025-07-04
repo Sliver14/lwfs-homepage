@@ -1,6 +1,7 @@
 import { prisma } from '../../../../lib/prisma';
 import { NextResponse, NextRequest } from 'next/server';
 import { getUserIdFromHeader } from '../../../../lib/getUserId'; // ✅ Import the new function
+import { Prisma } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   console.log('--- GET /api/cart Request Started ---');
@@ -27,10 +28,10 @@ export async function GET(request: NextRequest) {
     console.log('GET /api/cart: Retrieved cart data (first 5 items):', cart.slice(0, 5)); // Log a slice to avoid giant outputs
 
     return NextResponse.json(cart);
-  } catch (error: any) { // Use 'any' for general error type initially
+  } catch (error: unknown) { // Use 'unknown' for general error type initially
     console.error('GET /api/cart: Error fetching cart:', error);
     // Optionally log error details from Prisma
-    if (error.code && error.meta) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.error('Prisma Error Code:', error.code);
       console.error('Prisma Error Meta:', error.meta);
     }
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(item);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('POST /api/cart: Error adding item to cart:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

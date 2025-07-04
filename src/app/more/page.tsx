@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 // import { ArrowRight,  } from 'lucide-react';
-import { useUser } from '../context/UserContext';
+import { useUser } from '../../context/UserContext';
 
 const More =  () => {
   const router = useRouter();

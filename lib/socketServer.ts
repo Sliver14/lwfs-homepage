@@ -59,7 +59,7 @@ export const getIO = () => {
 };
 
 // Helper function to emit messages to a specific program
-export const emitToProgramRoom = (programId: string, event: string, data: any) => {
+export const emitToProgramRoom = (programId: string, event: string, data: unknown) => {
   const socket = getIO();
   socket.to(`program:${programId}`).emit(event, data);
 };

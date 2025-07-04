@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // Removed Next.js useRouter
 // Removed Next.js usePathname
 // Removed Next.js Link
-import { FaAngleDown, FaBars, FaTimes } from "react-icons/fa"; // Added FaBars (hamburger) and FaTimes (close X)
+import { FaBars, FaTimes } from "react-icons/fa"; // Added FaBars (hamburger) and FaTimes (close X)
 import { AiOutlineLogout } from "react-icons/ai";
 import axios from 'axios';
 import { ShoppingCart, Home, Tv, BookOpen, Store, User } from "lucide-react";
@@ -25,9 +25,9 @@ function Navbar() {
     const [currentPathname, setCurrentPathname] = useState('/');
     const { cart } = useUserCart();
 
-    // Styles for active and inactive navigation links
-    const activeClass = "flex items-center px-4 py-3 rounded-lg font-medium bg-red-600 text-white shadow-md transform scale-100 transition duration-300 ease-out";
-    const inactiveClass = "flex items-center text-gray-200 px-4 py-3 rounded-lg hover:bg-gray-700 hover:text-white transition duration-300 ease-out";
+    // Styles for active and inactive navigation links (commented out as not currently used)
+    // const activeClass = "flex items-center px-4 py-3 rounded-lg font-medium bg-red-600 text-white shadow-md transform scale-100 transition duration-300 ease-out";
+    // const inactiveClass = "flex items-center text-gray-200 px-4 py-3 rounded-lg hover:bg-gray-700 hover:text-white transition duration-300 ease-out";
 
     // Ref for the sidebar to detect clicks outside of it
     const sidebarRef = useRef<HTMLDivElement | null>(null);

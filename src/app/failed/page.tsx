@@ -1,7 +1,7 @@
 "use client"; // Ensure it's a client component
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { usePayment } from "../context/PaymentContext";
+import { usePayment } from "../../context/PaymentContext";
 import axios from "axios";
 
 interface TransactionStatus {

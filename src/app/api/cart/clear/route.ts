@@ -21,7 +21,7 @@ export async function DELETE(request: NextRequest) {
       message: 'Cart cleared successfully',
       deletedCount: deletedItems.count
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('DELETE /api/cart/clear: Error clearing cart:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

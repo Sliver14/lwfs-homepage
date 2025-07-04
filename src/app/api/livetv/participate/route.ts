@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create or update user program participation
-    const userProgram = await prisma.userProgram.upsert({
+    await prisma.userProgram.upsert({
       where: {
         userId_programId: {
           userId,

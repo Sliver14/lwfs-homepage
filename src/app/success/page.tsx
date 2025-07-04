@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 // import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { usePayment } from "../context/PaymentContext";
+import { usePayment } from "../../context/PaymentContext";
 
 interface TransactionStatus {
   transaction_status: string;

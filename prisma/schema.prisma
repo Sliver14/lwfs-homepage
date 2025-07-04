@@ -128,3 +128,17 @@ enum OrderStatus {
   delivered
   cancelled
 }
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  date        DateTime
+  minister    String
+  platform    String
+  time        String
+  imageUrl    String?
+  link        String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
