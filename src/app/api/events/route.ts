@@ -10,13 +10,21 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const offset = parseInt(searchParams.get('offset') || '0');
 
+    // Calculate the cutoff date (5 days ago from today)
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - 5);
+    cutoffDate.setHours(0, 0, 0, 0); // Set to start of day
+
     // Build where clause
     const where: Record<string, unknown> = {};
+    
+    // Only return events that are not more than 5 days old
+    where.date = {
+      gte: cutoffDate // Greater than or equal to 5 days ago
+    };
+    
     if (activeOnly) {
       where.isActive = true;
-      where.date = {
-        gte: new Date() // Only future events
-      };
     }
 
     const events = await prisma.event.findMany({

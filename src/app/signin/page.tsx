@@ -6,7 +6,8 @@ import axios, { AxiosError } from "axios";
 // import { AiFillHome } from "react-icons/ai";
 // import { MdEmail } from "react-icons/md";
 import Image from 'next/image';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 
 const Signin: React.FC = () => {
@@ -21,13 +22,25 @@ const Signin: React.FC = () => {
   // Function to handle sign-in
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  
+  // Validate inputs
+  if (!email || !password) {
+    setError("Please fill in all fields");
+    return;
+  }
+
   setLoading(true);
   setError(null);
   // setSuccess(null);
 
   try {
     await axios.post("/api/auth/signin", { email, password });
-    router.push("/home"); // Redirect to dashboard or home page
+    
+    // Show success feedback before redirect
+    setLoading(false);
+    
+    // Redirect to home page
+    router.push("/home");
     router.refresh();
 
   } catch (error: unknown) {
@@ -51,7 +64,8 @@ const Signin: React.FC = () => {
   };
 
   return (
-    <div className='flex relative flex-col items-center justify-center w-screen h-screen lg:grid lg:grid-cols-2 lg:gap-0 overflow-hidden'>
+    <ProtectedRoute>
+      <div className='flex relative flex-col items-center justify-center w-screen h-screen lg:grid lg:grid-cols-2 lg:gap-0 overflow-hidden'>
 
         <Image 
         src="/welcome/bg welcome app.png"
@@ -99,31 +113,43 @@ const Signin: React.FC = () => {
                 <h2 className='text-4xl text-lwfs_blue font-bold' >welcome back! </h2>
             </div>
           
-            <div className='flex flex-col gap-5 items-center w-full top-80'>
-              
+            <form onSubmit={handleSubmit} className='flex flex-col gap-5 items-center w-full'>
               <div className='flex relative w-full justify-center items-center'>
               <Mail className='absolute left-[9%] text-xl opacity-50' />
-                <input onChange={(event) => setEmail(event.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type="email" autoComplete="email" placeholder='Email' required/>
+                <input onChange={(event) => setEmail(event.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type="email" autoComplete="email" placeholder='Email' required disabled={loading}/>
               </div>
 
               <div className='flex relative w-full justify-center items-center'>
               <Lock className='absolute left-[9%] text-xl opacity-50'/>
-                <input onChange={(event)=> setPassword(event?.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"} placeholder='Password' required/>
-                <button onClick={()=> setShowPassword(!showPassword)} className='flex justify-center items-center'>
+                <input onChange={(event)=> setPassword(event?.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"} placeholder='Password' required disabled={loading}/>
+                <button onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} className='flex justify-center items-center' disabled={loading}>
                   {showPassword ? <Eye size={24} className='absolute right-[10%] opacity-50'/> : <EyeOff size={24} className='absolute  opacity-50 right-[10%] ' />}
                 </button>
                 
               </div>
                 
 
-                <button onClick={handleSubmit} 
-                className={`bg-lwfs_blue m-5 w-[90%] rounded-full transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm text-white p-2 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]text-white"}`} 
-                disabled={loading} >{loading ? "Logging..." : "Login"}</button>
-                {error && <p className='text-red-500'>{error}</p>}
+                <button type="submit" 
+                className={`bg-lwfs_blue m-5 w-[90%] rounded-full transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm text-white p-2 flex items-center justify-center ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]text-white"}`} 
+                disabled={loading} >
+                    {loading ? (
+                        <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Signing in...
+                        </>
+                    ) : (
+                        "Login"
+                    )}
+                </button>
+                                        {error && (
+                            <div className="w-[90%] p-3 bg-red-50 border border-red-200 rounded-lg">
+                                <p className='text-red-600 text-center'>{error}</p>
+                            </div>
+                        )}
                 {/* {success && <p className='text-green-500'>{success}</p>} */}
 
                 
-            </div>
+            </form>
 
           <div className="flex items-center gap-2 px-10">
             <div className="flex-1 border-t border-gray-300"></div>
@@ -163,31 +189,39 @@ const Signin: React.FC = () => {
                 <h2 className='text-4xl text-lwfs_blue font-bold' >welcome back! </h2>
             </div>
           
-            <div className='flex flex-col gap-3 items-center w-screen top-80'>
-              
+            <form onSubmit={handleSubmit} className='flex flex-col gap-3 items-center w-screen'>
               <div className='flex relative w-full justify-center items-center'>
               <Mail className='absolute left-[9%] text-xl opacity-50' />
-                <input onChange={(event) => setEmail(event.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type="email" autoComplete="email" placeholder='Email'/>
+                <input onChange={(event) => setEmail(event.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type="email" autoComplete="email" placeholder='Email' required disabled={loading}/>
               </div>
 
               <div className='flex relative w-full justify-center items-center'>
               <Lock className='absolute left-[9%] text-xl opacity-50'/>
-                <input onChange={(event)=> setPassword(event?.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"}  placeholder='Password'/>
-                <button onClick={()=> setShowPassword(!showPassword)} className='flex justify-center items-center'>
+                <input onChange={(event)=> setPassword(event?.target.value)} className='border rounded-full pl-[11%] border-lwfs_blue p-2 focus:outline-none focus:ring-1 focus:ring-lwfs_blue text-lg w-[90%]' type={showPassword ? "text" : "password"} placeholder='Password' required disabled={loading}/>
+                <button onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} className='flex justify-center items-center' disabled={loading}>
                   {showPassword ? <Eye size={24} className='absolute right-[10%] opacity-50'/> : <EyeOff size={24} className='absolute  opacity-50 right-[10%] ' />}
                 </button>
                 
               </div>
                 
 
-                <button onClick={handleSubmit} 
-                className={`bg-lwfs_blue m-5 w-[90%] transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm rounded-2xl text-white p-3 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]text-white"}`} 
-                disabled={loading} >{loading ? "Logging..." : "Login"}</button>
-                {error && <p className='text-red-500'>{error}</p>}
+                <button type="submit" 
+                className={`bg-lwfs_blue m-5 w-[90%] transition transform ease-out duration-200 text-2xl hover:scale-95 hover:shadow-sm rounded-2xl text-white p-3 flex items-center justify-center ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#360d97]"}`} 
+                disabled={loading} >
+                    {loading ? (
+                        <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Signing in...
+                        </>
+                    ) : (
+                        "Login"
+                    )}
+                </button>
+                {error && <div className="w-[90%] p-3 bg-red-50 border border-red-200 rounded-lg"><p className='text-red-600 text-center'>{error}</p></div>}
                 {/* {success && <p className='text-green-500'>{success}</p>} */}
 
                 
-            </div>
+            </form>
 
           <div className="flex items-center gap-2 px-10">
             <div className="flex-1 border-t border-gray-300"></div>
@@ -212,6 +246,7 @@ const Signin: React.FC = () => {
        
     
     </div>
+  </ProtectedRoute>
   )
 }
 
